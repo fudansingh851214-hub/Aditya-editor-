@@ -11,24 +11,23 @@ h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;tex
 .tabs button.active{background:#42dfff;color:#06101f}
 label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:13px;border-radius:10px;border:1px solid #36536d;background:#071522;color:white;font-size:16px}
 .submit{width:100%;margin-top:18px;padding:14px;border:0;border-radius:10px;background:linear-gradient(100deg,#8555ff,#42dfff);color:#06101f;font-weight:bold;font-size:16px}
-#message{white-space:pre-wrap;overflow-wrap:anywhere;text-align:left}.links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{color:#42dfff}
+#message{white-space:pre-wrap;overflow-wrap:anywhere;text-align:left}.links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{color:#42dfff}\n.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}}
 </style></head>
 <body><main class="wrap">
 <h1>✦ A K EDITOR</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
-<div class="tabs"><button id="loginTab" class="active" type="button">Login</button><button id="signupTab" type="button">Create Account</button></div>
+<div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button">Login</button><button id="signupTab" type="button">Create Account</button></div>
 <form id="authForm">
 <label for="email">Email Address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
 <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="कम से कम 8 characters">
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
-<p id="message" role="status" aria-live="polite"></p>
-<div class="links"><a href="index.html">Home</a><a href="booking.html">Book Now</a><a href="tracking.html">Track Booking</a></div>
+<p id="message" role="status" aria-live="polite"></p></div>\n<section class="dashboard" id="dashboard" aria-label="Customer Dashboard"><h2 id="welcome">Customer Dashboard</h2><p>आप Login हैं। नीचे से अपनी सेवा चुनें।</p><div class="dashgrid"><a href="index.html#services">Our Services</a><a href="booking.html">Book Now</a><a href="tracking.html">Track Your Booking</a><a href="payment.html">Secure Payment</a><a href="index.html#contact">Contact</a></div><button class="logout" id="logoutButton" type="button">Sign Out</button></section>\n<div class="links"><a href="index.html">Home</a></div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
 const client=window.supabase.createClient("https://okzwtylpmcyurkxvaocy.supabase.co","sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q");
-const form=document.getElementById("authForm"), email=document.getElementById("email"), password=document.getElementById("password"), message=document.getElementById("message"), submitButton=document.getElementById("submitButton");
+const form=document.getElementById("authForm"), email=document.getElementById("email"), password=document.getElementById("password"), message=document.getElementById("message"), submitButton=document.getElementById("submitButton");\nfunction showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Welcome"+(user&&user.email?" — "+user.email:"")+"!";message.textContent="";}\ndocument.getElementById("logoutButton").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("dashboard").style.display="none";document.getElementById("authArea").style.display="block";setMode("login");message.textContent="आप Sign Out हो गए हैं।";});
 let mode="login";
 function setMode(next){mode=next;document.getElementById("loginTab").classList.toggle("active",mode==="login");document.getElementById("signupTab").classList.toggle("active",mode==="signup");submitButton.textContent=mode==="login"?"Login":"Create Account";password.autocomplete=mode==="login"?"current-password":"new-password";message.textContent="";}
 document.getElementById("loginTab").addEventListener("click",()=>setMode("login"));
@@ -37,10 +36,10 @@ form.addEventListener("submit",async e=>{e.preventDefault();submitButton.disable
 try{
  let result;
  if(mode==="signup"){result=await client.auth.signUp({email:email.value.trim(),password:password.value});if(result.error)throw result.error;
- if(result.data.session){message.textContent="Account बन गया! अब आप Booking कर सकते हैं।";location.href="booking.html";return;}
+ if(result.data.session){showDashboard(result.data.user);return;}
  message.textContent="Account बनाने का अनुरोध सफल है। अपने Email में confirmation link देखें, फिर यहाँ Login करें।";
- }else{result=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(result.error)throw result.error;message.textContent="Login सफल।";location.href=new URLSearchParams(location.search).get("next")==="payment"?"payment.html":"booking.html";}
+ }else{result=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(result.error)throw result.error;showDashboard(result.data.user);}
 }catch(err){message.textContent="समस्या: "+(err.message||"दोबारा कोशिश करें।");}finally{submitButton.disabled=false;}
 });
-client.auth.getSession().then(({data})=>{if(data.session){message.textContent="आप पहले से Login हैं। Booking पेज खोल रहे हैं...";location.href="booking.html";}});
+client.auth.getSession().then(({data})=>{if(data.session)showDashboard(data.session.user);});
 </script></body></html>
