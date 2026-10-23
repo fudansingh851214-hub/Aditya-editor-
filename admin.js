@@ -397,15 +397,26 @@ async function loadBookings() {
     const { data, error } = await db
       .from("bookings")
       .select(
-        "id, booking_number, customer_name, phone, service, status, file_paths, created_at, amount"
+        "id, booking_number, customer_name, phone, email, address, user_id, service, status, booking_status, payment_status, payment_reference, file_paths, created_at, amount"
       )
       .order("created_at", { ascending: false });
 
     if (error) throw error;
 
     currentBookings = data || [];
+    const { data: paymentRows, error: paymentError } = await db.from("payment_submissions")
+      .select("id, booking_number, amount, status, utr, payment_reference, screenshot_path, created_at, verified_at, verified_by");
+    if (paymentError) throw paymentError;
+    const allPayments = paymentRows || [];
+    currentBookings = currentBookings.map((booking) => {
+      const payments = allPayments.filter((p) => p.booking_number === booking.booking_number);
+      const verifiedStatuses = ["paid", "verified", "confirmed", "success", "successful"];
+      const pendingStatuses = ["pending", "submitted", "under_review", "review"];
+      const paid = payments.filter((p) => verifiedStatuses.includes(String(p.status || "").toLowerCase())).reduce((sum, p) => sum + Math.max(0, Number(p.amount) || 0), 0);
+      const pending = payments.filter((p) => pendingStatuses.includes(String(p.status || "").toLowerCase())).reduce((sum, p) => sum + Math.max(0, Number(p.amount) || 0), 0);
+      return { ...booking, _payments: payments, _paidAmount: paid, _pendingAmount: pending, _remainingAmount: Math.max(0, (Number(booking.amount) || 0) - paid) };
+    });
     renderBookings(currentBookings);
-
     showMessage(message, `${currentBookings.length} Booking records मिले।`);
   } catch (error) {
     if (bookingsList) {
@@ -445,11 +456,32 @@ function renderBookings(bookings) {
       )
     );
 
-    addField(article, "Customer", booking.customer_name);
-    addField(article, "Phone", booking.phone);
-    addField(article, "Service", booking.service);
-    addField(article, "Created At", formatDate(booking.created_at));
-    addField(article, "Current Amount", formatAmount(booking.amount));
+    addField(article, "Customer Name", booking.customer_name);
+    addField(article, "Email", booking.email);
+    addField(article, "Mobile", booking.phone);
+    addField(article, "Address", booking.address);
+    addField(article, "Customer Account ID", booking.user_id);
+    addField(article, "Service / Category", booking.service);
+    addField(article, "Booking Status", booking.booking_status || booking.status);
+    addField(article, "Payment Status", booking.payment_status || "Pending");
+    addField(article, "Booking Created", formatDate(booking.created_at));
+    addField(article, "Total Amount", formatAmount(booking.amount));
+    addField(article, "Verified Payment Received", formatAmount(booking._paidAmount || 0));
+    addField(article, "Payment Awaiting Verification", formatAmount(booking._pendingAmount || 0));
+    addField(article, "Remaining Balance", formatAmount(booking._remainingAmount ?? booking.amount));
+    if (booking.payment_reference) addField(article, "Latest Payment Reference", booking.payment_reference);
+    if (booking._payments?.length) {
+      const payHistory = makeElement("div", "notice");
+      payHistory.appendChild(makeElement("h4", "", "Payment History & UTR"));
+      for (const payment of booking._payments) {
+        addField(payHistory, "Payment", formatAmount(payment.amount) + " · " + (payment.status || "Pending"));
+        addField(payHistory, "UTR / Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
+        addField(payHistory, "Submitted", formatDate(payment.created_at));
+        if (payment.verified_at) addField(payHistory, "Verified At", formatDate(payment.verified_at));
+        if (payment.verified_by) addField(payHistory, "Verified By", payment.verified_by);
+      }
+      article.appendChild(payHistory);
+    }
 
     const amountLabel = makeElement("label", "", "Booking Amount (₹)");
     const amountInput = makeElement("input");
@@ -745,10 +777,20 @@ function renderPayments(payments) {
       makeElement("h3", "", "Booking: " + (payment.booking_number || "उपलब्ध नहीं"))
     );
 
-    addField(article, "UTR / Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
-    addField(article, "Amount", formatAmount(payment.amount));
+    const linkedBooking = currentBookings.find((b) => b.booking_number === payment.booking_number);
+    addField(article, "Customer Name", linkedBooking?.customer_name || "Booking lookup नहीं मिला");
+    addField(article, "Customer Email", linkedBooking?.email || "उपलब्ध नहीं");
+    addField(article, "Customer Mobile", linkedBooking?.phone || "उपलब्ध नहीं");
+    addField(article, "Customer Address", linkedBooking?.address || "उपलब्ध नहीं");
+    addField(article, "Service / Category", linkedBooking?.service || "उपलब्ध नहीं");
+    addField(article, "UTR / Transaction Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
+    addField(article, "Submitted Amount", formatAmount(payment.amount));
+    addField(article, "Booking Total", formatAmount(linkedBooking?.amount));
+    addField(article, "Remaining After Verified Payments", formatAmount(linkedBooking?._remainingAmount ?? linkedBooking?.amount));
     addField(article, "Payment Status", payment.status || "Pending");
     addField(article, "Submitted At", formatDate(payment.created_at));
+    if (payment.verified_at) addField(article, "Verified At", formatDate(payment.verified_at));
+    if (payment.verified_by) addField(article, "Verified By", payment.verified_by);
 
     // Screenshots are stored in a private bucket; create a short-lived signed URL.
     if (payment.screenshot_path) {
@@ -833,16 +875,18 @@ async function reviewPayment(paymentId, nextStatus) {
 
     const { data, error } = await db
       .from("payment_submissions")
-      .update({ status: nextStatus })
+       .update({ status: nextStatus, verified_at: new Date().toISOString(), verified_by: (await verifyAdmin()).email || "Admin" })
       .eq("id", paymentId)
-      .select("id, status")
+      .select("id, booking_number, status")
       .maybeSingle();
 
     if (error) throw error;
     if (!data) throw new Error("Payment अपडेट नहीं हुई। Permissions जाँचें।");
-
+    const bookingPaymentStatus = nextStatus === "Paid" ? "Paid" : "Rejected";
+    const { error: bookingUpdateError } = await db.from("bookings").update({ payment_status: bookingPaymentStatus }).eq("booking_number", data.booking_number);
+    if (bookingUpdateError) throw new Error("Payment submission अपडेट हुई, लेकिन booking status अपडेट नहीं हुआ: " + getErrorText(bookingUpdateError));
     showMessage(paymentMessage, "Payment status अपडेट हो गया: " + nextStatus);
-    await loadPayments();
+    await Promise.all([loadPayments(), loadBookings()]);
   } catch (error) {
     showMessage(
       paymentMessage,
