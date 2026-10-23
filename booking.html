@@ -1,4 +1,977 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#fbf6eb"><title>Book a Service | Aditya Editor</title><link rel="stylesheet" href="style.css"></head>
-<body><header class="site-header"><a class="logo" href="index.html">ADITYA <span>EDITOR</span></a><nav><a href="index.html">Home</a><a href="tracking.html">Track My Booking</a><a href="https://wa.me/917544913754?text=Hello%20Aditya%20Editor" target="_blank" rel="noopener">WhatsApp</a></nav></header>
-<main><section class="section booking-section" id="booking"><div class="section-heading"><p class="eyebrow">LET'S CREATE</p><h2>Book a Service</h2><p>अपनी जानकारी भरें और फोटो/वीडियो चुनें।</p></div><form id="bookingForm" class="booking-form"><label>Your name<input name="name" required maxlength="80" placeholder="Enter your name"></label><label>Phone number<input name="phone" required inputmode="tel" maxlength="20" placeholder="Enter your phone number"></label><label>Service<select name="service" required><option value="">Choose a service</option><option>Photo Editing</option><option>Video Editing</option><option>Wedding Projects</option><option>Graphic Design</option></select></label><label class="full upload-label">Upload your photos or videos <span class="upload-hint">Choose one or more files (photos/videos)</span><input name="mediaFiles" id="mediaFiles" type="file" accept="image/*,video/*" multiple><span id="selectedFiles" class="upload-hint" aria-live="polite">No files selected</span></label><button class="btn" type="submit">Send Booking Request</button><p id="bookingMessage" class="form-message" aria-live="polite"></p></form></section></main><footer><span>© <span id="year"></span> Aditya Editor</span><span><a href="index.html">Home</a></span></footer><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf5e9">
+  <meta name="description" content="Book photo editing, video editing, wedding anniversary editing and graphic design with Aditya Editor.">
+  <title>Book Editing | Aditya Editor</title>
+
+  <style>
+    :root {
+      --green: #08634e;
+      --green-dark: #064b3c;
+      --gold: #c18b26;
+      --cream: #fbf5e9;
+      --text: #292a25;
+      --muted: #777970;
+      --border: #e9dfce;
+      --white: #fffefa;
+      --red: #a72c2c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; }
+
+    .container {
+      width: min(1000px, 100%);
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 254, 250, .97);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--green);
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: linear-gradient(145deg, #e9b84d, #ad7717);
+      border-radius: 50%;
+      color: white;
+      font-size: 28px;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a { color: #4b514d; }
+
+    .nav-links .active { color: var(--green); }
+
+    .whatsapp {
+      color: white !important;
+      background: #148451;
+      padding: 10px 16px;
+      border-radius: 28px;
+      white-space: nowrap;
+    }
+
+    main { padding: 24px 0 42px; }
+
+    .hero {
+      min-height: 250px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 16px;
+      padding: 28px 30px;
+      border: 1px solid #eee0c7;
+      border-radius: 25px;
+      background:
+        radial-gradient(circle at 90% 10%, #f3dfb9 0, transparent 40%),
+        linear-gradient(120deg, #fffaf0, #f8ecd6);
+      box-shadow: 0 8px 24px #684a1510;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      margin: 10px 0;
+      color: var(--green-dark);
+      font-size: clamp(29px, 5vw, 43px);
+      line-height: 1.25;
+    }
+
+    .hero p {
+      color: #68665f;
+      margin-bottom: 0;
+      font-size: 16px;
+    }
+
+    .hero-art {
+      min-height: 175px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(45px, 8vw, 82px);
+    }
+
+    .hero-art span {
+      display: grid;
+      place-items: center;
+      width: 95px;
+      height: 95px;
+      border-radius: 25px;
+      background: #fffdf6;
+      box-shadow: 0 8px 24px #755a2712;
+    }
+
+    .section-card {
+      margin-top: 18px;
+      padding: 22px;
+      border: 1px solid #ece5d8;
+      border-radius: 23px;
+      background: var(--white);
+      box-shadow: 0 7px 24px #684a150b;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .section-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #e2f1e8;
+      color: var(--green);
+      font-size: 21px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--green);
+      font-size: 22px;
+      line-height: 1.3;
+    }
+
+    .section-heading p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .service-option {
+      display: block;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .service-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .service-card {
+      height: 100%;
+      min-height: 210px;
+      padding: 15px 10px;
+      text-align: center;
+      border: 1.5px solid var(--border);
+      border-radius: 15px;
+      background: #fffefa;
+      transition: border-color .15s, background .15s;
+    }
+
+    .service-option input:checked + .service-card {
+      border-color: #138365;
+      background: #f0f8f2;
+      box-shadow: inset 0 0 0 1px #138365;
+    }
+
+    .service-option input:focus-visible + .service-card {
+      outline: 3px solid #a4d8bd;
+    }
+
+    .service-emoji {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 10px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #d8f0e4;
+      font-size: 36px;
+    }
+
+    .service-option:nth-child(2) .service-emoji {
+      background: #e9ddfb;
+    }
+
+    .service-option:nth-child(3) .service-emoji {
+      background: #ffe1e2;
+    }
+
+    .service-option:nth-child(4) .service-emoji {
+      background: #dcecff;
+    }
+
+    .service-card strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .service-card p {
+      margin: 8px 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .radio-circle {
+      display: block;
+      width: 19px;
+      height: 19px;
+      margin: auto;
+      border: 2px solid #929a96;
+      border-radius: 50%;
+    }
+
+    .service-option input:checked + .service-card .radio-circle {
+      border: 6px solid var(--green);
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 20px;
+    }
+
+    .field { min-width: 0; }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label, .field-label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .required { color: var(--red); }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      min-width: 0;
+      padding: 14px;
+      border: 1.5px solid #e4ded2;
+      border-radius: 12px;
+      background: #fffefa;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #08634e14;
+    }
+
+    .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .upload-box {
+      padding: 22px 15px;
+      text-align: center;
+      border: 2px dashed #c9c8b9;
+      border-radius: 14px;
+      background: #fffdf8;
+    }
+
+    .upload-icon {
+      font-size: 39px;
+      color: var(--green);
+    }
+
+    .upload-box p {
+      margin: 4px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      margin-top: 12px;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .file-list {
+      margin-top: 10px;
+      overflow-wrap: anywhere;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .submit-button {
+      width: 100%;
+      min-height: 58px;
+      margin-top: 18px;
+      padding: 15px;
+      border: 0;
+      border-radius: 15px;
+      background: linear-gradient(100deg, #8d2020, #ad2e29);
+      box-shadow: 0 9px 20px #91202020;
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .submit-button:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .info-note {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #eaf5ec;
+      color: var(--green-dark);
+      font-size: 13px;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .message.error { color: var(--red); }
+    .message.success { color: var(--green); }
+
+    .success-card {
+      margin-top: 18px;
+      padding: 22px;
+      border: 1px solid #b7d9c1;
+      border-radius: 18px;
+      background: #f0f9f1;
+    }
+
+    .success-card h2 { color: var(--green); }
+
+    .booking-number {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 9px;
+      background: white;
+      color: var(--green);
+      font-size: 20px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .track-link {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 24px 10px 5px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 760px) {
+      .container { padding: 0 14px; }
+      .nav { min-height: 76px; }
+      .brand-icon { width: 49px; height: 49px; }
+      .brand-name { font-size: 18px; }
+      .brand-sub { font-size: 10px; }
+      .nav-links { gap: 10px; }
+      .nav-links a:not(.whatsapp) { display: none; }
+      .whatsapp { padding: 9px 12px; font-size: 12px; }
+      .hero { grid-template-columns: 1fr; padding: 23px; }
+      .hero-art { min-height: 100px; }
+      .hero-art span { width: 75px; height: 75px; font-size: 43px; }
+      .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .service-card { min-height: 195px; }
+    }
+
+    @media (max-width: 440px) {
+      .section-card { padding: 16px; border-radius: 19px; }
+      .section-heading h2 { font-size: 19px; }
+      .fields { grid-template-columns: 1fr; gap: 13px; }
+      .field.full { grid-column: auto; }
+      .service-card { padding: 12px 8px; min-height: 190px; }
+      .service-emoji { width: 61px; height: 61px; font-size: 30px; }
+      .service-card strong { font-size: 13px; }
+      .service-card p { font-size: 11px; }
+      .submit-button { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">ॐ</span>
+        <span>
+          <span class="brand-name">Aditya Editor</span>
+          <span class="brand-sub">Photo &amp; Video Editing Studio</span>
+        </span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="booking.html" class="active">Booking</a>
+        <a href="tracking.html">Track</a>
+        <a class="whatsapp"
+           href="https://wa.me/917544913754"
+           target="_blank"
+           rel="noopener">WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">BOOKING SERVICE</div>
+        <h1>अपनी फोटो और वीडियो एडिट करवाएँ</h1>
+        <p>
+          अब अपनी यादों को और भी खास बनाइए।
+          हम देते हैं प्रोफेशनल एडिटिंग सर्विस,
+          वो भी आपकी सुविधा के अनुसार।
+        </p>
+      </div>
+
+      <div class="hero-art" aria-label="Editing services">
+        <span>📷</span>
+        <span>🎬</span>
+        <span>🎨</span>
+      </div>
+    </section>
+
+    <form id="bookingForm">
+      <section class="section-card">
+        <div class="section-heading">
+          <span class="section-icon">ॐ</span>
+          <div>
+            <h2>Editing Service</h2>
+            <p>कृपया वह सेवा चुनें जो आप बुक करना चाहते हैं।</p>
+          </div>
+        </div>
+
+        <div class="services">
+          <label class="service-option">
+            <input type="radio" name="service"
+                   value="Photo Editing" required>
+            <div class="service-card">
+              <div class="service-emoji">🖼️</div>
+              <strong>Photo Editing</strong>
+              <p>Portrait, background, retouching, color correction</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+
+          <label class="service-option">
+            <input type="radio" name="service"
+                   value="Video Editing" required>
+            <div class="service-card">
+              <div class="service-emoji">🎬</div>
+              <strong>Video Editing</strong>
+              <p>Reels, YouTube, cinematic editing, social media</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+
+          <label class="service-option">
+            <input type="radio" name="service"
+                   value="Wedding Anniversary Editing" required>
+            <div class="service-card">
+              <div class="service-emoji">💍</div>
+              <strong>Wedding Anniversary Editing</strong>
+              <p>Wedding, anniversary, family video editing</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+
+          <label class="service-option">
+            <input type="radio" name="service"
+                   value="Graphic Design" required>
+            <div class="service-card">
+              <div class="service-emoji">🎨</div>
+              <strong>Graphic Design</strong>
+              <p>Poster, banner, logo, thumbnail, social media design</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+          
+          <label class="service-option">
+            <input type="radio" name="service"
+                   value="Wedding Anniversary Editing" required>
+            <div class="service-card">
+              <div class="service-emoji">📱</div>
+              <strong>Social Media Reels</strong>
+              <p>Short videos और social media reels editing.</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+
+        </div>
+      </section>
+
+      <section class="section-card">
+        <div class="section-heading">
+          <span class="section-icon">👤</span>
+          <div>
+            <h2>Customer Information</h2>
+            <p>अपनी सही जानकारी भरें।</p>
+          </div>
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <label for="customerName">
+              पूरा नाम <span class="required">*</span>
+            </label>
+            <input type="text" id="customerName"
+                   name="customer_name"
+                   maxlength="100"
+                   placeholder="अपना नाम लिखें"
+                   autocomplete="name" required>
+          </div>
+
+          <div class="field">
+            <label for="phone">
+              मोबाइल नंबर <span class="required">*</span>
+            </label>
+            <input type="tel" id="phone" name="phone"
+                   inputmode="numeric"
+                   pattern="[0-9]{10}"
+                   maxlength="10"
+                   placeholder="10 अंकों का मोबाइल नंबर"
+                   autocomplete="tel" required>
+          </div>
+
+          <div class="field full">
+            <label for="address">
+              पता (Address) <span class="required">*</span>
+            </label>
+            <textarea id="address" name="address"
+                      maxlength="500"
+                      placeholder="अपना पूरा पता लिखें (घर का पता / क्षेत्र / शहर / पिन कोड)"
+                      autocomplete="street-address"
+                      required></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <div class="section-heading">
+          <span class="section-icon">📄</span>
+          <div>
+            <h2>Booking Details</h2>
+            <p>अपनी फोटो या वीडियो फाइल चुनें।</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="mediaFiles">
+            Upload Files <span class="required">*</span>
+          </label>
+
+          <div class="upload-box">
+            <div class="upload-icon">☁️</div>
+            <strong>फोटो / वीडियो / फाइल चुनें</strong>
+            <p>एक या अधिक फाइलें चुन सकते हैं।</p>
+
+            <input type="file"
+                   id="mediaFiles"
+                   name="mediaFiles"
+                   accept="image/*,video/*,.pdf,.zip"
+                   multiple required>
+
+            <div class="file-list" id="fileList"></div>
+          </div>
+
+          <p class="hint">
+            प्रति फाइल अधिकतम 100 MB। JPG, PNG, MP4, MOV, PDF और ZIP जैसी फाइलें।
+          </p>
+        </div>
+
+        <button type="submit" class="submit-button"
+                id="submitButton">
+          ➤ Submit Booking
+        </button>
+
+        <div id="formMessage" class="message"
+             role="status" aria-live="polite"></div>
+
+        <div class="info-note">
+          ℹ️ बुकिंग सबमिट होने के बाद आपका Booking Number मिलेगा।
+          उससे आप Track पेज पर अपनी बुकिंग देख सकते हैं।
+        </div>
+      </section>
+    </form>
+
+    <section id="successCard" class="success-card" hidden>
+      <h2>✅ Booking Submit हो गई!</h2>
+      <p>आपका Booking Number:</p>
+      <div id="successBookingNumber" class="booking-number"></div>
+      <p>इस नंबर को संभालकर रखें और Tracking के लिए इस्तेमाल करें।</p>
+      <a id="trackBookingLink" class="track-link" href="tracking.html">
+        Track Your Booking →
+      </a>
+      <p>
+        <a id="whatsappBookingLink"
+           href="https://wa.me/917544913754"
+           target="_blank" rel="noopener">
+          WhatsApp पर संपर्क करें
+        </a>
+      </p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Aditya Editor |
+      Photo &amp; Video Editing Service
+      <br>आपका भरोसा, हमारी पहचान
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    "use strict";
+
+    const SUPABASE_URL =
+      "https://okzwtylpmcyurkxvaocy.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+
+    const STORAGE_BUCKET = "customer-media";
+    const MAX_FILE_SIZE = 100 * 1024 * 1024;
+    const MAX_FILES = 10;
+
+    const client = window.supabase
+      ? window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        )
+      : null;
+
+    const $ = id => document.getElementById(id);
+
+    $("year").textContent = new Date().getFullYear();
+
+    function showMessage(message, type = "") {
+      const element = $("formMessage");
+      element.textContent = message;
+      element.className = "message" + (type ? " " + type : "");
+    }
+
+    function createBookingNumber() {
+      const date = new Date();
+      const datePart =
+        date.getFullYear().toString() +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        String(date.getDate()).padStart(2, "0");
+
+      const randomPart = Math.floor(
+        10000 + Math.random() * 90000
+      );
+
+      return "AE-" + datePart + "-" + randomPart;
+    }
+
+    function safeFileName(name) {
+      return name
+        .normalize("NFKD")
+        .replace(/[^a-zA-Z0-9._-]/g, "_")
+        .slice(-120);
+    }
+
+    $("mediaFiles").addEventListener("change", function() {
+      const files = Array.from(this.files || []);
+      const list = $("fileList");
+
+      if (files.length > MAX_FILES) {
+        this.value = "";
+        list.textContent = "एक बार में अधिकतम 10 फाइलें चुनें।";
+        return;
+      }
+
+      const tooLarge = files.find(
+        file => file.size > MAX_FILE_SIZE
+      );
+
+      if (tooLarge) {
+        this.value = "";
+        list.textContent =
+          tooLarge.name + " 100 MB से बड़ी है। दूसरी फाइल चुनें।";
+        return;
+      }
+
+      list.textContent = files.length
+        ? files.map(file =>
+            file.name + " (" +
+            (file.size / (1024 * 1024)).toFixed(1) + " MB)"
+          ).join(" • ")
+        : "";
+    });
+
+    async function uploadFiles(files, bookingNumber) {
+      const uploadedPaths = [];
+
+      for (const file of files) {
+        const path =
+          bookingNumber + "/" +
+          Date.now() + "_" +
+          Math.random().toString(36).slice(2, 8) + "_" +
+          safeFileName(file.name);
+
+        const { data, error } = await client.storage
+          .from(STORAGE_BUCKET)
+          .upload(path, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type || undefined
+          });
+
+        if (error) {
+          throw new Error(
+            "फाइल अपलोड नहीं हुई (" + file.name + "): " +
+            error.message
+          );
+        }
+
+        uploadedPaths.push(data.path);
+      }
+
+      return uploadedPaths;
+    }
+
+    $("bookingForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      if (!client) {
+        showMessage(
+          "Supabase लोड नहीं हुआ। Internet जाँचकर पेज Refresh करें।",
+          "error"
+        );
+        return;
+      }
+
+      const serviceElement =
+        document.querySelector('input[name="service"]:checked');
+
+      const customerName = $("customerName").value.trim();
+      const phone = $("phone").value.trim();
+      const address = $("address").value.trim();
+      const files = Array.from($("mediaFiles").files || []);
+
+      if (!serviceElement) {
+        showMessage("कृपया Editing Service चुनें।", "error");
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        showMessage(
+          "कृपया 10 अंकों का सही मोबाइल नंबर डालें।",
+          "error"
+        );
+        return;
+      }
+
+      if (!customerName || !address) {
+        showMessage(
+          "कृपया नाम और पूरा पता भरें।",
+          "error"
+        );
+        return;
+      }
+
+      if (files.length < 1) {
+        showMessage(
+          "कृपया कम से कम एक फोटो या फाइल चुनें।",
+          "error"
+        );
+        return;
+      }
+
+      if (files.length > MAX_FILES) {
+        showMessage(
+          "एक बार में अधिकतम 10 फाइलें अपलोड करें।",
+          "error"
+        );
+        return;
+      }
+
+      const tooLarge = files.find(
+        file => file.size > MAX_FILE_SIZE
+      );
+
+      if (tooLarge) {
+        showMessage(
+          tooLarge.name + " 100 MB से बड़ी है।",
+          "error"
+        );
+        return;
+      }
+
+      const button = $("submitButton");
+      button.disabled = true;
+      button.textContent = "Booking Submit हो रही है...";
+      showMessage("कृपया इंतज़ार करें। फाइलें अपलोड हो रही हैं...");
+
+      let uploadedPaths = [];
+
+      try {
+        const bookingNumber = createBookingNumber();
+
+        uploadedPaths = await uploadFiles(
+          files,
+          bookingNumber
+        );
+
+        const bookingData = {
+          booking_number: bookingNumber,
+          customer_name: customerName,
+          phone: phone,
+          address: address,
+          service: serviceElement.value,
+          status: "Booking Submitted",
+          file_paths: uploadedPaths
+        };
+
+        const { error } = await client
+          .from("bookings")
+          .insert(bookingData);
+
+        if (error) {
+          throw error;
+        }
+
+        $("successBookingNumber").textContent = bookingNumber;
+        $("trackBookingLink").href =
+          "tracking.html?id=" +
+          encodeURIComponent(bookingNumber);
+
+        const whatsappMessage =
+          "Namaste Aditya Editor! Meri booking submit hui hai." +
+          "\nBooking Number: " + bookingNumber +
+          "\nName: " + customerName +
+          "\nService: " + serviceElement.value;
+
+        $("whatsappBookingLink").href =
+          "https://wa.me/917544913754?text=" +
+          encodeURIComponent(whatsappMessage);
+
+        $("successCard").hidden = false;
+        $("successCard").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+        $("bookingForm").reset();
+        $("fileList").textContent = "";
+
+        showMessage(
+          "Booking सफलतापूर्वक सबमिट हो गई।",
+          "success"
+        );
+
+      } catch (error) {
+        console.error("Booking submit error:", error);
+
+        showMessage(
+          "Booking submit नहीं हुई: " +
+          (error.message || "कृपया दोबारा कोशिश करें।") +
+          "\nअगर फाइलें अपलोड हुई थीं, तो दोबारा कोशिश करने पर नई फाइलें भी अपलोड हो सकती हैं।",
+          "error"
+        );
+
+      } finally {
+        button.disabled = false;
+        button.textContent = "➤ Submit Booking";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -2,12 +2,13 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#06101f">
-<title>Aditya Editor | Photo & Video Editing</title>
+<meta name="description" content="A k Editor - Photo Editing, Video Editing, Wedding Editing, Graphic Design and Secure Payment.">
+<title>A k Editor | Home</title>
 
 <style>
-:root{
+:root {
   --bg:#06101f;
   --panel:#102139;
   --cyan:#42dfff;
@@ -16,117 +17,108 @@
   --white:#f5f7ff;
   --muted:#adbbd0;
   --border:#29415d;
-  --red:#ff7373;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:85px}
-body{
-  margin:0;color:var(--white);
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  color:var(--white);
   background:radial-gradient(ellipse at top right,#17365a,transparent 45%),var(--bg);
-  font-family:Arial,Helvetica,sans-serif;line-height:1.6
+  font-family:Arial,Helvetica,sans-serif;
+  line-height:1.6;
 }
-a{color:inherit;text-decoration:none}
-button,input,select,textarea{font:inherit}
-.container{width:min(1100px,100%);margin:auto;padding:0 18px}
-header{
+a { color:inherit;text-decoration:none; }
+.container { width:min(1100px,100%);margin:auto;padding:0 18px; }
+header {
   position:sticky;top:0;z-index:10;
-  background:#06101ff5;border-bottom:1px solid var(--border)
+  background:#06101ff5;border-bottom:1px solid var(--border);
 }
-.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.logo{font-size:20px;font-weight:900;color:var(--cyan)}
-.logo small{display:block;color:var(--muted);font-size:11px;font-weight:400}
-#menu{display:none;background:var(--panel);color:var(--cyan);border:1px solid var(--border);padding:9px 13px;border-radius:9px}
-.links{display:flex;align-items:center;gap:17px;font-size:14px}
-.links a:hover{color:var(--cyan)}
-.btn{
+.nav {
+  min-height:72px;display:flex;align-items:center;
+  justify-content:space-between;gap:15px;
+}
+.logo { font-size:21px;font-weight:900;color:var(--cyan); }
+.logo small { display:block;color:var(--muted);font-size:11px;font-weight:400; }
+#menu {
+  display:none;background:var(--panel);color:var(--cyan);
+  border:1px solid var(--border);padding:9px 13px;border-radius:9px;
+}
+.links { display:flex;align-items:center;gap:17px;font-size:14px; }
+.links a:hover { color:var(--cyan); }
+.btn {
   display:inline-flex;align-items:center;justify-content:center;
-  padding:12px 19px;border:0;border-radius:10px;
+  padding:12px 18px;border:0;border-radius:10px;
   background:linear-gradient(100deg,var(--purple),var(--cyan));
   color:#06101f;font-weight:bold;text-align:center;cursor:pointer;
-  transition:transform .2s,box-shadow .2s
+  transition:transform .2s;
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px #42dfff30}
-.btn.green{background:var(--green)}
-.btn.outline{background:transparent;border:1px solid var(--cyan);color:var(--cyan)}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.hero{padding:60px 0;border-bottom:1px solid var(--border)}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:35px}
-.eyebrow{color:var(--cyan);letter-spacing:2px;font-size:12px;font-weight:bold}
-h1{font-size:clamp(40px,7vw,70px);line-height:1.05;margin:15px 0}
-.gradient{background:linear-gradient(90deg,var(--cyan),#b49aff);background-clip:text;-webkit-background-clip:text;color:transparent}
-p{color:var(--muted);margin:9px 0}
-.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:22px}
-.hero-art{
-  min-width:0;padding:30px 22px;text-align:center;
+.btn:hover { transform:translateY(-2px); }
+.btn.green { background:var(--green); }
+.btn.outline { background:transparent;border:1px solid var(--cyan);color:var(--cyan); }
+.hero { padding:58px 0;border-bottom:1px solid var(--border); }
+.hero-grid {
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:35px;
+}
+.eyebrow { color:var(--cyan);letter-spacing:2px;font-size:12px;font-weight:bold; }
+h1 { font-size:clamp(42px,7vw,70px);line-height:1.05;margin:15px 0; }
+.gradient {
+  background:linear-gradient(90deg,var(--cyan),#b49aff);
+  background-clip:text;-webkit-background-clip:text;color:transparent;
+}
+p { color:var(--muted);margin:9px 0; }
+.actions { display:flex;gap:11px;flex-wrap:wrap;margin-top:22px; }
+.hero-art {
+  padding:30px 22px;text-align:center;
   background:linear-gradient(145deg,#192c53,#081323);
-  border:1px solid #345578;border-radius:22px
+  border:1px solid #345578;border-radius:22px;
 }
-.hero-art .icons{font-size:48px;margin-bottom:12px}
-.hero-art h2{color:var(--cyan)}
-.hero-links{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
-.hero-links .btn{width:100%;min-height:52px;padding:12px 8px;font-size:14px}
-section{padding:52px 0}
-.heading{margin-bottom:25px}
-.heading h2{font-size:clamp(27px,4vw,36px);margin:5px 0}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
-.card{
+.big-icons { font-size:48px; }
+.hero-art h2 { color:var(--cyan); }
+.quick-links {
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;
+}
+.quick-links .btn { min-height:52px;padding:12px 8px;font-size:14px; }
+section { padding:48px 0; }
+.heading { margin-bottom:25px; }
+.heading h2 { font-size:clamp(27px,4vw,36px);margin:5px 0; }
+.grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px; }
+.card {
   min-width:0;background:linear-gradient(145deg,var(--panel),#091629);
   border:1px solid var(--border);border-radius:17px;
-  padding:22px;overflow-wrap:anywhere
+  padding:22px;overflow-wrap:anywhere;
 }
-.card h3{margin:8px 0}
-.icon{font-size:36px}
-.gallery-art{font-size:45px;text-align:center;padding:23px;background:linear-gradient(130deg,#1a4268,#382568);border-radius:12px}
-label{display:block;margin:12px 0 6px;font-weight:bold}
-input,select,textarea{
-  width:100%;padding:13px;border-radius:10px;
-  border:1px solid #36516f;background:#071426;color:var(--white)
-}
-input:focus,select:focus,textarea:focus{outline:1px solid var(--cyan)}
-textarea{min-height:90px;resize:vertical}
-input[type=file]{padding:10px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.full{grid-column:1/-1}
-.note{font-size:13px;color:var(--muted)}
-.message{overflow-wrap:anywhere;white-space:pre-wrap;margin-top:15px;color:var(--cyan)}
-.message.error{color:var(--red)}
-.message.success{color:var(--green)}
-.result{display:none;background:#071426;border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:18px;overflow-wrap:anywhere}
-.result h3{color:var(--cyan)}
-.result p{padding:6px 0;border-bottom:1px solid #29415d80}
-.progress{display:flex;gap:6px;margin:20px 0}
-.step{flex:1;min-width:0;text-align:center;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
-.dot{width:15px;height:15px;border-radius:50%;background:#38506b;margin:0 auto 8px}
-.step.done .dot{background:var(--green)}
-.step.done{color:var(--white)}
-footer{padding:30px 0;text-align:center;border-top:1px solid var(--border)}
-@media(max-width:850px){
-  #menu{display:block}
-  .links{
+.card h3 { margin:8px 0; }
+.icon { font-size:38px; }
+.card .btn { margin-top:13px;width:100%; }
+.feature-card { text-align:center; }
+.feature-card .icon { font-size:40px; }
+.payment-card { border-color:#31617b; }
+.contact-grid { display:grid;grid-template-columns:1fr 1fr;gap:17px; }
+footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
+@media(max-width:850px) {
+  #menu { display:block; }
+  .links {
     display:none;position:absolute;top:72px;left:0;right:0;
     background:#06101f;padding:18px;flex-direction:column;
-    align-items:stretch;border-bottom:1px solid var(--border)
+    align-items:stretch;border-bottom:1px solid var(--border);
   }
-  .links.open{display:flex}
-  .links a{padding:8px}
-  .hero-grid{grid-template-columns:1fr}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .links.open { display:flex; }
+  .links a { padding:8px; }
+  .hero-grid { grid-template-columns:1fr; }
+  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
-@media(max-width:520px){
-  .container{padding:0 15px}
-  .hero{padding:40px 0}
-  section{padding:38px 0}
-  .hero-grid{grid-template-columns:minmax(0,1fr);gap:22px}
-  .hero-art{padding:22px 14px}
-  .hero-art .icons{font-size:40px}
-  .hero-links{grid-template-columns:1fr 1fr;gap:9px}
-  .hero-links .btn{font-size:12px;min-height:48px}
-  .grid,.form-grid{grid-template-columns:1fr}
-  .full{grid-column:auto}
-  .card{padding:18px}
-  .actions .btn{flex:1}
-  input,select,textarea{font-size:16px}
-  .step{font-size:9px}
+@media(max-width:520px) {
+  .container { padding:0 15px; }
+  .hero { padding:38px 0; }
+  section { padding:36px 0; }
+  .hero-art { padding:22px 14px; }
+  .big-icons { font-size:40px; }
+  .quick-links { gap:9px; }
+  .quick-links .btn { font-size:12px;min-height:50px; }
+  .grid,.contact-grid { grid-template-columns:1fr; }
+  .card { padding:18px; }
+  .actions .btn { flex:1; }
 }
 </style>
 </head>
@@ -134,441 +126,202 @@ footer{padding:30px 0;text-align:center;border-top:1px solid var(--border)}
 <body>
 <header>
   <div class="container nav">
-    <a class="logo" href="#home">✦ ADITYA EDITOR
-      <small>Photo & Video Editing</small>
+    <a class="logo" href="index.html">
+      ✦ A K EDITOR
+      <small>Photo &amp; Video Editing Studio</small>
     </a>
-    <button id="menu" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+
+    <button id="menu" type="button" aria-expanded="false"
+      aria-label="Menu खोलें">☰</button>
+
     <nav class="links" id="links">
-      <a href="#home">Home</a>
+      <a href="index.html">Home</a>
       <a href="#services">Our Services</a>
-      <a href="#booking">Book Now</a>
-      <a href="#track">Track Your Booking</a>
-      <a href="#payment">Secure Payment</a>
+      <a href="booking.html">Book Now</a>
+      <a href="tracking.html">Track Your Booking</a>
+      <a href="payment.html">Secure Payment</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-<section class="hero" id="home">
-  <div class="container hero-grid">
-    <div>
-      <div class="eyebrow">CREATE · EDIT · DELIVER</div>
-      <h1>ADITYA<br><span class="gradient">EDITOR</span></h1>
-      <h2>Photo & Video Editing Service</h2>
-      <p>अपनी फोटो और वीडियो की editing बुक करें। अपनी बुकिंग का स्टेटस देखें और भुगतान की जानकारी पाएँ।</p>
-      <div class="actions">
-        <a class="btn" href="#booking">Book Now →</a>
-        <a class="btn green" href="https://wa.me/917544913754" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-    </div>
-    <div class="hero-art">
-      <div class="icons">📸 🎬 ✨</div>
-      <h2>Your Creativity, Our Editing</h2>
-      <p>Photo Editing · Video Editing · Wedding · Graphics</p>
-      <div class="hero-links">
-        <a class="btn" href="#services">Our Services</a>
-        <a class="btn" href="#booking">Book Your Work</a>
-        <a class="btn" href="#track">Track Your Booking</a>
-        <a class="btn" href="#payment">Secure Payment</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="services">
-  <div class="container">
-    <div class="heading">
-      <div class="eyebrow">OUR SERVICES</div>
-      <h2>हमारी सेवाएँ</h2>
-    </div>
-    <div class="grid">
-      <article class="card"><div class="icon">🖼️</div><h3>Photo Editing</h3><p>Photo retouching, background और colour correction.</p></article>
-      <article class="card"><div class="icon">🎥</div><h3>Video Editing</h3><p>Video cuts, transitions और video editing.</p></article>
-      <article class="card"><div class="icon">💍</div><h3>Wedding Projects</h3><p>Wedding videos और खास यादों की editing.</p></article>
-      <article class="card"><div class="icon">🎨</div><h3>Graphics Design</h3><p>Posters और creative designs.</p></article>
-      <article class="card"><div class="icon">📱</div><h3>Social Media Reels</h3><p>Short videos और reels editing.</p></article>
-    </div>
-  </div>
-</section>
-
-<section id="gallery">
-  <div class="container">
-    <div class="heading"><div class="eyebrow">PORTFOLIO</div><h2>Our Work</h2></div>
-    <div class="grid">
-      <div class="card"><div class="gallery-art">📸</div><h3>Photo Editing</h3></div>
-      <div class="card"><div class="gallery-art">🎞️</div><h3>Video & Reels</h3></div>
-      <div class="card"><div class="gallery-art">💍</div><h3>Wedding Projects</h3></div>
-    </div>
-  </div>
-</section>
-
-<section id="booking">
-  <div class="container">
-    <div class="heading">
-      <div class="eyebrow">BOOK YOUR WORK</div>
-      <h2>अपना काम बुक करें</h2>
-      <p>अपनी जानकारी भरें और फोटो या वीडियो अपलोड करें।</p>
-    </div>
-    <div class="card">
-      <form id="bookingForm">
-        <div class="form-grid">
-          <div>
-            <label for="name">पूरा नाम *</label>
-            <input id="name" required maxlength="100" autocomplete="name" placeholder="अपना नाम">
-          </div>
-          <div>
-            <label for="phone">मोबाइल नंबर *</label>
-            <input id="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" placeholder="10 अंकों का नंबर">
-          </div>
-          <div class="full">
-            <label for="address">पूरा पता *</label>
-            <textarea id="address" required maxlength="500" autocomplete="street-address" placeholder="अपना पूरा पता"></textarea>
-          </div>
-          <div>
-            <label for="service">Service चुनें *</label>
-            <select id="service" required>
-              <option value="">Service चुनें</option>
-              <option value="Photo Editing">Photo Editing</option>
-              <option value="Video Editing">Video Editing</option>
-              <option value="Wedding Projects">Wedding Projects</option>
-              <option value="Graphics Design">Graphics Design</option>
-              <option value="Social Media Reels">Social Media Reels</option>
-            </select>
-          </div>
-          <div>
-            <label for="quantity">Quantity *</label>
-            <input id="quantity" type="number" min="1" max="100" value="1" required>
-          </div>
-          <div class="full">
-            <label for="uploads">Photo / Video Upload करें</label>
-            <input id="uploads" type="file" accept="image/*,video/*" multiple>
-            <p class="note">अधिकतम 5 फाइलें, हर फाइल 50 MB तक।</p>
-          </div>
+  <!-- HOME HERO -->
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">CREATE · EDIT · DELIVER</div>
+        <h1>A K<br><span class="gradient">EDITOR</span></h1>
+        <h2>Photo &amp; Video Editing Service</h2>
+        <p>
+          अपनी फोटो, वीडियो, वेडिंग प्रोजेक्ट और ग्राफिक डिजाइन
+          का काम आसानी से बुक करें। Booking Number से स्टेटस देखें
+          और अपनी तय राशि का भुगतान करें।
+        </p>
+        <div class="actions">
+          <a class="btn" href="booking.html">Book Now →</a>
+          <a class="btn green" href="https://wa.me/917544913754"
+             target="_blank" rel="noopener">WhatsApp</a>
         </div>
-        <button class="btn" id="bookButton" type="submit">Book Now →</button>
-        <div id="bookingMessage" class="message" role="status" aria-live="polite"></div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<section id="track">
-  <div class="container">
-    <div class="heading">
-      <div class="eyebrow">TRACK YOUR BOOKING</div>
-      <h2>Track Your Booking</h2>
-      <p>अपना Booking Number और मोबाइल नंबर डालें।</p>
-    </div>
-    <div class="card">
-      <form id="trackForm">
-        <label for="trackNumber">Booking Number *</label>
-        <input id="trackNumber" required placeholder="AE-12345678">
-        <label for="trackMobile">मोबाइल नंबर *</label>
-        <input id="trackMobile" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 अंकों का नंबर">
-        <button class="btn" type="submit" style="margin-top:16px">Track Your Booking →</button>
-      </form>
-      <div id="trackMessage" class="message" role="status" aria-live="polite"></div>
-      <div id="trackResult" class="result"></div>
-    </div>
-  </div>
-</section>
-
-<section id="payment">
-  <div class="container">
-    <div class="heading">
-      <div class="eyebrow">SECURE PAYMENT</div>
-      <h2>UPI Payment</h2>
-      <p>भुगतान करने से पहले Admin से राशि की पुष्टि करें।</p>
-    </div>
-    <div class="card">
-      <h3>Pay Aditya Editor</h3>
-      <p>UPI ID: <strong>7544913754-3@ybl</strong></p>
-      <div class="actions">
-        <a class="btn green" href="upi://pay?pa=7544913754-3%40ybl&amp;pn=Aditya%20Kumar&amp;cu=INR">Open UPI App</a>
-        <button class="btn outline" id="copyUpi" type="button">Copy UPI ID</button>
       </div>
-      <div id="paymentMessage" class="message" role="status" aria-live="polite"></div>
-      <p class="note">UTR भेजने से भुगतान अपने-आप verified नहीं होता। Admin transaction जाँचकर ही Paid करेगा।</p>
-      <a class="btn outline" href="payment.html">Submit Payment Reference →</a>
-    </div>
-  </div>
-</section>
 
-<section id="contact">
-  <div class="container">
-    <div class="heading"><div class="eyebrow">CONTACT</div><h2>Aditya Kumar</h2></div>
-    <div class="grid">
-      <div class="card">
-        <h3>WhatsApp</h3><p>7544913754</p>
-        <a class="btn green" href="https://wa.me/917544913754" target="_blank" rel="noopener">Chat on WhatsApp</a>
-      </div>
-      <div class="card">
-        <h3>Business Address</h3>
-        <p>Jagu Nagar, Banni, Khagaria, Maheshkhunt, Bihar - 851214</p>
+      <div class="hero-art">
+        <div class="big-icons">📸 🎬 ✨</div>
+        <h2>Your Creativity, Our Editing</h2>
+        <p>Photo Editing · Video Editing · Wedding · Graphics</p>
+
+        <div class="quick-links">
+          <a class="btn" href="booking.html">Our Services</a>
+          <a class="btn" href="booking.html">Book Your Work</a>
+          <a class="btn outline" href="tracking.html">Track Your Booking</a>
+          <a class="btn green" href="payment.html">Secure Payment</a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="heading">
+        <div class="eyebrow">OUR SERVICES</div>
+        <h2>हमारी सेवाएँ</h2>
+        <p>अपनी जरूरत की सर्विस चुनें और बुकिंग शुरू करें।</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="icon">🖼️</div>
+          <h3>Photo Editing</h3>
+          <p>Photo retouching, background removal और colour correction.</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">🎬</div>
+          <h3>Video Editing</h3>
+          <p>Video cuts, transitions, reels और video editing.</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">💍</div>
+          <h3>Wedding Projects</h3>
+          <p>Wedding videos, anniversary videos और खास यादों की editing.</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">🎨</div>
+          <h3>Graphic Design</h3>
+          <p>Posters, banners, thumbnails और creative designs.</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">📱</div>
+          <h3>Social Media Reels</h3>
+          <p>Short videos और social media reels editing.</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card feature-card">
+          <div class="icon">📋</div>
+          <h3>Track Your Booking</h3>
+          <p>अपना Booking Number और मोबाइल नंबर डालकर बुकिंग देखें।</p>
+          <a class="btn outline" href="tracking.html">Track Now →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING AND PAYMENT SHORTCUTS -->
+  <section id="quick-actions">
+    <div class="container">
+      <div class="heading">
+        <div class="eyebrow">QUICK ACCESS</div>
+        <h2>Booking &amp; Payment</h2>
+        <p>नीचे दिए गए बटन से सही पेज खोलें।</p>
+      </div>
+
+      <div class="grid">
+        <article class="card feature-card">
+          <div class="icon">📝</div>
+          <h3>Book Your Work</h3>
+          <p>अपनी सर्विस चुनें, जानकारी भरें और फाइल अपलोड करें।</p>
+          <a class="btn" href="booking.html">Book Now →</a>
+        </article>
+
+        <article class="card feature-card">
+          <div class="icon">🔎</div>
+          <h3>Track Your Booking</h3>
+          <p>Booking Number से अपनी बुकिंग का स्टेटस देखें।</p>
+          <a class="btn outline" href="tracking.html">Track Booking →</a>
+        </article>
+
+        <article class="card feature-card payment-card">
+          <div class="icon">💳</div>
+          <h3>Secure Payment</h3>
+          <p>Booking Number डालें। Admin की तय राशि दिखने पर भुगतान करें।</p>
+          <a class="btn green" href="payment.html">Payment Now →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="heading">
+        <div class="eyebrow">CONTACT US</div>
+        <h2>A K Editor</h2>
+        <p>काम या बुकिंग से जुड़ी मदद के लिए संपर्क करें।</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="card">
+          <h3>WhatsApp</h3>
+          <p>7544913754</p>
+          <a class="btn green" href="https://wa.me/917544913754"
+             target="_blank" rel="noopener">Chat on WhatsApp</a>
+        </div>
+
+        <div class="card">
+          <h3>Business Address</h3>
+          <p> Khagaria, Maheshkhunt, Bihar - 851214</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
   <div class="container">
-    <div class="logo">ADITYA EDITOR</div>
-    <p>Photo & Video Editing</p>
-    <p>© <span id="year"></span> Aditya Editor</p>
+    <div class="logo">✦ A K EDITOR</div>
+    <p>Photo &amp; Video Editing Studio</p>
+    <p>© <span id="year"></span> Aditya Editor. All rights reserved.</p>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
 
-const SUPABASE_URL = "https://okzwtylpmcyurkxvaocy.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
-const STORAGE_BUCKET = "customer-media";
-const MAX_FILE_SIZE = 50 * 1024 * 1024;
-const MAX_FILES = 5;
+document.getElementById("year").textContent =
+  new Date().getFullYear();
 
-const client = window.supabase
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
-  : null;
+const menu = document.getElementById("menu");
+const links = document.getElementById("links");
 
-const $ = id => document.getElementById(id);
-$("year").textContent = new Date().getFullYear();
-
-$("menu").addEventListener("click", () => {
-  const open = $("links").classList.toggle("open");
-  $("menu").setAttribute("aria-expanded", String(open));
-});
-document.querySelectorAll("#links a").forEach(link => {
-  link.addEventListener("click", () => $("links").classList.remove("open"));
+menu.addEventListener("click", function() {
+  const isOpen = links.classList.toggle("open");
+  menu.setAttribute("aria-expanded", String(isOpen));
 });
 
-$("copyUpi").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText("7544913754-3@ybl");
-    $("paymentMessage").textContent = "UPI ID कॉपी हो गई।";
-  } catch {
-    $("paymentMessage").textContent = "UPI ID: 7544913754-3@ybl";
-  }
-});
-
-function newBookingNumber() {
-  return "AE-" + Date.now().toString().slice(-8) +
-    Math.floor(10 + Math.random() * 90);
-}
-
-function showMessage(element, text, type) {
-  element.textContent = text;
-  element.className = "message" + (type ? " " + type : "");
-}
-
-function readableError(error) {
-  const text = String(error?.message || error || "Unknown error");
-  if (/row-level security|violates row-level security/i.test(text)) {
-    return "Booking सेव नहीं हुई: Supabase की bookings RLS policy अनुमति नहीं दे रही। SQL Editor में INSERT policy ठीक करें।";
-  }
-  if (/bucket not found/i.test(text)) {
-    return "Storage bucket 'customer-media' नहीं मिला। Supabase Storage में bucket का नाम जाँचें।";
-  }
-  if (/permission denied|not authorized|unauthorized/i.test(text)) {
-    return "Supabase permission error। Database और Storage policies जाँचें।";
-  }
-  return "Booking सेव नहीं हुई: " + text;
-}
-
-$("bookingForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  const message = $("bookingMessage");
-  const button = $("bookButton");
-  showMessage(message, "", "");
-
-  if (!client) {
-    showMessage(message, "Supabase load नहीं हुआ। Internet जाँचें और Refresh करें।", "error");
-    return;
-  }
-
-  const name = $("name").value.trim();
-  const phone = $("phone").value.replace(/\D/g, "");
-  const address = $("address").value.trim();
-  const service = $("service").value;
-  const quantity = Number($("quantity").value);
-  const files = Array.from($("uploads").files || []);
-
-  if (!name || !address || !service) {
-    showMessage(message, "कृपया सभी जरूरी जानकारी भरें।", "error");
-    return;
-  }
-  if (!/^\d{10}$/.test(phone)) {
-    showMessage(message, "सही 10 अंकों का मोबाइल नंबर डालें।", "error");
-    return;
-  }
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
-    showMessage(message, "Quantity 1 से 100 के बीच रखें।", "error");
-    return;
-  }
-  if (files.length > MAX_FILES) {
-    showMessage(message, "अधिकतम 5 फाइलें चुनें।", "error");
-    return;
-  }
-  if (files.some(file => file.size > MAX_FILE_SIZE)) {
-    showMessage(message, "हर फाइल 50 MB या उससे छोटी होनी चाहिए।", "error");
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = "Booking भेजी जा रही है...";
-
-  const bookingNumber = newBookingNumber();
-  const uploadedPaths = [];
-
-  try {
-    for (const file of files) {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const randomPart = (crypto.randomUUID
-        ? crypto.randomUUID()
-        : Date.now() + "-" + Math.random().toString(16).slice(2));
-      const path = bookingNumber + "/" + randomPart + "-" + safeName;
-
-      const { error: uploadError } =
-        await client.storage.from(STORAGE_BUCKET).upload(path, file);
-
-      if (uploadError) throw uploadError;
-      uploadedPaths.push(path);
-    }
-
-    // NOTE: address तभी save होगा जब bookings table में address column हो।
-    // नीचे insert मौजूदा table columns के अनुसार रखा गया है।
-    const { error: insertError } = await client.from("bookings").insert({
-      booking_number: bookingNumber,
-      customer_name: name,
-      phone: phone,
-      service: service + " (Quantity: " + quantity + ")",
-      status: "Pending",
-      file_paths: uploadedPaths
-    });
-
-    if (insertError) throw insertError;
-
-    // यह message केवल तब दिखेगा जब database insert सफल हो।
-    showMessage(
-      message,
-      "🎉 Booking Successful!\n\nBooking Number: " + bookingNumber +
-      "\nService: " + service +
-      "\nStatus: Pending\n\nइस Booking Number को सुरक्षित रखें। Tracking में यही नंबर डालें।",
-      "success"
-    );
-
-    $("trackNumber").value = bookingNumber;
-    $("trackMobile").value = phone;
-    $("bookingForm").reset();
-
-  } catch (error) {
-    console.error("Booking error:", error);
-
-    // Insert fail होने पर इस attempt में upload की गई files हटाने की कोशिश।
-    if (uploadedPaths.length) {
-      const { error: cleanupError } =
-        await client.storage.from(STORAGE_BUCKET).remove(uploadedPaths);
-      if (cleanupError) console.error("Uploaded-file cleanup error:", cleanupError);
-    }
-
-    showMessage(message, readableError(error), "error");
-  } finally {
-    button.disabled = false;
-    button.textContent = "Book Now →";
-  }
-});
-
-$("trackForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  const message = $("trackMessage");
-  const result = $("trackResult");
-  showMessage(message, "", "");
-  result.replaceChildren();
-  result.style.display = "none";
-
-  if (!client) {
-    showMessage(message, "Supabase load नहीं हुआ। Internet जाँचें।", "error");
-    return;
-  }
-
-  const bookingNumber = $("trackNumber").value.trim();
-  const phone = $("trackMobile").value.replace(/\D/g, "");
-
-  if (!/^\d{10}$/.test(phone)) {
-    showMessage(message, "सही 10 अंकों का मोबाइल नंबर डालें।", "error");
-    return;
-  }
-
-  showMessage(message, "Booking जाँची जा रही है...", "");
-
-  try {
-    const { data, error } = await client.rpc("track_booking", {
-      p_booking_number: bookingNumber,
-      p_phone: phone
-    });
-
-    if (error) throw error;
-
-    const booking = Array.isArray(data) ? data[0] : data;
-    if (!booking) {
-      showMessage(message, "Booking नहीं मिली। Booking Number और मोबाइल नंबर जाँचें।", "error");
-      return;
-    }
-
-    showMessage(message, "", "");
-
-    function addLine(label, value) {
-      const p = document.createElement("p");
-      const strong = document.createElement("strong");
-      strong.textContent = label + ": ";
-      p.append(strong, document.createTextNode(String(value ?? "—")));
-      result.appendChild(p);
-    }
-
-    const title = document.createElement("h3");
-    title.textContent = "Aditya Editor — Booking Details";
-    result.appendChild(title);
-
-    addLine("Booking Number", booking.booking_number);
-    addLine("Customer", booking.customer_name);
-    addLine("Service", booking.service);
-    addLine("Status", booking.status);
-    addLine("Amount", booking.amount == null
-      ? "Admin ने अभी कीमत तय नहीं की है"
-      : "₹" + Number(booking.amount).toLocaleString("en-IN"));
-    addLine("Booking Date", booking.created_at
-      ? new Date(booking.created_at).toLocaleString("en-IN")
-      : "—");
-
-    const current = String(booking.status || "").toLowerCase();
-    const active = current.includes("complete") ? 3 :
-      current.includes("progress") ? 2 :
-      current.includes("confirm") || current.includes("received") ? 1 : 0;
-
-    const progress = document.createElement("div");
-    progress.className = "progress";
-
-    ["Booking Received", "Confirmed", "In Progress", "Completed"].forEach((label, index) => {
-      const step = document.createElement("div");
-      step.className = "step" + (index <= active ? " done" : "");
-      const dot = document.createElement("div");
-      dot.className = "dot";
-      const text = document.createElement("div");
-      text.textContent = label;
-      step.append(dot, text);
-      progress.appendChild(step);
-    });
-
-    result.appendChild(progress);
-    result.style.display = "block";
-
-  } catch (error) {
-    console.error("Tracking error:", error);
-    showMessage(message, "Tracking error: " + (error.message || String(error)), "error");
-  }
+links.querySelectorAll("a").forEach(function(link) {
+  link.addEventListener("click", function() {
+    links.classList.remove("open");
+    menu.setAttribute("aria-expanded", "false");
+  });
 });
 </script>
 </body>

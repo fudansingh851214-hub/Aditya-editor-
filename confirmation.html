@@ -1,37 +1,371 @@
 <!doctype html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fbf6eb">
+
   <title>Booking Received | Aditya Editor</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .confirmation-page {
+      margin: 0;
+      min-height: 100vh;
+      background: #fbf6eb;
+      color: #28251f;
+      font-family: Arial, "Noto Sans Devanagari", sans-serif;
+    }
+
+    .confirm-header {
+      margin: 20px auto;
+      width: calc(100% - 32px);
+      max-width: 900px;
+      padding: 22px;
+      box-sizing: border-box;
+      background: #fffdf8;
+      border-bottom: 1px solid #e5d5b3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .confirm-header .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #28251f;
+      text-decoration: none;
+    }
+
+    .confirm-header .brand-mark {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #d8ad55;
+      color: white;
+      font-size: 30px;
+    }
+
+    .confirm-header .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .confirm-header .brand-text small {
+      font-size: 13px;
+    }
+
+    .confirm-header .brand-text strong {
+      font-size: 25px;
+    }
+
+    .whatsapp-top {
+      border: 2px solid #258454;
+      color: #258454;
+      padding: 14px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .confirmation-wrap {
+      padding: 24px 16px 48px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .confirmation-card {
+      width: 100%;
+      max-width: 590px;
+      padding: 48px 34px;
+      box-sizing: border-box;
+      background: #fff;
+      border: 2px solid #eadfc6;
+      border-radius: 38px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(112, 86, 39, 0.08);
+    }
+
+    .success-mark {
+      width: 112px;
+      height: 112px;
+      margin: 12px auto 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 4px solid #b8e4c5;
+      background: #e5f6e9;
+      color: #16834a;
+      font-size: 68px;
+      font-weight: bold;
+    }
+
+    .confirm-eyebrow {
+      color: #b38b3d;
+      letter-spacing: 4px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .confirmation-card h1 {
+      margin: 36px 0 22px;
+      font-size: clamp(28px, 6vw, 42px);
+      line-height: 1.55;
+    }
+
+    .confirm-copy {
+      color: #827b70;
+      font-size: 20px;
+      line-height: 1.9;
+      margin-bottom: 48px;
+    }
+
+    .booking-number-box {
+      padding: 30px 14px;
+      margin: 0 0 30px;
+      border: 2px dashed #d7c18d;
+      border-radius: 28px;
+      background: #fcf5e7;
+      overflow-wrap: anywhere;
+    }
+
+    .booking-number-box span {
+      display: block;
+      color: #8c7b57;
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      margin-bottom: 24px;
+    }
+
+    .booking-number-box strong {
+      display: block;
+      color: #93631d;
+      font-size: clamp(24px, 6vw, 38px);
+      letter-spacing: 2px;
+    }
+
+    .confirm-whatsapp,
+    .confirm-home {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 22px 16px;
+      margin-top: 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .confirm-whatsapp {
+      background: #138747;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(19, 135, 71, 0.16);
+    }
+
+    .confirm-home {
+      background: #f5f0e5;
+      color: #6b542b;
+      border: 1px solid #e6d8b9;
+    }
+
+    .confirm-note {
+      margin-top: 28px;
+      color: #777064;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .confirm-footer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #827b70;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      .confirm-header {
+        padding: 16px 12px;
+      }
+
+      .confirm-header .brand-mark {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+      }
+
+      .confirm-header .brand-text strong {
+        font-size: 18px;
+      }
+
+      .confirm-header .brand-text small {
+        font-size: 10px;
+      }
+
+      .whatsapp-top {
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      .confirmation-card {
+        padding: 34px 20px;
+        border-radius: 28px;
+      }
+
+      .success-mark {
+        width: 90px;
+        height: 90px;
+        font-size: 55px;
+      }
+
+      .confirm-copy {
+        font-size: 17px;
+      }
+
+      .booking-number-box span {
+        font-size: 12px;
+        letter-spacing: 2px;
+      }
+
+      .confirm-whatsapp,
+      .confirm-home {
+        font-size: 18px;
+        padding: 19px 12px;
+      }
+    }
+  </style>
 </head>
+
 <body class="confirmation-page">
+
   <header class="site-header confirm-header">
-    <a class="brand-wrap" href="index.html#home"><span class="brand-mark">ॐ</span><span class="brand-text"><small>श्री गणेशाय नमः:</small><strong>Aditya Editor</strong></span></a>
-    <a class="whatsapp-top" id="topWhatsapp" href="https://wa.me/917544913754" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="brand-wrap" href="index.html#home">
+      <span class="brand-mark">ॐ</span>
+      <span class="brand-text">
+        <small>श्री गणेशाय नमः:</small>
+        <strong>Aditya Editor</strong>
+      </span>
+    </a>
+
+    <a class="whatsapp-top" id="topWhatsapp"
+       href="https://wa.me/917544913754"
+       target="_blank" rel="noopener">
+      WhatsApp
+    </a>
   </header>
+
   <main class="confirmation-wrap">
     <section class="confirmation-card">
+
       <div class="success-mark">✓</div>
+
       <p class="confirm-eyebrow">BOOKING RECEIVED</p>
-      <h1>आपकी Booking<br class="desktop-break"> Enquiry भेज दी गई है!</h1>
-      <p class="confirm-copy">हमारी टीम आपकी जानकारी check करके आपसे जल्द संपर्क करेगी।</p>
-      <div class="booking-number-box"><span>BOOKING NUMBER</span><strong id="bookingNumber">AE-000000</strong></div>
-      <a class="confirm-whatsapp" id="sendWhatsapp" href="https://wa.me/917544913754" target="_blank" rel="noopener">WhatsApp पर भेजें</a>
-      <a class="confirm-home" href="index.html">Home पर जाएँ</a>
-      <p class="confirm-note">जरूरी: यह वेबसाइट का demo booking confirmation है। जब तक online database/backend जुड़ा न हो, booking की जानकारी इसी browser में रहती है।</p>
+
+      <h1>
+        आपकी Booking<br class="desktop-break">
+        Enquiry भेज दी गई है!
+      </h1>
+
+      <p class="confirm-copy">
+        हमारी टीम आपकी जानकारी check करके आपसे जल्द संपर्क करेगी।
+      </p>
+
+      <div class="booking-number-box">
+        <span>BOOKING NUMBER</span>
+        <strong id="bookingNumber">लोड हो रहा है...</strong>
+      </div>
+
+      <a class="confirm-whatsapp" id="sendWhatsapp"
+         href="https://wa.me/917544913754"
+         target="_blank" rel="noopener">
+        WhatsApp पर भेजें
+      </a>
+
+      <a class="confirm-home" href="index.html">
+        Home पर जाएँ
+      </a>
+
+      <p class="confirm-note" id="confirmNote">
+        अपनी Booking Number सुरक्षित रखें। Tracking के लिए इसी नंबर का उपयोग करें।
+      </p>
+
     </section>
   </main>
-  <footer class="confirm-footer"><span>© <span id="year"></span> Aditya Editor</span><span>Jagu Nagar, Banni, Maheshkhunt, Bihar</span></footer>
+
+  <footer class="confirm-footer">
+    <span>© <span id="year"></span> Aditya Editor</span>
+    <span>Jagu Nagar, Banni, Maheshkhunt, Bihar</span>
+  </footer>
+
   <script>
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id') || sessionStorage.getItem('adityaLastBookingId') || 'AE-000000';
-    document.getElementById('bookingNumber').textContent = id;
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const message = `Namaste Aditya Editor, meri booking enquiry submit hui hai. Booking Number: ${id}. Kripya mujhse sampark karein.`;
-    const wa = 'https://wa.me/917544913754?text=' + encodeURIComponent(message);
-    document.getElementById('sendWhatsapp').href = wa;
-    document.getElementById('topWhatsapp').href = wa;
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const bookingNumberElement =
+        document.getElementById("bookingNumber");
+
+      const note = document.getElementById("confirmNote");
+      const whatsappButton =
+        document.getElementById("sendWhatsapp");
+      const topWhatsapp =
+        document.getElementById("topWhatsapp");
+
+      document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+      let id = params.get("id");
+
+      if (!id) {
+        try {
+          id = sessionStorage.getItem("adityaLastBookingId");
+        } catch (error) {
+          id = null;
+        }
+      }
+
+      if (id) {
+        id = id.trim();
+      }
+
+      if (id && /^AE-[A-Z0-9-]+$/i.test(id)) {
+        bookingNumberElement.textContent = id;
+
+        const message =
+          "Namaste Aditya Editor, meri booking enquiry submit hui hai. " +
+          "Booking Number: " + id +
+          ". Kripya mujhse sampark karein.";
+
+        const whatsappURL =
+          "https://wa.me/917544913754?text=" +
+          encodeURIComponent(message);
+
+        whatsappButton.href = whatsappURL;
+        topWhatsapp.href = whatsappURL;
+      } else {
+        bookingNumberElement.textContent =
+          "Booking Number नहीं मिला";
+
+        note.textContent =
+          "Booking number नहीं मिला। कृपया Index page से Booking दोबारा जाँचें।";
+
+        whatsappButton.href = "https://wa.me/917544913754";
+        topWhatsapp.href = "https://wa.me/917544913754";
+      }
+    })();
   </script>
-</body></html>
+
+</body>
+</html>

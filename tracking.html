@@ -1,4 +1,883 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#fbf6eb"><title>Track Your Booking | Aditya Editor</title><link rel="stylesheet" href="style.css"></head>
-<body><header class="site-header"><a class="logo" href="index.html">ADITYA <span>EDITOR</span></a><nav><a href="index.html">Home</a><a href="booking.html">Book a Service</a><a href="https://wa.me/917544913754?text=Hello%20Aditya%20Editor%2C%20I%20need%20help%20tracking%20my%20booking." target="_blank" rel="noopener">WhatsApp</a></nav></header>
-<main><section class="section booking-section"><div class="section-heading"><p class="eyebrow">BOOKING STATUS</p><h2>Track Your Booking</h2><p>अपना Booking Number और registered mobile number डालें।</p></div><div class="track-box" id="trackBooking"><div class="track-intro"><div class="track-icon">🔎</div><div><h3>Track Your Booking</h3><p>Enter your booking number and registered mobile number to view your booking details.</p></div></div><label class="track-label" for="trackingId">Booking Number</label><input id="trackingId" class="track-input" placeholder="e.g. AE-20261011-12345" autocomplete="off"><label class="track-label" for="trackingPhone">Registered Mobile Number</label><input id="trackingPhone" class="track-input" type="tel" inputmode="numeric" placeholder="Enter registered mobile number" autocomplete="tel"><button id="trackButton" class="btn track-submit" type="button">Track Booking</button><p id="trackingMessage" class="form-message" aria-live="polite"></p><div id="trackingResult" class="tracking-result" hidden></div></div></section></main><footer><span>© <span id="year"></span> Aditya Editor</span><span><a href="index.html">Home</a></span></footer><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f6ef">
+  <meta name="description" content="Aditya Editor booking status and customer booking details.">
+  <title>Track Booking | Aditya Editor</title>
+
+  <style>
+    :root {
+      --green: #176347;
+      --green-dark: #104b37;
+      --mint: #dcefe5;
+      --gold: #ffdb63;
+      --bg: #f8f6ef;
+      --text: #242824;
+      --muted: #818681;
+      --line: #dce5de;
+      --white: #fff;
+      --red: #b83232;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; }
+
+    .container {
+      width: min(760px, 100%);
+      margin: auto;
+      padding: 0 16px;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 1px solid #e8e5db;
+      padding: 17px 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: linear-gradient(145deg, #f2d27b, #bd8c2e);
+      color: white;
+      font-size: 28px;
+      box-shadow: 0 5px 14px #b98d3828;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 11px;
+      color: #8a784f;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 19px;
+    }
+
+    .whatsapp {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border: 1.5px solid #21865a;
+      color: var(--green);
+      border-radius: 28px;
+      padding: 10px 15px;
+      font-weight: 700;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    main { padding: 28px 0 42px; }
+
+    .intro { margin: 0 0 18px; }
+
+    .eyebrow {
+      color: #a17b2e;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      font-size: clamp(27px, 6vw, 36px);
+      line-height: 1.2;
+      margin: 7px 0;
+      color: var(--green);
+    }
+
+    .muted { color: var(--muted); }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid #e9e9e5;
+      border-radius: 24px;
+      padding: 22px;
+      margin: 18px 0;
+      box-shadow: 0 7px 28px #193e2510;
+      min-width: 0;
+    }
+
+    .panel h2 {
+      color: var(--green);
+      margin: 0 0 18px;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 13px 0 6px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid #d7e0d9;
+      border-radius: 12px;
+      font: inherit;
+      background: #fbfcfa;
+      color: var(--text);
+    }
+
+    input:focus {
+      outline: 2px solid #b8dfc7;
+      border-color: var(--green);
+    }
+
+    button, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+      font: inherit;
+      font-weight: 800;
+      padding: 14px 18px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 17px;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .message {
+      margin-top: 12px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .message.error { color: var(--red); }
+
+    [hidden] { display: none !important; }
+
+    .booking-banner {
+      background: linear-gradient(120deg, #104b37, #206d4d);
+      color: white;
+      border-radius: 0 0 30px 30px;
+      padding: 27px 24px 30px;
+      overflow: hidden;
+    }
+
+    .booking-banner .label {
+      color: #d6e5dc;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+
+    .booking-id {
+      display: block;
+      color: var(--gold);
+      font-size: clamp(23px, 6vw, 34px);
+      line-height: 1.3;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+      margin: 7px 0 16px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      border-radius: 30px;
+      padding: 8px 18px;
+      background: white;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 5px;
+    }
+
+    .timeline-step {
+      position: relative;
+      display: flex;
+      gap: 17px;
+      min-height: 100px;
+      padding-bottom: 22px;
+    }
+
+    .timeline-step:last-child {
+      min-height: 0;
+      padding-bottom: 0;
+    }
+
+    .timeline-step:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 31px;
+      bottom: -1px;
+      width: 4px;
+      background: var(--line);
+      border-radius: 5px;
+    }
+
+    .timeline-step.done:not(:last-child)::before {
+      background: #246b4f;
+    }
+
+    .timeline-dot {
+      width: 31px;
+      height: 31px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+      background: #aeb9b1;
+      border: 5px solid #e6eae6;
+      color: white;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .timeline-step.done .timeline-dot {
+      background: #21694c;
+      border-color: #d8ece1;
+    }
+
+    .timeline-step.current .timeline-dot {
+      background: #e1b642;
+      border-color: #f9edc6;
+      color: #4d3910;
+    }
+
+    .step-content { padding-top: 0; }
+
+    .step-content h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .step-content p {
+      color: var(--muted);
+      margin: 4px 0 0;
+      font-size: 15px;
+    }
+
+    .detail-card {
+      background: #f6f8f5;
+      border-radius: 17px;
+      padding: 18px;
+      margin-top: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      font-size: 17px;
+      font-weight: 800;
+      white-space: pre-wrap;
+    }
+
+    .detail-icon { margin-right: 7px; }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .action-row .button {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .button.secondary {
+      color: var(--green);
+      background: #e8f3eb;
+    }
+
+    .footnote {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 8px 0 0;
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0 12px; }
+      main { padding-top: 20px; }
+      .panel { padding: 18px; border-radius: 20px; }
+      .panel h2 { font-size: 22px; }
+      .brand-mark { width: 46px; height: 46px; }
+      .brand strong { font-size: 17px; }
+      .whatsapp { padding: 9px 11px; font-size: 12px; }
+      .booking-banner { padding: 24px 19px; }
+      .step-content h3 { font-size: 17px; }
+      .detail-value { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">ॐ</span>
+        <span>
+          <small>श्री गणेशाय नमः:</small>
+          <strong>Aditya Editor</strong>
+        </span>
+      </a>
+
+      <a class="whatsapp"
+         href="https://wa.me/917544913754"
+         target="_blank"
+         rel="noopener">
+        WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="intro">
+      <div class="eyebrow">BOOKING TRACKING</div>
+      <h1>Track Your Booking</h1>
+      <p class="muted">
+        अपनी बुकिंग का स्टेटस और पूरी जानकारी देखें।
+      </p>
+    </div>
+
+    <section class="panel" id="searchPanel">
+      <h2>अपनी Booking खोजें</h2>
+
+      <form id="trackForm">
+        <label for="bookingInput">Booking Number *</label>
+        <input
+          id="bookingInput"
+          required
+          maxlength="60"
+          placeholder="जैसे AE-20261020-12345"
+          autocomplete="off">
+
+        <label for="phoneInput">रजिस्टर्ड मोबाइल नंबर *</label>
+        <input
+          id="phoneInput"
+          required
+          inputmode="numeric"
+          pattern="[0-9]{10}"
+          maxlength="10"
+          placeholder="10 अंकों का मोबाइल नंबर"
+          autocomplete="tel">
+
+        <button id="trackButton" type="submit">
+          🔎 Track Booking
+        </button>
+
+        <div id="message"
+             class="message"
+             role="status"
+             aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section id="bookingResult" hidden>
+      <div class="booking-banner">
+        <div class="label">BOOKING NUMBER</div>
+        <strong id="resultBookingNumber" class="booking-id">—</strong>
+        <span id="resultStatus" class="status-pill">—</span>
+      </div>
+
+      <div class="panel">
+        <h2>Booking Status</h2>
+        <div id="timeline" class="timeline"></div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="detail-icon">📋</span>Booking Details</h2>
+        <div id="bookingDetails"></div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="detail-icon">👤</span>Customer Details</h2>
+        <div id="customerDetails"></div>
+      </div>
+
+      <div class="action-row">
+        <a class="button" href="index.html">← Home पर जाएँ</a>
+
+        <a class="button secondary"
+           id="whatsappLink"
+           href="https://wa.me/917544913754"
+           target="_blank"
+           rel="noopener">
+          WhatsApp पर संपर्क करें
+        </a>
+      </div>
+    </section>
+
+    <p class="footnote">
+      © <span id="year"></span> Aditya Editor · Booking Support
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    "use strict";
+
+    const SUPABASE_URL =
+      "https://okzwtylpmcyurkxvaocy.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+
+    const client = window.supabase
+      ? window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        )
+      : null;
+
+    const $ = id => document.getElementById(id);
+
+    $("year").textContent = new Date().getFullYear();
+
+    /*
+      Booking statuses.
+      Keep these names consistent with admin.js.
+    */
+    const stages = [
+      {
+        status: "Booking Submitted",
+        title: "Booking Submitted",
+        description: "आपकी booking request प्राप्त हो गई है।"
+      },
+      {
+        status: "Booking Confirmed",
+        title: "Booking Confirmed",
+        description: "आपकी booking confirm कर दी गई है।"
+      },
+      {
+        status: "Payment Confirmed",
+        title: "Payment Confirmed",
+        description: "आपकी payment confirm कर दी गई है।"
+      },
+      {
+        status: "Editing In Progress",
+        title: "Editing In Progress",
+        description: "आपकी photo या video पर काम चल रहा है।"
+      },
+      {
+        status: "Ready for Delivery",
+        title: "Ready for Delivery",
+        description: "आपका project delivery के लिए तैयार है।"
+      },
+      {
+        status: "Completed",
+        title: "Completed",
+        description: "आपका project पूरा हो गया है।"
+      }
+    ];
+
+    /*
+      Convert older status names to the current status names.
+    */
+    function normalizeTrackingStatus(status) {
+      const original = String(
+        status || "Booking Submitted"
+      ).trim();
+
+      const value = original.toLowerCase();
+
+      const statusMap = {
+        "pending": "Booking Submitted",
+        "submitted": "Booking Submitted",
+        "booking submitted": "Booking Submitted",
+
+        "confirmed": "Booking Confirmed",
+        "booking confirmed": "Booking Confirmed",
+
+        "payment confirmed": "Payment Confirmed",
+
+        "in progress": "Editing In Progress",
+        "editing": "Editing In Progress",
+        "editing in progress": "Editing In Progress",
+
+        "ready": "Ready for Delivery",
+        "ready for delivery": "Ready for Delivery",
+
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "canceled": "Cancelled"
+      };
+
+      return statusMap[value] || original;
+    }
+
+    function addDetail(container, label, value) {
+      const card = document.createElement("div");
+      card.className = "detail-card";
+
+      const labelEl = document.createElement("div");
+      labelEl.className = "detail-label";
+      labelEl.textContent = label;
+
+      const valueEl = document.createElement("div");
+      valueEl.className = "detail-value";
+
+      valueEl.textContent =
+        value === null ||
+        value === undefined ||
+        value === ""
+          ? "—"
+          : String(value);
+
+      card.append(labelEl, valueEl);
+      container.appendChild(card);
+    }
+
+    function formatDate(value) {
+      if (!value) return "उपलब्ध नहीं";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "उपलब्ध नहीं";
+      }
+
+      return date.toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function maskPhone(value) {
+      const digits = String(value || "")
+        .replace(/\D/g, "");
+
+      if (digits.length < 5) {
+        return digits || "—";
+      }
+
+      return digits.slice(0, 2) +
+        "*".repeat(Math.max(0, digits.length - 4)) +
+        digits.slice(-2);
+    }
+
+    function drawTimeline(status) {
+      const timeline = $("timeline");
+      timeline.replaceChildren();
+
+      const normalizedStatus =
+        normalizeTrackingStatus(status);
+
+      if (normalizedStatus === "Cancelled") {
+        const step = document.createElement("div");
+        step.className = "timeline-step current";
+
+        const dot = document.createElement("div");
+        dot.className = "timeline-dot";
+        dot.textContent = "!";
+
+        const content = document.createElement("div");
+        content.className = "step-content";
+
+        const title = document.createElement("h3");
+        title.textContent = "Booking Cancelled";
+
+        const description = document.createElement("p");
+        description.textContent =
+          "इस booking को cancel किया गया है। सहायता के लिए WhatsApp पर संपर्क करें।";
+
+        content.append(title, description);
+        step.append(dot, content);
+        timeline.appendChild(step);
+        return;
+      }
+
+      const currentIndex = stages.findIndex(
+        stage => stage.status === normalizedStatus
+      );
+
+      stages.forEach((stage, index) => {
+        const step = document.createElement("div");
+
+        const done =
+          currentIndex >= 0 && index < currentIndex;
+
+        const current = index === currentIndex;
+
+        step.className = "timeline-step" +
+          (done ? " done" : "") +
+          (current ? " current" : "");
+
+        const dot = document.createElement("div");
+        dot.className = "timeline-dot";
+        dot.textContent =
+          done ? "✓" : current ? "•" : "";
+
+        const content = document.createElement("div");
+        content.className = "step-content";
+
+        const title = document.createElement("h3");
+        title.textContent = stage.title;
+
+        const description = document.createElement("p");
+
+        if (done) {
+          description.textContent =
+            "यह चरण पूरा हो चुका है।";
+        } else if (current) {
+          description.textContent = stage.description;
+        } else {
+          description.textContent =
+            "इस चरण का इंतज़ार है।";
+        }
+
+        content.append(title, description);
+        step.append(dot, content);
+        timeline.appendChild(step);
+      });
+
+      if (currentIndex === -1) {
+        const note = document.createElement("p");
+        note.className = "muted";
+        note.textContent =
+          "वर्तमान status: " + normalizedStatus +
+          ". इस status की जानकारी के लिए WhatsApp पर संपर्क करें।";
+
+        timeline.appendChild(note);
+      }
+    }
+
+    function showMessage(text, isError = false) {
+      $("message").textContent = text;
+
+      $("message").className =
+        "message" + (isError ? " error" : "");
+    }
+
+    $("trackForm").addEventListener(
+      "submit",
+      async function(event) {
+        event.preventDefault();
+
+        const button = $("trackButton");
+
+        const bookingNumber =
+          $("bookingInput").value.trim().toUpperCase();
+
+        const phone =
+          $("phoneInput").value.replace(/\D/g, "");
+
+        $("bookingResult").hidden = true;
+
+        if (!client) {
+          showMessage(
+            "Supabase load नहीं हुआ। Internet जाँचें और पेज Refresh करें।",
+            true
+          );
+          return;
+        }
+
+        if (!bookingNumber || !/^\d{10}$/.test(phone)) {
+          showMessage(
+            "सही Booking Number और 10 अंकों का मोबाइल नंबर डालें।",
+            true
+          );
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Booking जाँची जा रही है...";
+        showMessage("कृपया इंतज़ार करें...");
+
+        try {
+          const { data, error } = await client.rpc(
+            "track_booking",
+            {
+              p_booking_number: bookingNumber,
+              p_phone: phone
+            }
+          );
+
+          if (error) throw error;
+
+          const booking =
+            Array.isArray(data) ? data[0] : data;
+
+          if (!booking) {
+            showMessage(
+              "Booking नहीं मिली। Booking Number और registered mobile number जाँचें।",
+              true
+            );
+            return;
+          }
+
+          /*
+            Normalize the database status before showing it.
+          */
+          const status = normalizeTrackingStatus(
+            booking.status
+          );
+
+          $("resultBookingNumber").textContent =
+            booking.booking_number || bookingNumber;
+
+          $("resultStatus").textContent = status;
+
+          drawTimeline(status);
+
+          const bookingDetails = $("bookingDetails");
+          bookingDetails.replaceChildren();
+
+          addDetail(
+            bookingDetails,
+            "Booking Date",
+            formatDate(booking.created_at)
+          );
+
+          addDetail(
+            bookingDetails,
+            "Service",
+            booking.service
+          );
+
+          if (
+            booking.amount !== undefined &&
+            booking.amount !== null
+          ) {
+            const amount = Number(booking.amount);
+
+            addDetail(
+              bookingDetails,
+              "Amount",
+              Number.isFinite(amount)
+                ? "₹" + amount.toLocaleString("en-IN")
+                : booking.amount
+            );
+          }
+
+          const customerDetails = $("customerDetails");
+          customerDetails.replaceChildren();
+
+          addDetail(
+            customerDetails,
+            "Name",
+            booking.customer_name
+          );
+
+          addDetail(
+            customerDetails,
+            "Mobile",
+            maskPhone(phone)
+          );
+
+          if (booking.address) {
+            addDetail(
+              customerDetails,
+              "Address",
+              booking.address
+            );
+          }
+
+          const message =
+            "Namaste Aditya Editor, meri booking ke baare mein update chahiye. " +
+            "Booking Number: " +
+            (booking.booking_number || bookingNumber) +
+            ". Current Status: " + status + ".";
+
+          $("whatsappLink").href =
+            "https://wa.me/917544913754?text=" +
+            encodeURIComponent(message);
+
+          $("bookingResult").hidden = false;
+
+          showMessage(
+            "Booking मिल गई। नीचे details देखें।"
+          );
+
+          $("bookingResult").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        } catch (error) {
+          console.error("Tracking error:", error);
+
+          showMessage(
+            "Tracking error: " +
+            (error.message || "कृपया दोबारा कोशिश करें।"),
+            true
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "🔎 Track Booking";
+        }
+      }
+    );
+
+    /*
+      Auto-fill booking number if index.html sends ?id=...
+    */
+    const params = new URLSearchParams(location.search);
+    const queryBooking = params.get("id");
+
+    if (queryBooking) {
+      $("bookingInput").value = queryBooking;
+      $("searchPanel").scrollIntoView({
+        block: "start"
+      });
+    }
+  </script>
+</body>
+</html>
