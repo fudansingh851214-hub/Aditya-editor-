@@ -16,7 +16,7 @@ nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}nav a:hover{color:var(--
 
 .service-preview{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;margin:0 0 14px;border:1px solid var(--border,#29415d)}
 .service-demo{margin:0 0 18px}
-.service-demo video{display:block;width:100%;max-height:360px;border-radius:14px;background:#000}
+.service-demo video,.reels-video video{display:block;width:100%;max-height:360px;border-radius:14px;background:#000}.reels-video{margin:10px 0 14px}.reels-video video{aspect-ratio:9/16;max-height:320px;object-fit:cover}
 .service-demo p{margin:8px 0 0}
 </style>
 </head>
@@ -31,7 +31,9 @@ nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}nav a:hover{color:var(--
 <article class="card"><div class="icon">💍</div><img class="service-preview" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80" alt="Wedding Projects sample preview" loading="lazy" onerror="this.style.display='none'">
 <h2>Wedding Projects</h2><p>Wedding videos, anniversary videos और खास यादों की editing.</p><a class="btn" href="booking.html?service=Wedding%20Projects">Book Wedding Project</a></article>
 <article class="card"><div class="icon">📱</div><img class="service-preview" src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=900&q=80" alt="Social Media Reels sample preview" loading="lazy" onerror="this.style.display='none'">
-<h2>Social Media Reels</h2><p>Short videos और social media reels editing.</p><a class="btn" href="booking.html?service=Social%20Media%20Reels">Book Reels Editing</a></article>
+<h2>Social Media Reels</h2>
+<div class="reels-video"><video controls playsinline preload="metadata" poster="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&amp;fit=crop&amp;w=900&amp;q=80"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">Your browser does not support video playback.</video></div>
+<p>Short videos और social media reels editing.</p><a class="btn" href="booking.html?service=Social%20Media%20Reels">Book Reels Editing</a></article>
 <article class="card"><div class="icon">🎨</div><img class="service-preview" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=900&q=80" alt="Graphic Design sample preview" loading="lazy" onerror="this.style.display='none'">
 <h2>Graphic Design</h2><p>Posters, banners, thumbnails और creative designs.</p><a class="btn" href="booking.html?service=Graphic%20Design">Book Graphic Design</a></article>
 </section>
