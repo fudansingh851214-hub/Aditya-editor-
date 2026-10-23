@@ -104,10 +104,44 @@ async function loadCustomerHistory(user) {
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
       if (booking.amount !== null && booking.amount !== undefined) {
         const total = Math.max(0, Number(booking.amount) || 0);
-        const amountLine = addText(card, "p", "Total: ₹" + total.toLocaleString("en-IN"));
-        amountLine.style.color = "#42dfff";
-        const payLink = addText(card, "a", "Pay Remaining Amount / Payment Details →", "action");
-        payLink.href = "payment.html?booking=" + encodeURIComponent(booking.booking_number || "");
+        let verifiedOnline = 0;
+        let onlinePending = 0;
+        let history = [];
+        if (booking.booking_number) {
+          const pr = await client.from("payment_submissions")
+            .select("amount,status,payment_reference,utr,created_at")
+            .eq("booking_number", booking.booking_number);
+          if (!pr.error && pr.data) {
+            history = pr.data;
+            for (const payment of history) {
+              const status = String(payment.status || "").toLowerCase();
+              const amount = Math.max(0, Number(payment.amount) || 0);
+              if (["verified","paid","confirmed","success","successful"].includes(status)) verifiedOnline += amount;
+              else if (["pending","submitted","under_review","review"].includes(status)) onlinePending += amount;
+            }
+          }
+        }
+        const received = verifiedOnline;
+        const remaining = Math.max(0, total - received);
+        const money = addText(card, "div", "", "money-grid");
+        for (const item of [["Total",total],["Received",received],["Verified online",verifiedOnline],["Online pending",onlinePending],["Remaining",remaining]]) {
+          const cell = addText(money, "div", "", "money-item");
+          addText(cell, "small", item[0]);
+          addText(cell, "strong", "₹" + item[1].toLocaleString("en-IN"));
+        }
+        if (history.length) {
+          addText(card, "p", "Payment History", "history-state");
+          for (const payment of history) {
+            const status = String(payment.status || "pending");
+            addText(card, "p", dateText(payment.created_at) + " · UPI · ₹" + (Number(payment.amount) || 0).toLocaleString("en-IN") + " · " + status);
+            const ref = payment.utr || payment.payment_reference;
+            if (ref) addText(card, "p", "Reference: " + ref, "history-state");
+          }
+        }
+        if (remaining > 0 && booking.booking_number) {
+          const payLink = addText(card, "a", "Pay ₹" + remaining.toLocaleString("en-IN") + " with UPI →", "action");
+          payLink.href = "payment.html?booking=" + encodeURIComponent(booking.booking_number);
+        }
       } else {
         addText(card, "p", "Total: Admin राशि तय होने पर यहाँ दिखेगी।", "history-state");
       }
