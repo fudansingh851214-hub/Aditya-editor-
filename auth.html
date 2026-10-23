@@ -12,7 +12,7 @@ h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;tex
 label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:13px;border-radius:10px;border:1px solid #36536d;background:#071522;color:white;font-size:16px}
 .submit{width:100%;margin-top:18px;padding:14px;border:0;border-radius:10px;background:linear-gradient(100deg,#8555ff,#42dfff);color:#06101f;font-weight:bold;font-size:16px}
 #message{white-space:pre-wrap;overflow-wrap:anywhere;text-align:left}.links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{color:#42dfff}
-.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}}
+.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}.profile,.paybox{margin:14px 0;padding:16px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.profile p,.paybox p{text-align:left;margin:7px 0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#153a4b;color:#42dfff;font-size:12px}.paybox{text-align:center}.qr{display:block;width:190px;height:190px;max-width:100%;margin:12px auto;padding:8px;background:#fff;border-radius:12px}.upi{font-weight:bold;color:#42dfff;overflow-wrap:anywhere}.action{display:inline-block;margin:6px 3px;padding:11px 13px;border-radius:9px;background:#42dfff;color:#06101f;text-decoration:none;font-weight:bold;border:0}.note{font-size:12px;color:#9db1c7}.dashgrid a{min-height:55px}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}}
 </style></head>
 <body><main class="wrap">
 <h1>✦ A K EDITOR</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
@@ -23,7 +23,19 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
 <p id="message" role="status" aria-live="polite"></p></div>
-<section class="dashboard" id="dashboard" aria-label="Customer Dashboard"><h2 id="welcome">Customer Dashboard</h2><p>आप Login हैं। नीचे से अपनी सेवा चुनें।</p><div class="dashgrid"><a href="services.html">Our Services</a><a href="booking.html">Book Now</a><a href="tracking.html">Track Your Booking</a><a href="payment.html">Secure Payment</a><a href="index.html#contact">Contact</a></div><button class="logout" id="logoutButton" type="button">Sign Out</button></section>
+<section class="dashboard" id="dashboard" aria-label="Customer Dashboard">
+<h2 id="welcome">Customer Dashboard</h2><p>आपका A K Editor Customer Portal</p>
+<div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
+<div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="tracking.html">📦 Booking Status / History</a><a href="payment.html">💳 Payment & Amount</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
+<div class="paybox"><h3>💠 Quick UPI Payment</h3><p>UPI ID</p><p class="upi" id="upiId">7544913754-3@ybl</p>
+<img class="qr" id="upiQr" alt="A K Editor UPI Payment QR Code" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7544913754-3%40ybl%26pn%3DA%2520K%2520Editor%26cu%3DINR">
+<p class="note">भुगतान करने से पहले UPI ID और प्राप्तकर्ता का नाम अपने UPI ऐप में जाँच लें।</p>
+<button class="action" id="copyUpi" type="button">Copy UPI ID</button>
+<a class="action" href="upi://pay?pa=7544913754-3%40ybl&amp;pn=A%20K%20Editor&amp;cu=INR">Open UPI App</a>
+<p id="upiMessage" class="note" role="status" aria-live="polite"></p>
+</div>
+<p class="note">Booking और payment की वास्तविक जानकारी संबंधित पेज पर देखें। केवल QR/UTR से भुगतान अपने-आप verified नहीं होता; Admin की पुष्टि आवश्यक है।</p>
+<button class="logout" id="logoutButton" type="button">Sign Out</button></section>
 <div class="links"><a href="index.html">Home</a></div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,8 +43,8 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 "use strict";
 const client=window.supabase.createClient("https://okzwtylpmcyurkxvaocy.supabase.co","sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q");
 const form=document.getElementById("authForm"), email=document.getElementById("email"), password=document.getElementById("password"), message=document.getElementById("message"), submitButton=document.getElementById("submitButton");
-function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Welcome"+(user&&user.email?" — "+user.email:"")+"!";message.textContent="";}
-document.getElementById("logoutButton").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("dashboard").style.display="none";document.getElementById("authArea").style.display="block";setMode("login");message.textContent="आप Sign Out हो गए हैं।";});
+function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Customer Dashboard";document.getElementById("customerEmail").textContent=user&&user.email?user.email:"Email उपलब्ध नहीं";message.textContent="";}
+document.getElementById("copyUpi").addEventListener("click",async()=>{const out=document.getElementById("upiMessage");try{await navigator.clipboard.writeText("7544913754-3@ybl");out.textContent="UPI ID कॉपी हो गई।";}catch(e){out.textContent="UPI ID को दबाकर चुनें और Copy करें: 7544913754-3@ybl";}});\ndocument.getElementById("logoutButton").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("dashboard").style.display="none";document.getElementById("authArea").style.display="block";setMode("login");message.textContent="आप Sign Out हो गए हैं।";});
 let mode="login";
 function setMode(next){mode=next;document.getElementById("loginTab").classList.toggle("active",mode==="login");document.getElementById("signupTab").classList.toggle("active",mode==="signup");submitButton.textContent=mode==="login"?"Login":"Create Account";password.autocomplete=mode==="login"?"current-password":"new-password";message.textContent="";}
 document.getElementById("loginTab").addEventListener("click",()=>setMode("login"));
