@@ -35,9 +35,13 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <button class="logout" id="logoutButton" type="button">Sign Out</button></section>
 
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
+const UPI_ID = "7544913754-3@ybl";
+const PAYEE_NAME = "Aditya Editor";
+const PAYMENT_FUNCTION_URL = "https://okzwtylpmcyurkxvaocy.supabase.co/functions/v1/submit-payment-screenshot";
 const message = document.getElementById("message");
 const form = document.getElementById("authForm");
 const email = document.getElementById("email");
@@ -136,8 +140,58 @@ async function loadCustomerHistory(user) {
           }
         }
         if (remaining > 0 && booking.booking_number) {
-          const payLink = addText(card, "a", "Pay ₹" + remaining.toLocaleString("en-IN") + " with UPI →", "action");
-          payLink.href = "payment.html?booking=" + encodeURIComponent(booking.booking_number);
+          const payBox = addText(card, "section", "", "paybox");
+          addText(payBox, "h3", "Pay Remaining Amount");
+          addText(payBox, "p", "Booking: " + booking.booking_number);
+          addText(payBox, "p", "Amount due: ₹" + remaining.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
+          const qr = addText(payBox, "div", "", "qr");
+          const upiParams = new URLSearchParams({pa: UPI_ID, pn: PAYEE_NAME, am: remaining.toFixed(2), cu: "INR", tn: "Booking " + booking.booking_number});
+          const upiUrl = "upi://pay?" + upiParams.toString();
+          if (window.QRCode) new QRCode(qr, {text: upiUrl, width: 190, height: 190, correctLevel: QRCode.CorrectLevel.M});
+          else addText(qr, "p", "QR लोड नहीं हुआ। नीचे UPI ID इस्तेमाल करें।");
+          addText(payBox, "p", "UPI ID: " + UPI_ID, "upi");
+          const actions = addText(payBox, "div", "", "upi-actions");
+          const copy = addText(actions, "button", "Copy UPI ID", "action");
+          copy.type = "button";
+          copy.addEventListener("click", async () => {
+            try { await navigator.clipboard.writeText(UPI_ID); copy.textContent = "UPI ID Copied"; }
+            catch { copy.textContent = UPI_ID; }
+          });
+          const openUPI = addText(actions, "a", "Open PhonePe / UPI", "action");
+          openUPI.href = upiUrl;
+          const paymentForm = addText(payBox, "form", "", "payment-submit");
+          addText(paymentForm, "label", "Payment amount (₹)");
+          const amountInput = addText(paymentForm, "input", "");
+          amountInput.type = "text"; amountInput.readOnly = true; amountInput.value = remaining.toFixed(2);
+          addText(paymentForm, "label", "Transaction ID / UTR");
+          const utrInput = addText(paymentForm, "input", "");
+          utrInput.type = "text"; utrInput.required = true; utrInput.maxLength = 100; utrInput.placeholder = "UPI transaction ID / UTR";
+          addText(paymentForm, "label", "Upload payment screenshot or PDF (max 5 MB)");
+          const fileInput = addText(paymentForm, "input", "");
+          fileInput.type = "file"; fileInput.required = true; fileInput.accept = "image/jpeg,image/png,image/webp,application/pdf,.pdf";
+          const submit = addText(paymentForm, "button", "Submit payment for verification", "action");
+          submit.type = "submit";
+          const status = addText(payBox, "p", "Admin verify करने के बाद ही payment received गिना जाएगा।", "note");
+          paymentForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const file = fileInput.files && fileInput.files[0], utr = utrInput.value.trim();
+            if (!utr || !file) { status.textContent = "UTR और screenshot/PDF दोनों भरें।"; return; }
+            const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+            if (!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type) && !isPdf) { status.textContent = "केवल JPG, PNG, WebP या PDF स्वीकार है।"; return; }
+            if (file.size <= 0 || file.size > 5 * 1024 * 1024) { status.textContent = "फाइल 5 MB तक होनी चाहिए।"; return; }
+            if (!booking.payment_token) { status.textContent = "Payment token नहीं मिला। Secure Payment पेज खोलें या Admin से संपर्क करें।"; return; }
+            submit.disabled = true; status.textContent = "Payment details जमा हो रहे हैं...";
+            try {
+              const fd = new FormData();
+              fd.append("booking_number", booking.booking_number); fd.append("payment_token", booking.payment_token);
+              fd.append("utr", utr); fd.append("screenshot", file); fd.append("amount", remaining.toFixed(2));
+              const response = await fetch(PAYMENT_FUNCTION_URL, {method:"POST", headers:{"apikey":"sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q"}, body:fd});
+              let result; try { result = await response.json(); } catch { throw new Error("Server से सही जवाब नहीं मिला।"); }
+              if (!response.ok || !result.success) throw new Error(result.error || "Payment details जमा नहीं हुए।");
+              status.textContent = "UTR और screenshot जमा हो गए। Admin Verification का इंतजार करें।";
+              submit.textContent = "Submitted for Verification";
+            } catch (err) { status.textContent = "Error: " + (err.message || "Upload असफल हुआ।"); submit.disabled = false; }
+          });
         }
       } else {
         addText(card, "p", "Total: Admin राशि तय होने पर यहाँ दिखेगी।", "history-state");
