@@ -14,6 +14,7 @@ nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}nav a:hover{color:var(--
 @media(max-width:760px){.nav{align-items:flex-start;flex-direction:column;padding:12px 0}nav{gap:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.grid{grid-template-columns:1fr}.container{padding:0 14px}.card{padding:18px}}
 
+.photo-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.photo-side{position:relative;overflow:hidden;border-radius:12px;min-width:0;background:#111}.photo-side img{display:block;width:100%;height:190px;object-fit:cover}.photo-side span{position:absolute;left:8px;bottom:8px;padding:5px 9px;border-radius:6px;background:#07101fe8;color:#fff;font-size:11px;font-weight:800;letter-spacing:1px}.photo-side.after span{background:#ffd34d;color:#172033}.photo-caption{font-size:12px;opacity:.8;margin:0 0 12px}
 .service-preview{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;margin:0 0 14px;border:1px solid var(--border,#29415d)}
 .service-demo{margin:0 0 18px}
 .service-demo video,.reels-video video{display:block;width:100%;max-height:360px;border-radius:14px;background:#000}.reels-video{margin:10px 0 14px}.reels-video video{aspect-ratio:9/16;max-height:320px;object-fit:cover}
@@ -24,7 +25,7 @@ nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}nav a:hover{color:var(--
 <header><div class="container nav"><a class="logo" href="index.html">✦ A K EDITOR<small>Photo &amp; Video Editing Studio</small></a><nav aria-label="Main navigation"><a href="index.html">Home</a><a href="services.html">Our Services</a><a href="booking.html">Book Now</a><a href="payment.html">Secure Payment</a><a href="index.html#contact">Contact</a><a href="auth.html">Sign In</a></nav></div></header>
 <main class="container"><section class="hero"><div class="eyebrow">WHAT WE DO</div><h1>Our Services</h1><p>अपनी जरूरत की सर्विस चुनें। यहाँ से पहले सेवाओं की जानकारी देखें; बुकिंग शुरू करने के लिए संबंधित Book Now बटन दबाएँ।</p></section>
 <section class="grid" aria-label="Available editing services">
-<article class="card"><div class="icon">🖼️</div><img class="service-preview" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=900&amp;q=90" alt="Professional portrait photo editing sample" loading="lazy" onerror="this.style.display='none'">
+<article class="card"><div class="icon">🖼️</div><div class="photo-compare" aria-label="Photo editing before and after preview"><div class="photo-side"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Before editing portrait sample" loading="lazy"><span>BEFORE</span></div><div class="photo-side after"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="After editing style portrait sample" loading="lazy"><span>AFTER</span></div></div><p class="photo-caption">Photo Retouching · Color · Lighting</p>
 <h2>Photo Editing</h2><p>Photo retouching, background removal और colour correction.</p><a class="btn" href="booking.html?service=Photo%20Editing">Book Photo Editing</a></article>
 <article class="card"><div class="icon">🎬</div>
 <h2>Video Editing</h2>
