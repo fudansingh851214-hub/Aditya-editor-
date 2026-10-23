@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aditya Editor | Payment</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      color: #eaf6ff;
+      background: #07111f;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 20px auto;
+      padding: 24px;
+      border: 1px solid #1d526b;
+      border-radius: 20px;
+      background: #0d1c2d;
+      box-shadow: 0 0 28px #00d9ff12;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    h1 {
+      color: #56e7ff;
+      font-size: 27px;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 19px;
+    }
+
+    .subtitle, .hint {
+      color: #a8bfd0;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .booking {
+      overflow-wrap: anywhere;
+      margin: 20px 0;
+      padding: 13px;
+      text-align: center;
+      background: #142b40;
+      border-radius: 10px;
+    }
+
+    #bookingNumber {
+      color: #56e7ff;
+      font-weight: bold;
+    }
+
+    .qr-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 220px;
+      padding: 15px;
+      margin: 18px auto;
+      background: white;
+      border-radius: 14px;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    #qrcode {
+      max-width: 100%;
+    }
+
+    #qrcode img, #qrcode canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .upi-id {
+      text-align: center;
+      overflow-wrap: anywhere;
+      font-weight: bold;
+      color: #67e8a5;
+      margin: 15px 0;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      font-size: 14px;
+      color: #dcecf7;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #31536d;
+      border-radius: 9px;
+      background: #071522;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #56e7ff;
+    }
+
+    button, .pay-link {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      margin-top: 13px;
+      border: 0;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .primary {
+      color: #04111a;
+      background: #56e7ff;
+    }
+
+    .secondary {
+      color: #eaf6ff;
+      background: #1a354c;
+      border: 1px solid #31536d;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #paymentMessage {
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .warning {
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 10px;
+      background: #302817;
+      color: #ffdfa0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .back {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #56e7ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>ADITYA EDITOR</h1>
+    <p class="subtitle">Secure Payment Reference Submission</p>
+
+    <div class="booking">
+      Booking Number<br>
+      <span id="bookingNumber">Loading...</span>
+      <button class="secondary" id="copyBooking" type="button">
+        Copy Booking Number
+      </button>
+    </div>
+
+    <h2>Pay using UPI</h2>
+    <p class="subtitle">
+      Open your UPI app and scan this QR code.
+      Confirm the payee details before paying.
+    </p>
+
+    <div class="qr-box">
+      <div id="qrcode"></div>
+    </div>
+
+    <p class="upi-id">UPI ID: 7544913754-3@ybl</p>
+
+    <button class="secondary" id="copyUPI" type="button">
+      Copy UPI ID
+    </button>
+
+    <a class="pay-link primary" id="payNow" href="#">
+      Open UPI App
+    </a>
+
+    <p class="hint">
+      Enter the exact amount shown for your booking in your UPI app.
+      The payment link does not set a fixed amount.
+    </p>
+
+    <hr style="border-color:#244055; margin:25px 0;">
+
+    <h2>Submit UTR / Transaction Reference</h2>
+
+    <form id="paymentForm">
+      <label for="paymentAmount">Amount paid (₹)</label>
+      <input
+        id="paymentAmount"
+        type="number"
+        min="1"
+        step="0.01"
+        placeholder="Enter actual amount paid"
+        required
+      >
+
+      <label for="paymentUTR">UPI UTR / Transaction Reference</label>
+      <input
+        id="paymentUTR"
+        type="text"
+        minlength="6"
+        maxlength="40"
+        autocomplete="off"
+        placeholder="Enter transaction reference"
+        required
+      >
+
+      <button class="primary" id="submitPayment" type="submit">
+        Submit Payment Details
+      </button>
+    </form>
+
+    <p id="paymentMessage" role="status" aria-live="polite"></p>
+
+    <div class="warning">
+      <strong>Important:</strong> Submitting a UTR does not confirm
+      that payment has been received. Your status remains Pending
+      until an authorized admin checks the actual payment record.
+      Never share your UPI PIN or OTP.
+    </div>
+
+    <a class="back" href="index.html">← Back to Home</a>
+  </main>
+
+  <!-- QR code generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Supabase client library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Handles QR, UPI link and Supabase submission -->
+  <script>
+    const UPI_ID = "7544913754-3@ybl";
+    const PAYEE_NAME = "Aditya Editor";
+
+    const bookingNumber =
+      new URLSearchParams(window.location.search).get("id") || "";
+
+    const bookingLabel = document.getElementById("bookingNumber");
+    const message = document.getElementById("paymentMessage");
+    const payNow = document.getElementById("payNow");
+    const submitButton = document.getElementById("submitPayment");
+
+    bookingLabel.textContent = bookingNumber || "Booking number missing";
+
+    // Create a UPI payment URI without a preset amount.
+    const upiParams = new URLSearchParams({
+      pa: UPI_ID,
+      pn: PAYEE_NAME,
+      cu: "INR",
+      tn: bookingNumber
+        ? "Aditya Editor booking " + bookingNumber
+        : "Aditya Editor payment"
+    });
+
+    const upiURI = "upi://pay?" + upiParams.toString();
+
+    payNow.href = upiURI;
+
+    if (window.QRCode) {
+      new QRCode(document.getElementById("qrcode"), {
+        text: upiURI,
+        width: 190,
+        height: 190,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      document.getElementById("qrcode").textContent =
+        "QR could not load. Check your internet connection.";
+    }
+
+    document.getElementById("copyBooking").addEventListener("click", async () => {
+      if (!bookingNumber) {
+        message.textContent = "Booking number is missing.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(bookingNumber);
+        message.textContent = "Booking number copied.";
+      } catch {
+        message.textContent = "Please copy the booking number manually.";
+      }
+    });
+
+    document.getElementById("copyUPI").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(UPI_ID);
+        message.textContent = "UPI ID copied.";
+      } catch {
+        message.textContent = "UPI ID: " + UPI_ID;
+      }
+    });
+
+    // Supabase connection
+    const SUPABASE_URL =
+      "https://okzwtylpmcyurkxvaocy.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+
+    const supabaseClient = window.supabase
+      ? window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        )
+      : null;
+
+    document.getElementById("paymentForm").addEventListener(
+      "submit",
+      async (event) => {
+        event.preventDefault();
+        message.textContent = "";
+
+        const amount = Number(
+          document.getElementById("paymentAmount").value
+        );
+
+        const utr = document
+          .getElementById("paymentUTR")
+          .value.trim();
+
+        if (!bookingNumber) {
+          message.textContent =
+            "Booking number missing. Open this page from a valid booking.";
+          return;
+        }
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          message.textContent = "Enter a valid payment amount.";
+          return;
+        }
+
+        if (!/^[a-zA-Z0-9-]{6,40}$/.test(utr)) {
+          message.textContent =
+            "Enter a valid UTR containing 6–40 letters, numbers or hyphens.";
+          return;
+        }
+
+        if (!supabaseClient) {
+          message.textContent =
+            "Supabase library did not load. Check your internet connection.";
+          return;
+        }
+
+        submitButton.disabled = true;
+        message.textContent = "Submitting details...";
+
+        try {
+          const { error } = await supabaseClient
+            .from("payment_submissions")
+            .insert({
+              booking_number: bookingNumber,
+              utr: utr,
+              amount: amount
+            });
+
+          if (error) throw error;
+
+          message.textContent =
+            "Payment reference submitted. Status: Pending verification.";
+
+          document.getElementById("paymentUTR").value = "";
+        } catch (error) {
+          console.error("Payment submission error:", error);
+
+          if (error.code === "23505") {
+            message.textContent =
+              "This UTR has already been submitted.";
+          } else if (error.code === "42501") {
+            message.textContent =
+              "Database permission denied. Check Supabase RLS policies.";
+          } else {
+            message.textContent =
+              "Submission failed. Check your internet and Supabase table settings.";
+          }
+        } finally {
+          submitButton.disabled = false;
+        }
+      }
+    );
+  </script>
+</body>
+</html>
