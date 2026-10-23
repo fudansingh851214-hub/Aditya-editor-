@@ -12,7 +12,7 @@ h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;tex
 label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:13px;border-radius:10px;border:1px solid #36536d;background:#071522;color:white;font-size:16px}
 .submit{width:100%;margin-top:18px;padding:14px;border:0;border-radius:10px;background:linear-gradient(100deg,#8555ff,#42dfff);color:#06101f;font-weight:bold;font-size:16px}
 #message{white-space:pre-wrap;overflow-wrap:anywhere;text-align:left}.links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{color:#42dfff}
-.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}.profile,.paybox{margin:14px 0;padding:16px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.profile p,.paybox p{text-align:left;margin:7px 0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#153a4b;color:#42dfff;font-size:12px}.paybox{text-align:center}.qr{display:block;width:190px;height:190px;max-width:100%;margin:12px auto;padding:8px;background:#fff;border-radius:12px}.upi{font-weight:bold;color:#42dfff;overflow-wrap:anywhere}.action{display:inline-block;margin:6px 3px;padding:11px 13px;border-radius:9px;background:#42dfff;color:#06101f;text-decoration:none;font-weight:bold;border:0}.note{font-size:12px;color:#9db1c7}.dashgrid a{min-height:55px}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}}
+.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}.profile,.paybox{margin:14px 0;padding:16px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.profile p,.paybox p{text-align:left;margin:7px 0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#153a4b;color:#42dfff;font-size:12px}.paybox{text-align:center}.qr{display:block;width:190px;height:190px;max-width:100%;margin:12px auto;padding:8px;background:#fff;border-radius:12px}.upi{font-weight:bold;color:#42dfff;overflow-wrap:anywhere}.action{display:inline-block;margin:6px 3px;padding:11px 13px;border-radius:9px;background:#42dfff;color:#06101f;text-decoration:none;font-weight:bold;border:0}.note{font-size:12px;color:#9db1c7}.dashgrid a{min-height:55px}.history-section{margin:16px 0;padding:15px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.history-section h3{color:#42dfff;margin:0 0 8px}.history-card{margin:10px 0;padding:12px;border:1px solid #29415d;border-radius:11px;background:#102139}.history-card p{margin:6px 0;text-align:left;overflow-wrap:anywhere}.money-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.money-item{padding:10px;border-radius:9px;background:#071522}.money-item small{display:block;color:#9db1c7}.money-item strong{display:block;margin-top:4px;color:#42dfff}.history-link{color:#42dfff}.history-state{font-size:12px;color:#9db1c7}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}.money-grid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body><main class="wrap">
 <h1>✦ A K EDITOR</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
@@ -27,6 +27,8 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <h2 id="welcome">Customer Dashboard</h2><p>आपका A K Editor Customer Portal</p>
 <div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
 <div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="tracking.html">📦 Booking Status / History</a><a href="payment.html">💳 Payment & Amount</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
+<section class="history-section"><h3>YOUR BOOKINGS</h3><p>Booking History · <a class="history-link" href="tracking.html">Track booking →</a></p><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div></section>
+<section class="history-section"><h3>Payment History</h3><div id="paymentHistory" aria-live="polite">भुगतान रिकॉर्ड लोड हो रहे हैं...</div></section>
 <div class="paybox"><h3>💠 Quick UPI Payment</h3><p>UPI ID</p><p class="upi" id="upiId">7544913754-3@ybl</p>
 <img class="qr" id="upiQr" alt="A K Editor UPI Payment QR Code" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7544913754-3%40ybl%26pn%3DA%2520K%2520Editor%26cu%3DINR">
 <p class="note">भुगतान करने से पहले UPI ID और प्राप्तकर्ता का नाम अपने UPI ऐप में जाँच लें।</p>
@@ -43,7 +45,42 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 "use strict";
 const client=window.supabase.createClient("https://okzwtylpmcyurkxvaocy.supabase.co","sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q");
 const form=document.getElementById("authForm"), email=document.getElementById("email"), password=document.getElementById("password"), message=document.getElementById("message"), submitButton=document.getElementById("submitButton");
-function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Customer Dashboard";document.getElementById("customerEmail").textContent=user&&user.email?user.email:"Email उपलब्ध नहीं";message.textContent="";}
+function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Customer Dashboard";document.getElementById("customerEmail").textContent=user&&user.email?user.email:"Email उपलब्ध नहीं";message.textContent="";if(user)loadCustomerHistory(user);}
+const money=v=>{const n=Number(v);return Number.isFinite(n)?new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(n):"—";};
+function addText(parent,tag,text,cls){const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;parent.appendChild(el);return el;}
+function dateText(v){if(!v)return "तारीख उपलब्ध नहीं";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});}
+async function loadCustomerHistory(user){
+ const bookingBox=document.getElementById("bookingHistory"), paymentBox=document.getElementById("paymentHistory");
+ bookingBox.textContent="आपकी बुकिंग लोड हो रही हैं...";paymentBox.textContent="भुगतान रिकॉर्ड लोड हो रहे हैं...";
+ const {data:bookings,error}=await client.from("bookings").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
+ if(error){bookingBox.textContent="बुकिंग नहीं दिख सकीं। Database की bookings SELECT policy जाँचें। ("+error.message+")";paymentBox.textContent="भुगतान इतिहास बुकिंग रिकॉर्ड उपलब्ध होने पर दिखेगा।";return;}
+ if(!bookings||!bookings.length){bookingBox.textContent="इस Login अकाउंट से जुड़ी कोई बुकिंग नहीं मिली। नई बुकिंग करने के लिए Book New Service दबाएँ।";paymentBox.textContent="अभी कोई भुगतान रिकॉर्ड नहीं मिला।";return;}
+ bookingBox.textContent="";
+ const ids=bookings.map(b=>b.booking_number).filter(Boolean);
+ let payments=[],payError=null;
+ if(ids.length){const pr=await client.from("payment_submissions").select("*").in("booking_number",ids).order("id",{ascending:false});payments=pr.data||[];payError=pr.error;}
+ const paidByBooking={};
+ for(const p of payments){const k=p.booking_number;if(!k)continue;if(!paidByBooking[k])paidByBooking[k]=0;const st=String(p.status||"").toLowerCase();if(["verified","paid","confirmed","success"].includes(st))paidByBooking[k]+=Number(p.amount||0);}
+ let allDue=0,allReceived=0;
+ for(const b of bookings){
+  const card=addText(bookingBox,"div","", "history-card");
+  addText(card,"p",b.booking_number||("Booking #"+(b.id??"")),"");
+  addText(card,"p","Date: "+dateText(b.created_at),"");
+  addText(card,"p","Service: "+(b.service||"—"),"");
+  addText(card,"p","Status: "+(b.booking_status||b.status||"Submitted"),"");
+  if(b.customer_name)addText(card,"p","Customer: "+b.customer_name,"");
+  if(b.phone)addText(card,"p","Mobile: "+b.phone,"");
+  const total=Number(b.amount||0), received=paidByBooking[b.booking_number]||0, remaining=Math.max(0,total-received);
+  allDue+=total;allReceived+=received;
+  const grid=addText(card,"div","","money-grid");
+  for(const [label,value] of [["Total",money(total)],["Received",money(received)],["Online pending",money(payments.filter(p=>p.booking_number===b.booking_number&&!["verified","paid","confirmed","success"].includes(String(p.status||"").toLowerCase())).reduce((s,p)=>s+Number(p.amount||0),0))],["Remaining",money(remaining)]]){const item=addText(grid,"div","","money-item");addText(item,"small",label);addText(item,"strong",value);}
+ }
+ if(payError){paymentBox.textContent="Payment history नहीं दिख सकी। payment_submissions की SELECT policy जाँचें। ("+payError.message+")";return;}
+ paymentBox.textContent="";
+ const ownPayments=payments;
+ if(!ownPayments.length){paymentBox.textContent="इन बुकिंग नंबरों के लिए अभी भुगतान रिकॉर्ड नहीं मिला।";return;}
+ for(const p of ownPayments){const card=addText(paymentBox,"div","","history-card");addText(card,"p",p.booking_number||"Booking","");addText(card,"p",dateText(p.created_at||p.verified_at)+" · UPI","");addText(card,"p","Amount: "+money(p.amount),"");addText(card,"p","Status: "+(p.status||"Pending"),"");const ref=p.utr||p.payment_reference||p.reference;if(ref)addText(card,"p","Reference: "+ref,"");}
+}
 document.getElementById("copyUpi").addEventListener("click",async()=>{const out=document.getElementById("upiMessage");try{await navigator.clipboard.writeText("7544913754-3@ybl");out.textContent="UPI ID कॉपी हो गई।";}catch(e){out.textContent="UPI ID को दबाकर चुनें और Copy करें: 7544913754-3@ybl";}});
 document.getElementById("logoutButton").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("dashboard").style.display="none";document.getElementById("authArea").style.display="block";setMode("login");message.textContent="आप Sign Out हो गए हैं।";});
 let mode="login";
