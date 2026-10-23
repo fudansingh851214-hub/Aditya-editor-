@@ -73,7 +73,7 @@ async function loadCustomerHistory(user){
   const total=Number(b.amount||0), received=paidByBooking[b.booking_number]||0, remaining=Math.max(0,total-received);
   allDue+=total;allReceived+=received;
   const grid=addText(card,"div","","money-grid");
-  for(const [label,value] of [["Total",money(total)],["Received",money(received)],["Online pending",money(payments.filter(p=>p.booking_number===b.booking_number&&!["verified","paid","confirmed","success"].includes(String(p.status||"").toLowerCase())).reduce((s,p)=>s+Number(p.amount||0),0))],["Remaining",money(remaining)]]){const item=addText(grid,"div","","money-item");addText(item,"small",label);addText(item,"strong",value);}
+  for(const [label,value] of [["Total",money(total)],["Received",money(received)],["Verified online",money(received)],["Online pending",money(payments.filter(p=>p.booking_number===b.booking_number&&!["verified","paid","confirmed","success"].includes(String(p.status||"").toLowerCase())).reduce((s,p)=>s+Number(p.amount||0),0))],["Remaining",money(remaining)]]){const item=addText(grid,"div","","money-item");addText(item,"small",label);addText(item,"strong",value);}
  }
  if(payError){paymentBox.textContent="Payment history नहीं दिख सकी। payment_submissions की SELECT policy जाँचें। ("+payError.message+")";return;}
  paymentBox.textContent="";
