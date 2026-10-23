@@ -699,14 +699,15 @@ async function loadPayments() {
 
     const { data, error } = await db
       .from("payment_submissions")
-      .select("id, booking_number, utr, amount, status, created_at")
+      .select("id, booking_number, utr, amount, status, created_at, screenshot_path")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
 
     const selected = paymentFilter?.value || "all";
     const filtered = (data || []).filter((payment) =>
-      selected === "all" || payment.status === selected
+      selected === "all" ||
+      String(payment.status || "pending").toLowerCase() === selected.toLowerCase()
     );
 
     renderPayments(filtered);
@@ -744,10 +745,61 @@ function renderPayments(payments) {
       makeElement("h3", "", "Booking: " + (payment.booking_number || "उपलब्ध नहीं"))
     );
 
-    addField(article, "UTR / Reference", payment.utr || "दर्ज नहीं");
+    addField(article, "UTR / Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
     addField(article, "Amount", formatAmount(payment.amount));
     addField(article, "Payment Status", payment.status || "Pending");
     addField(article, "Submitted At", formatDate(payment.created_at));
+
+    // Screenshots are stored in a private bucket; create a short-lived signed URL.
+    if (payment.screenshot_path) {
+      const screenshotBox = makeElement("div", "payment-screenshot");
+      screenshotBox.appendChild(makeElement("h4", "", "Customer Payment Screenshot"));
+      const preview = makeElement("img");
+      preview.alt = "Payment screenshot for booking " + (payment.booking_number || "");
+      preview.loading = "lazy";
+      preview.style.display = "block";
+      preview.style.width = "100%";
+      preview.style.maxWidth = "520px";
+      preview.style.maxHeight = "520px";
+      preview.style.objectFit = "contain";
+      preview.style.background = "#fff";
+      preview.style.borderRadius = "10px";
+      preview.style.margin = "10px 0";
+      preview.alt = "Screenshot loading...";
+      screenshotBox.appendChild(preview);
+
+      const link = makeElement("a", "btn btn-secondary", "Open Full Screenshot");
+      link.href = "#";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.style.display = "inline-block";
+      link.style.margin = "8px 0 12px";
+      link.textContent = "Open Full Screenshot";
+      screenshotBox.appendChild(link);
+
+      const loadScreenshot = async () => {
+        const { data: signed, error: signedError } = await db.storage
+          .from("payment-screenshots")
+          .createSignedUrl(payment.screenshot_path, 3600);
+        if (signedError || !signed?.signedUrl) {
+          preview.alt = "Screenshot नहीं खुला: " + getErrorText(signedError);
+          preview.style.display = "none";
+          link.textContent = "Screenshot खोलने में समस्या";
+          link.removeAttribute("href");
+          return;
+        }
+        preview.alt = "Payment screenshot";
+        preview.src = signed.signedUrl;
+        link.href = signed.signedUrl;
+      };
+      loadScreenshot().catch((error) => {
+        preview.alt = "Screenshot नहीं खुला: " + getErrorText(error);
+        preview.style.display = "none";
+      });
+      article.appendChild(screenshotBox);
+    } else {
+      addField(article, "Screenshot", "इस payment record में screenshot_path खाली है।");
+    }
 
     article.appendChild(
       makeActionButton("Mark Paid", "btn", () =>
