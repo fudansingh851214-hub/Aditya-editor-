@@ -102,7 +102,13 @@ async function loadCustomerHistory(user) {
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
       if (booking.amount !== null && booking.amount !== undefined) {
-        addText(card, "p", "Amount: ₹" + Number(booking.amount).toLocaleString("en-IN"));
+        const total = Math.max(0, Number(booking.amount) || 0);
+        const amountLine = addText(card, "p", "Total: ₹" + total.toLocaleString("en-IN"));
+        amountLine.style.color = "#42dfff";
+        const payLink = addText(card, "a", "Pay Remaining Amount / Payment Details →", "action");
+        payLink.href = "payment.html?booking=" + encodeURIComponent(booking.booking_number || "");
+      } else {
+        addText(card, "p", "Total: Admin राशि तय होने पर यहाँ दिखेगी।", "history-state");
       }
     }
   } catch (error) {
