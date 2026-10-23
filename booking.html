@@ -499,6 +499,7 @@
 
       <nav class="nav-links">
         <a href="index.html">Home</a>
+        <a href="auth.html">Customer Login</a>
         <a href="booking.html" class="active">Booking</a>
         <a href="tracking.html">Track</a>
         <a class="whatsapp"
@@ -838,6 +839,12 @@
         return;
       }
 
+      const { data: authData, error: authError } = await client.auth.getUser();
+      if (authError || !authData?.user) {
+        location.href = "auth.html?next=booking";
+        return;
+      }
+
       const serviceElement =
         document.querySelector('input[name="service"]:checked');
 
@@ -912,6 +919,7 @@
 
         const bookingData = {
           booking_number: bookingNumber,
+          user_id: authData.user.id,
           customer_name: customerName,
           phone: phone,
           address: address,
