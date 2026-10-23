@@ -366,13 +366,11 @@ async function initializeAdmin() {
 }
 
 async function loadAllAdminData() {
-  // एक section में error होने से दूसरे section का load नहीं रुकेगा।
-  const results = await Promise.allSettled([
-    loadBookings(),
-    loadPayments(),
-    loadServiceGallery()
-  ]);
-
+  // पहले bookings लोड करें ताकि payment cards customer details से link हो सकें।
+  const results = [];
+  results.push(await Promise.allSettled([loadBookings()]));
+  results.push(await Promise.allSettled([loadPayments()]));
+  results.push(await Promise.allSettled([loadServiceGallery()]));
   return results;
 }
 
