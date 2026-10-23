@@ -150,7 +150,7 @@ async function loadCustomerHistory(user) {
         }
         if (remaining > 0 && booking.booking_number) {
           const payBox = addText(card, "section", "", "paybox");
-          addText(payBox, "h3", "Pay Remaining Amount");
+          addText(payBox, "h3", "QR Payment Screen · Pay Remaining Amount");
           addText(payBox, "p", "Booking: " + booking.booking_number);
           addText(payBox, "p", "Amount due: ₹" + remaining.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
           const qr = addText(payBox, "div", "", "qr");
@@ -180,7 +180,7 @@ async function loadCustomerHistory(user) {
           fileInput.type = "file"; fileInput.required = true; fileInput.accept = "image/jpeg,image/png,image/webp,application/pdf,.pdf";
           const submit = addText(paymentForm, "button", "Submit payment for verification", "action");
           submit.type = "submit";
-          const status = addText(payBox, "p", "Admin verify करने के बाद ही payment received गिना जाएगा।", "note");
+          const status = addText(payBox, "p", "Payment Verification Status: Pending Verification. Admin की पुष्टि के बाद ही भुगतान Received गिना जाएगा।", "note");
           paymentForm.addEventListener("submit", async (event) => {
             event.preventDefault();
             const file = fileInput.files && fileInput.files[0], utr = utrInput.value.trim();
