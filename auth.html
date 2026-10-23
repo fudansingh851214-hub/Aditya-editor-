@@ -41,12 +41,12 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <label for="paymentBooking">Booking Number</label>
 <select id="paymentBooking" required><option value="">अपनी बुकिंग चुनें</option></select>
 <label for="paymentAmount">Payment amount (₹)</label>
-<input id="paymentAmount" type="number" min="1" step="0.01" readonly placeholder="Admin द्वारा तय राशि यहाँ आएगी">
+<input id="paymentAmount" type="number" min="1" step="0.01" inputmode="decimal" required placeholder="Booking की राशि अपने-आप आएगी; आप इसे बदल सकते हैं">
 <label for="paymentUtr">Transaction ID / UTR</label>
 <input id="paymentUtr" type="text" maxlength="120" required placeholder="UPI transaction ID / UTR">
 <label for="paymentProof">Upload payment screenshot or PDF</label>
 <input id="paymentProof" type="file" accept="image/*,application/pdf" required>
-<p class="note">राशि चुनी गई बुकिंग के Admin-set amount और verified payment के आधार पर आएगी। सबमिट करने पर भुगतान Pending रहेगा, जब तक Admin जाँच न कर ले।</p>
+<p class="note">राशि आपकी सबसे नई बुकिंग से अपने-आप भरी जाएगी। आप भुगतान करने वाली राशि बदल सकते हैं। भुगतान जमा करने पर Pending रहेगा, जब तक Admin जाँच न कर ले।</p>
 <button class="action" id="submitPayment" type="button">Submit Payment Proof</button>
 <p id="paymentSubmitMessage" class="note" role="status" aria-live="polite"></p>
 </div>
