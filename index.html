@@ -121,6 +121,7 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
   .actions .btn { flex:1; }
 }
 
+.photo-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.photo-side{position:relative;overflow:hidden;border-radius:12px;min-width:0;background:#111}.photo-side img{display:block;width:100%;height:190px;object-fit:cover}.photo-side span{position:absolute;left:8px;bottom:8px;padding:5px 9px;border-radius:6px;background:#07101fe8;color:#fff;font-size:11px;font-weight:800;letter-spacing:1px}.photo-side.after span{background:#ffd34d;color:#172033}.photo-caption{font-size:12px;opacity:.8;margin:0 0 12px}
 .service-preview{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;margin:0 0 14px;border:1px solid var(--border,#29415d)}
 .home-video{margin:10px 0 14px}.home-video video{display:block;width:100%;aspect-ratio:9/16;max-height:320px;object-fit:cover;border-radius:12px;background:#000;border:1px solid var(--border)}
 .service-demo{margin:0 0 18px}
@@ -199,7 +200,7 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
       <div class="grid">
         <article class="card">
           <div class="icon">🖼️</div>
-          <img class="service-preview" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=900&amp;q=90" alt="Professional portrait photo editing sample" loading="lazy" onerror="this.style.display='none'">
+          <div class="photo-compare" aria-label="Photo editing before and after preview"><div class="photo-side"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Before editing portrait sample" loading="lazy"><span>BEFORE</span></div><div class="photo-side after"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="After editing style portrait sample" loading="lazy"><span>AFTER</span></div></div><p class="photo-caption">Photo Retouching · Color · Lighting</p>
           <h3>Photo Editing</h3>
           <p>Photo retouching, background removal और colour correction.</p>
           <a class="btn" href="booking.html">Book Now →</a>
