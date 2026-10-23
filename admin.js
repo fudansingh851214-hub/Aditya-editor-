@@ -906,7 +906,44 @@ function renderPayments(payments) {
       )
     );
 
+    article.appendChild(
+      makeActionButton("Delete Payment Record", "btn btn-danger", () =>
+        deletePaymentRecord(payment)
+      )
+    );
+
     paymentsList.appendChild(article);
+  }
+}
+
+async function deletePaymentRecord(payment) {
+  const confirmed = window.confirm(
+    "क्या आप Booking " + (payment.booking_number || "उपलब्ध नहीं") +
+    " का यह Payment Verification रिकॉर्ड हटाना चाहते हैं?\\n\\n" +
+    "यह payment_submissions से रिकॉर्ड हटाएगा। Screenshot Storage में अलग से रह सकता है।\\n" +
+    "यह काम वापस नहीं किया जा सकता।"
+  );
+  if (!confirmed) return;
+
+  try {
+    await verifyAdmin();
+    const { data, error } = await db
+      .from("payment_submissions")
+      .delete()
+      .eq("id", payment.id)
+      .select("id")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error("रिकॉर्ड नहीं हटा। Supabase में admin-only delete policy जाँचें।");
+    }
+
+    await loadPayments();
+    await loadBookings();
+    showMessage(paymentMessage, "Payment Verification रिकॉर्ड हटा दिया गया। Screenshot फ़ाइल अलग से रह सकती है।");
+  } catch (error) {
+    showMessage(paymentMessage, "Payment रिकॉर्ड डिलीट नहीं हुआ: " + getErrorText(error), true);
   }
 }
 
