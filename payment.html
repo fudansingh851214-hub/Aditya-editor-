@@ -256,6 +256,22 @@
 
         <h2>Payment Details</h2>
 
+        <label for="paymentAmount">
+          Payment Amount (₹)
+        </label>
+        <input
+          id="paymentAmount"
+          name="payment_amount"
+          type="text"
+          value="Admin द्वारा तय राशि लोड होगी"
+          readonly
+          aria-describedby="amountHint"
+        >
+        <p class="hint" id="amountHint">
+          यह राशि Admin की Booking में सेट की गई राशि से अपने-आप आएगी।
+          ग्राहक इसे बदल नहीं सकता।
+        </p>
+
         <label for="utr">
           UTR / Reference Number
           <span class="required">*</span>
@@ -278,7 +294,7 @@
         </p>
 
         <label for="paymentScreenshot">
-          Payment Screenshot
+          Upload Payment Screenshot or PDF
           <span class="required">*</span>
         </label>
 
@@ -286,12 +302,12 @@
           id="paymentScreenshot"
           name="screenshot"
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,application/pdf,.pdf"
           required
         >
 
         <p class="hint">
-          केवल JPG, PNG या WebP फाइल, अधिकतम 5 MB।
+          JPG, PNG, WebP या PDF फाइल, अधिकतम 5 MB।
         </p>
 
         <button class="primary" id="submitButton" type="submit">
@@ -447,6 +463,11 @@
 
         document.getElementById("showAmount").textContent =
           "₹" + amount.toFixed(2);
+        document.getElementById("paymentAmount").value =
+          "₹" + amount.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
 
         document.getElementById("showStatus").textContent =
           data.payment_status || "Pending";
@@ -514,12 +535,15 @@
       const allowedTypes = [
         "image/jpeg",
         "image/png",
-        "image/webp"
+        "image/webp",
+        "application/pdf"
       ];
+      const isPdf = screenshot.type === "application/pdf" ||
+        screenshot.name.toLowerCase().endsWith(".pdf");
 
-      if (!allowedTypes.includes(screenshot.type)) {
+      if (!allowedTypes.includes(screenshot.type) && !isPdf) {
         showMessage(
-          "केवल JPG, PNG या WebP Screenshot स्वीकार हैं।"
+          "केवल JPG, PNG, WebP या PDF फाइल स्वीकार है।"
         );
         return;
       }
@@ -529,7 +553,7 @@
         screenshot.size > 5 * 1024 * 1024
       ) {
         showMessage(
-          "Screenshot का आकार 5 MB तक होना चाहिए।"
+          "Screenshot/PDF का आकार 5 MB तक होना चाहिए।"
         );
         return;
       }
@@ -578,7 +602,7 @@
         }
 
         showMessage(
-          "UTR और Screenshot जमा हो गए। Admin Verification का इंतजार करें।"
+          "UTR और Payment Screenshot/PDF जमा हो गए। Admin Verification का इंतजार करें।"
         );
 
         paymentForm.reset();
