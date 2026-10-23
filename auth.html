@@ -17,7 +17,7 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 </style></head>
 <body><div class="home-top"><a href="index.html">← Home</a></div><main class="wrap">
 <h1>✦ A K EDITOR</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
-<div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button">Login</button><button id="signupTab" type="button">Create Account</button></div>
+<div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button" onclick="setMode('login')">Login</button><button id="signupTab" type="button" onclick="setMode('signup')">Create Account</button></div>
 <form id="authForm">
 <label for="email">Email Address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
 <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="कम से कम 8 characters">
@@ -59,6 +59,7 @@ function setMode(next) {
   password.autocomplete = mode === "login" ? "current-password" : "new-password";
   setMessage("");
 }
+window.setMode = setMode;
 function showDashboard(user) {
   document.getElementById("authArea").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
