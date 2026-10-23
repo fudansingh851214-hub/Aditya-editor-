@@ -527,12 +527,65 @@ function renderBookings(bookings) {
       )
     );
 
+    article.appendChild(
+      makeActionButton(
+        "Delete Booking",
+        "btn btn-danger",
+        () => deleteBooking(booking)
+      )
+    );
+
     const fileOutput = makeElement("div");
     fileOutput.id = "files-" + booking.id;
     fileOutput.style.marginTop = "12px";
     article.appendChild(fileOutput);
 
     bookingsList.appendChild(article);
+  }
+}
+
+async function deleteBooking(booking) {
+  const bookingNumber = booking.booking_number || booking.id;
+  const confirmed = window.confirm(
+    "क्या आप Booking " + bookingNumber + " का रिकॉर्ड हटाना चाहते हैं?\n\n" +
+    "ध्यान दें: यह केवल bookings टेबल का रिकॉर्ड हटाएगा। " +
+    "Payment history, UTR, screenshot और uploaded photos/videos अपने-आप नहीं हटेंगे।\n\n" +
+    "यह काम वापस नहीं किया जा सकता। जारी रखें?"
+  );
+  if (!confirmed) return;
+
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from("bookings")
+      .delete()
+      .eq("id", booking.id)
+      .select("id, booking_number")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error(
+        "Booking delete नहीं हुई। Database में Admin delete policy और permissions जाँचें।"
+      );
+    }
+
+    currentBookings = currentBookings.filter(
+      (item) => String(item.id) !== String(booking.id)
+    );
+    renderBookings(currentBookings);
+    showMessage(
+      message,
+      "Booking " + (data.booking_number || data.id) +
+      " का रिकॉर्ड हट गया। Payment records और uploaded files अलग से मौजूद हो सकते हैं।"
+    );
+  } catch (error) {
+    showMessage(
+      message,
+      "Booking delete नहीं हुई: " + getErrorText(error),
+      true
+    );
   }
 }
 
