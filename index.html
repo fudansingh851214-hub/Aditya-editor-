@@ -122,6 +122,7 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
 }
 
 .service-preview{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;margin:0 0 14px;border:1px solid var(--border,#29415d)}
+.photo-compare{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0 0 12px}.photo-compare>div{position:relative;min-width:0;overflow:hidden;border-radius:10px}.photo-compare img{display:block;width:100%;height:155px;object-fit:cover}.photo-compare span{position:absolute;left:7px;bottom:7px;padding:3px 7px;border-radius:5px;background:#06101fe8;color:#fff;font-size:10px;font-weight:bold;letter-spacing:1px}.photo-extra{aspect-ratio:16/9}
 .home-video{margin:10px 0 14px}.home-video video{display:block;width:100%;aspect-ratio:9/16;max-height:320px;object-fit:cover;border-radius:12px;background:#000;border:1px solid var(--border)}
 .service-demo{margin:0 0 18px}
 .service-demo video{display:block;width:100%;max-height:360px;border-radius:14px;background:#000}
@@ -199,7 +200,7 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
       <div class="grid">
         <article class="card">
           <div class="icon">🖼️</div>
-          <img class="service-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=80" alt="Photo Editing sample preview" loading="lazy" onerror="this.style.display='none'">
+          <div class="photo-compare" aria-label="Photo editing before and after example"><div><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Before photo editing sample" loading="lazy"><span>BEFORE</span></div><div><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="After photo editing style sample" loading="lazy"><span>AFTER</span></div></div><img class="service-preview photo-extra" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&amp;fit=crop&amp;w=900&amp;q=85" alt="Extra portrait photo editing sample" loading="lazy" onerror="this.style.display='none'">
           <h3>Photo Editing</h3>
           <p>Photo retouching, background removal और colour correction.</p>
           <a class="btn" href="booking.html">Book Now →</a>
