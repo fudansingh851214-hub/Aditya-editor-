@@ -431,15 +431,22 @@
           return;
         }
 
-        const amount = Number(data.amount);
+        const totalAmount = Number(data.amount);
 
-        if (!Number.isFinite(amount) || amount <= 0) {
+        if (!Number.isFinite(totalAmount) || totalAmount <= 0) {
           showMessage(
             "इस Booking की राशि तय नहीं है। Admin से संपर्क करें।"
           );
           return;
         }
 
+        const { data: paymentRows, error: paymentRowsError } = await db.from("payment_submissions").select("amount,status,utr,payment_reference,created_at").eq("booking_number", bookingNumber);
+        if (paymentRowsError) throw new Error("Payment history नहीं पढ़ सकी। payment_submissions की SELECT permission जाँचें।");
+        let verifiedAmount = 0;
+        let pendingAmount = 0;
+        const verifiedStatuses = ["verified", "paid", "confirmed", "success", "successful"];
+        for (const row of (paymentRows || [])) { const paidAmount = Math.max(0, Number(row.amount) || 0); const state = String(row.status || "pending").toLowerCase(); if (verifiedStatuses.includes(state)) verifiedAmount += paidAmount; else pendingAmount += paidAmount; }
+        const amount = Math.max(0, totalAmount - verifiedAmount);
         if (!data.payment_token) {
           showMessage(
             "इस Booking का Payment Token उपलब्ध नहीं है। Admin से संपर्क करें।"
@@ -462,7 +469,7 @@
           data.service || "Service";
 
         document.getElementById("showAmount").textContent =
-          "₹" + amount.toFixed(2);
+          "₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " बाकी (कुल ₹" + totalAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + ")";
         document.getElementById("paymentAmount").value =
           "₹" + amount.toLocaleString("en-IN", {
             minimumFractionDigits: 2,
@@ -470,7 +477,7 @@
           });
 
         document.getElementById("showStatus").textContent =
-          data.payment_status || "Pending";
+          amount <= 0 ? "Paid / Verified" : (pendingAmount > 0 ? "Pending Verification" : (data.payment_status || "Pending"));
 
         payNow.href = makeUPILink(data.booking_number, amount);
 
@@ -576,6 +583,7 @@
 
         formData.append("utr", utr);
         formData.append("screenshot", screenshot);
+        formData.append("amount", currentBooking.amount.toFixed(2));
 
         const response = await fetch(PAYMENT_FUNCTION_URL, {
           method: "POST",
