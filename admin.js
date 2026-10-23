@@ -1,0 +1,1122 @@
+
+"use strict";
+
+/* ==========================================
+   ADITYA EDITOR — ADMIN PANEL
+   Login | Bookings | Customer Files
+   Payment Verification | Service Gallery
+========================================== */
+
+const SUPABASE_URL =
+  "https://okzwtylpmcyurkxvaocy.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+
+const STORAGE_BUCKET = "customer-media";
+const GALLERY_BUCKET = "service-gallery";
+const GALLERY_TABLE = "service_gallery";
+const SIGNED_URL_SECONDS = 3600;
+
+const BOOKING_STATUSES = [
+  "Booking Submitted",
+  "Booking Confirmed",
+  "Payment Confirmed",
+  "Editing In Progress",
+  "Ready for Delivery",
+  "Completed"
+];
+
+const GALLERY_SERVICES = [
+  "Photo Editing",
+  "Video Editing",
+  "Wedding Projects",
+  "Graphic Design",
+  "Social Media Reels"
+];
+
+const db = window.supabase?.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const $ = (id) => document.getElementById(id);
+
+let bookingsBusy = false;
+let paymentsBusy = false;
+let galleryBusy = false;
+let currentBookings = [];
+
+const loginPanel = $("loginPanel");
+const adminDashboard = $("adminDashboard");
+const loginForm = $("loginForm");
+const adminEmail = $("adminEmail");
+const adminPassword = $("adminPassword");
+const loginMessage = $("loginMessage");
+const logoutButton = $("logoutButton");
+
+const refreshButton = $("refreshButton");
+const message = $("message");
+const bookingsList = $("bookingsList");
+
+const refreshPaymentsButton = $("refreshPaymentsButton");
+const paymentFilter = $("paymentFilter");
+const paymentMessage = $("paymentMessage");
+const paymentsList = $("paymentsList");
+
+const galleryUploadForm = $("galleryUploadForm");
+const galleryTitle = $("galleryTitle");
+const galleryService = $("galleryService");
+const galleryFile = $("galleryFile");
+const galleryUploadButton = $("galleryUploadButton");
+const galleryMessage = $("galleryMessage");
+const galleryAdminList = $("galleryAdminList");
+const refreshGalleryButton = $("refreshGalleryButton");
+
+/* ---------- HELPERS ---------- */
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function showMessage(element, text, isError = false) {
+  if (!element) return;
+  element.textContent = text;
+  element.style.color = isError ? "#ff8585" : "#42dfff";
+  element.style.whiteSpace = "pre-wrap";
+}
+
+function getErrorText(error) {
+  if (!error) return "Unknown error";
+  return [
+    error.message,
+    error.details,
+    error.hint,
+    error.code ? "Code: " + error.code : ""
+  ].filter(Boolean).join(" | ");
+}
+
+function formatAmount(value) {
+  if (value === null || value === undefined || value === "") {
+    return "निर्धारित नहीं";
+  }
+
+  const number = Number(value);
+  if (!Number.isFinite(number)) return String(value);
+
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2
+  }).format(number);
+}
+
+function formatDate(value) {
+  if (!value) return "उपलब्ध नहीं";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return date.toLocaleString("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function makeElement(tag, className = "", text = "") {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== "") element.textContent = String(text);
+  return element;
+}
+
+function addField(parent, label, value) {
+  const p = makeElement("p");
+  const strong = makeElement("strong", "", label + ": ");
+  p.append(strong, document.createTextNode(String(value ?? "उपलब्ध नहीं")));
+  parent.appendChild(p);
+}
+
+function setButtonBusy(button, busy, busyText, normalText) {
+  if (!button) return;
+
+  if (busy) {
+    if (!button.dataset.originalText) {
+      button.dataset.originalText = button.textContent;
+    }
+    button.disabled = true;
+    button.textContent = busyText || "Loading...";
+  } else {
+    button.disabled = false;
+    button.textContent =
+      button.dataset.originalText || normalText || "Refresh";
+    delete button.dataset.originalText;
+  }
+}
+
+function normalizeStatus(status) {
+  return BOOKING_STATUSES.includes(status)
+    ? status
+    : BOOKING_STATUSES[0];
+}
+
+function parseFilePaths(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === "object") return [value];
+
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [parsed];
+    } catch {
+      return [value.trim()].filter(Boolean);
+    }
+  }
+
+  return [];
+}
+
+function makeActionButton(text, className, callback) {
+  const button = makeElement("button", className, text);
+  button.type = "button";
+  button.addEventListener("click", callback);
+  return button;
+}
+
+/* ---------- LOGIN VISIBILITY ---------- */
+
+function showLogin() {
+  if (loginPanel) {
+    loginPanel.classList.remove("hidden");
+    loginPanel.style.display = "block";
+  }
+
+  if (adminDashboard) {
+    adminDashboard.classList.add("hidden");
+    adminDashboard.style.display = "none";
+  }
+}
+
+function showDashboard() {
+  if (loginPanel) {
+    loginPanel.classList.add("hidden");
+    loginPanel.style.display = "none";
+  }
+
+  if (adminDashboard) {
+    adminDashboard.classList.remove("hidden");
+    adminDashboard.style.display = "block";
+  }
+}
+
+/* ---------- ADMIN AUTHORIZATION ---------- */
+
+async function verifyAdmin() {
+  if (!db) {
+    throw new Error(
+      "Supabase initialize नहीं हुआ। Supabase library और URL जाँचें।"
+    );
+  }
+
+  const { data, error } = await db.auth.getUser();
+  if (error) throw error;
+
+  if (!data?.user) {
+    throw new Error("आपका session नहीं मिला। दोबारा Login करें।");
+  }
+
+  const result = await db.rpc("is_admin");
+
+  if (result.error) {
+    throw new Error(
+      "Admin permission जाँचने में समस्या। is_admin() function जाँचें: " +
+      getErrorText(result.error)
+    );
+  }
+
+  if (result.data !== true) {
+    throw new Error("इस account को Admin permission नहीं मिली है।");
+  }
+
+  return data.user;
+}
+
+/* ---------- LOGIN ---------- */
+
+async function handleLogin(event) {
+  event.preventDefault();
+
+  if (!db) {
+    showMessage(loginMessage, "Supabase library लोड नहीं हुई।", true);
+    return;
+  }
+
+  const email = adminEmail?.value.trim();
+  const password = adminPassword?.value;
+
+  if (!email || !password) {
+    showMessage(loginMessage, "Email और Password भरें।", true);
+    return;
+  }
+
+  const submitButton = loginForm?.querySelector(
+    'button[type="submit"]'
+  );
+
+  setButtonBusy(submitButton, true, "Logging in...", "LOGIN");
+  showMessage(loginMessage, "Login जाँचा जा रहा है...");
+
+  try {
+    const { error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    await verifyAdmin();
+
+    showDashboard();
+    showMessage(loginMessage, "Admin Login सफल हुआ।");
+
+    await loadAllAdminData();
+  } catch (error) {
+    try {
+      await db.auth.signOut();
+    } catch (_) {
+      // Login error is displayed below.
+    }
+
+    showLogin();
+    showMessage(
+      loginMessage,
+      "Login नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  } finally {
+    setButtonBusy(submitButton, false, "", "LOGIN");
+  }
+}
+
+async function handleLogout() {
+  if (!db) return;
+
+  try {
+    const { error } = await db.auth.signOut();
+    if (error) throw error;
+
+    showLogin();
+    if (loginForm) loginForm.reset();
+
+    showMessage(loginMessage, "आप Logout हो गए हैं।");
+  } catch (error) {
+    showMessage(
+      loginMessage,
+      "Logout समस्या: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+/* ---------- INITIAL SESSION CHECK ---------- */
+
+async function initializeAdmin() {
+  // पेज खुलते ही Login दिखाएँ। पहले से authorized session
+  // सत्यापित होने पर ही Dashboard दिखेगा।
+  showLogin();
+
+  if (!db) {
+    showMessage(
+      loginMessage,
+      "Supabase library लोड नहीं हुई। Internet और script tag जाँचें।",
+      true
+    );
+    return;
+  }
+
+  try {
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+
+    if (!data?.session) {
+      showLogin();
+      return;
+    }
+
+    await verifyAdmin();
+    showDashboard();
+    showMessage(loginMessage, "Admin session सत्यापित हुआ।");
+
+    await loadAllAdminData();
+  } catch (error) {
+    showLogin();
+    showMessage(
+      loginMessage,
+      "Session सत्यापित नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+async function loadAllAdminData() {
+  // एक section में error होने से दूसरे section का load नहीं रुकेगा।
+  const results = await Promise.allSettled([
+    loadBookings(),
+    loadPayments(),
+    loadServiceGallery()
+  ]);
+
+  return results;
+}
+
+/* ---------- BOOKINGS ---------- */
+
+async function loadBookings() {
+  if (bookingsBusy || !db || adminDashboard?.classList.contains("hidden")) {
+    return;
+  }
+
+  bookingsBusy = true;
+  setButtonBusy(refreshButton, true, "Loading...", "Refresh Bookings");
+  showMessage(message, "Bookings लोड हो रही हैं...");
+
+  if (bookingsList) {
+    bookingsList.textContent = "कृपया प्रतीक्षा करें...";
+  }
+
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from("bookings")
+      .select(
+        "id, booking_number, customer_name, phone, service, status, file_paths, created_at, amount"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    currentBookings = data || [];
+    renderBookings(currentBookings);
+
+    showMessage(message, `${currentBookings.length} Booking records मिले।`);
+  } catch (error) {
+    if (bookingsList) {
+      bookingsList.replaceChildren();
+      bookingsList.textContent =
+        "Bookings नहीं खुलीं: " + getErrorText(error);
+    }
+
+    showMessage(
+      message,
+      "Bookings नहीं खुलीं: " + getErrorText(error),
+      true
+    );
+  } finally {
+    bookingsBusy = false;
+    setButtonBusy(refreshButton, false, "", "Refresh Bookings");
+  }
+}
+
+function renderBookings(bookings) {
+  if (!bookingsList) return;
+  bookingsList.replaceChildren();
+
+  if (!bookings.length) {
+    bookingsList.textContent = "अभी कोई Booking नहीं मिली।";
+    return;
+  }
+
+  for (const booking of bookings) {
+    const article = makeElement("article", "record");
+
+    article.appendChild(
+      makeElement(
+        "h3",
+        "",
+        "Booking: " + (booking.booking_number || booking.id)
+      )
+    );
+
+    addField(article, "Customer", booking.customer_name);
+    addField(article, "Phone", booking.phone);
+    addField(article, "Service", booking.service);
+    addField(article, "Created At", formatDate(booking.created_at));
+    addField(article, "Current Amount", formatAmount(booking.amount));
+
+    const amountLabel = makeElement("label", "", "Booking Amount (₹)");
+    const amountInput = makeElement("input");
+    amountInput.type = "number";
+    amountInput.min = "0";
+    amountInput.step = "0.01";
+    amountInput.value = booking.amount ?? "";
+    amountInput.placeholder = "Amount दर्ज करें";
+    amountInput.id = "amount-" + booking.id;
+    amountLabel.htmlFor = amountInput.id;
+
+    const amountButton = makeActionButton(
+      "Save Amount",
+      "btn",
+      () => saveAmount(booking.id)
+    );
+
+    article.append(amountLabel, amountInput, amountButton);
+
+    const statusLabel = makeElement("label", "", "Booking Status");
+    const statusSelect = makeElement("select");
+    statusSelect.id = "status-" + booking.id;
+    statusLabel.htmlFor = statusSelect.id;
+
+    for (const status of BOOKING_STATUSES) {
+      const option = makeElement("option", "", status);
+      option.value = status;
+      option.selected = status === normalizeStatus(booking.status);
+      statusSelect.appendChild(option);
+    }
+
+    const statusButton = makeActionButton(
+      "Update Status",
+      "btn",
+      () => saveStatus(booking.id)
+    );
+
+    article.append(statusLabel, statusSelect, statusButton);
+
+    article.appendChild(
+      makeActionButton(
+        "View Customer Files",
+        "btn",
+        () => viewFiles(booking.id)
+      )
+    );
+
+    const fileOutput = makeElement("div");
+    fileOutput.id = "files-" + booking.id;
+    fileOutput.style.marginTop = "12px";
+    article.appendChild(fileOutput);
+
+    bookingsList.appendChild(article);
+  }
+}
+
+async function saveAmount(bookingId) {
+  try {
+    await verifyAdmin();
+
+    const raw = $("amount-" + bookingId)?.value.trim();
+    if (raw === "" || raw === undefined) {
+      throw new Error("Booking Amount दर्ज करें।");
+    }
+
+    const amount = Number(raw);
+    if (!Number.isFinite(amount) || amount < 0) {
+      throw new Error("मान्य Amount दर्ज करें।");
+    }
+
+    const { data, error } = await db
+      .from("bookings")
+      .update({ amount })
+      .eq("id", bookingId)
+      .select("id, amount")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error("Amount अपडेट नहीं हुआ। Permissions जाँचें।");
+    }
+
+    showMessage(message, "Booking Amount सेव हो गया।");
+    await loadBookings();
+  } catch (error) {
+    showMessage(
+      message,
+      "Amount सेव नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+async function saveStatus(bookingId) {
+  try {
+    await verifyAdmin();
+
+    const status = $("status-" + bookingId)?.value;
+    if (!BOOKING_STATUSES.includes(status)) {
+      throw new Error("मान्य Booking Status चुनें।");
+    }
+
+    if (!window.confirm("Booking status '" + status + "' करना चाहते हैं?")) {
+      return;
+    }
+
+    const { data, error } = await db
+      .from("bookings")
+      .update({ status })
+      .eq("id", bookingId)
+      .select("id, status")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error("Status अपडेट नहीं हुआ। Permissions जाँचें।");
+    }
+
+    showMessage(message, "Status अपडेट हो गया: " + data.status);
+    await loadBookings();
+  } catch (error) {
+    showMessage(
+      message,
+      "Status अपडेट नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+/* ---------- CUSTOMER FILES ---------- */
+
+async function viewFiles(bookingId) {
+  const output = $("files-" + bookingId);
+  if (!output) return;
+
+  output.replaceChildren();
+  output.textContent = "Customer files लोड हो रही हैं...";
+
+  try {
+    await verifyAdmin();
+
+    const booking = currentBookings.find(
+      (item) => String(item.id) === String(bookingId)
+    );
+
+    if (!booking) throw new Error("Booking नहीं मिली। Refresh करें।");
+
+    const paths = parseFilePaths(booking.file_paths);
+
+    if (!paths.length) {
+      output.textContent = "इस Booking में file_paths उपलब्ध नहीं है।";
+      return;
+    }
+
+    output.replaceChildren();
+
+    const grid = makeElement("div");
+    grid.style.display = "grid";
+    grid.style.gridTemplateColumns = "repeat(auto-fit,minmax(220px,1fr))";
+    grid.style.gap = "14px";
+
+    for (const item of paths) {
+      const path = (
+        typeof item === "string"
+          ? item
+          : item?.path || item?.file_path || item?.storage_path
+      )?.trim();
+
+      if (!path) continue;
+
+      const card = makeElement("article", "record");
+      const { data, error } = await db.storage
+        .from(STORAGE_BUCKET)
+        .createSignedUrl(path, SIGNED_URL_SECONDS);
+
+      if (error || !data?.signedUrl) {
+        card.textContent = "File नहीं खुली: " + getErrorText(error);
+        grid.appendChild(card);
+        continue;
+      }
+
+      const url = data.signedUrl;
+      const name = typeof item === "object" && item.name
+        ? item.name
+        : path.split("/").pop() || "Customer File";
+
+      card.appendChild(makeElement("h3", "", name));
+
+      const ext = path.split("?")[0].split(".").pop().toLowerCase();
+      const imageExt = ["jpg", "jpeg", "png", "gif", "webp", "avif", "bmp"];
+      const videoExt = ["mp4", "webm", "mov", "m4v", "ogv"];
+
+      if (imageExt.includes(ext)) {
+        const img = makeElement("img");
+        img.src = url;
+        img.alt = name;
+        img.loading = "lazy";
+        img.style.width = "100%";
+        img.style.maxHeight = "320px";
+        img.style.objectFit = "contain";
+        card.appendChild(img);
+      } else if (videoExt.includes(ext)) {
+        const video = makeElement("video");
+        video.src = url;
+        video.controls = true;
+        video.preload = "metadata";
+        video.playsInline = true;
+        video.style.width = "100%";
+        video.style.maxHeight = "360px";
+        card.appendChild(video);
+      }
+
+      const link = makeElement("a", "", "Open File");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.style.display = "inline-block";
+      link.style.marginTop = "12px";
+      card.appendChild(link);
+
+      grid.appendChild(card);
+    }
+
+    output.appendChild(grid);
+  } catch (error) {
+    output.textContent = "Files नहीं खुलीं: " + getErrorText(error);
+  }
+}
+
+/* ---------- PAYMENTS ---------- */
+
+async function loadPayments() {
+  if (paymentsBusy || !db || adminDashboard?.classList.contains("hidden")) {
+    return;
+  }
+
+  paymentsBusy = true;
+  setButtonBusy(refreshPaymentsButton, true, "Loading...", "Refresh Payments");
+  showMessage(paymentMessage, "Payments लोड हो रहे हैं...");
+
+  if (paymentsList) {
+    paymentsList.textContent = "कृपया प्रतीक्षा करें...";
+  }
+
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from("payment_submissions")
+      .select("id, booking_number, utr, amount, status, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    const selected = paymentFilter?.value || "all";
+    const filtered = (data || []).filter((payment) =>
+      selected === "all" || payment.status === selected
+    );
+
+    renderPayments(filtered);
+    showMessage(paymentMessage, `${filtered.length} payment records मिले।`);
+  } catch (error) {
+    if (paymentsList) {
+      paymentsList.replaceChildren();
+      paymentsList.textContent = "Payments नहीं खुलीं: " + getErrorText(error);
+    }
+
+    showMessage(
+      paymentMessage,
+      "Payments नहीं खुलीं: " + getErrorText(error),
+      true
+    );
+  } finally {
+    paymentsBusy = false;
+    setButtonBusy(refreshPaymentsButton, false, "", "Refresh Payments");
+  }
+}
+
+function renderPayments(payments) {
+  if (!paymentsList) return;
+  paymentsList.replaceChildren();
+
+  if (!payments.length) {
+    paymentsList.textContent = "इस filter में कोई payment नहीं है।";
+    return;
+  }
+
+  for (const payment of payments) {
+    const article = makeElement("article", "record");
+
+    article.appendChild(
+      makeElement("h3", "", "Booking: " + (payment.booking_number || "उपलब्ध नहीं"))
+    );
+
+    addField(article, "UTR / Reference", payment.utr || "दर्ज नहीं");
+    addField(article, "Amount", formatAmount(payment.amount));
+    addField(article, "Payment Status", payment.status || "Pending");
+    addField(article, "Submitted At", formatDate(payment.created_at));
+
+    article.appendChild(
+      makeActionButton("Mark Paid", "btn", () =>
+        reviewPayment(payment.id, "Paid")
+      )
+    );
+
+    article.appendChild(
+      makeActionButton("Reject", "btn btn-danger", () =>
+        reviewPayment(payment.id, "Rejected")
+      )
+    );
+
+    paymentsList.appendChild(article);
+  }
+}
+
+async function reviewPayment(paymentId, nextStatus) {
+  if (!["Paid", "Rejected"].includes(nextStatus)) return;
+
+  const confirmed = window.confirm(
+    nextStatus === "Paid"
+      ? "भुगतान को वास्तविक बैंक/UPI रिकॉर्ड से सत्यापित किया है?"
+      : "क्या आप इस payment को Reject करना चाहते हैं?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from("payment_submissions")
+      .update({ status: nextStatus })
+      .eq("id", paymentId)
+      .select("id, status")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) throw new Error("Payment अपडेट नहीं हुई। Permissions जाँचें।");
+
+    showMessage(paymentMessage, "Payment status अपडेट हो गया: " + nextStatus);
+    await loadPayments();
+  } catch (error) {
+    showMessage(
+      paymentMessage,
+      "Payment update नहीं हुई: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+/* ---------- SERVICE GALLERY ---------- */
+
+function detectMediaType(file) {
+  if (file?.type?.startsWith("image/")) return "image";
+  if (file?.type?.startsWith("video/")) return "video";
+  return null;
+}
+
+function validateGalleryFile(file) {
+  if (!file) throw new Error("Photo या Video चुनें।");
+
+  const type = detectMediaType(file);
+  if (!type) {
+    throw new Error("केवल मान्य Image या Video फ़ाइल अपलोड करें।");
+  }
+
+  const maxSize = type === "image"
+    ? 10 * 1024 * 1024
+    : 50 * 1024 * 1024;
+
+  if (file.size > maxSize) {
+    throw new Error(
+      type === "image"
+        ? "Photo अधिकतम 10 MB की हो सकती है।"
+        : "Video अधिकतम 50 MB की हो सकती है।"
+    );
+  }
+
+  return type;
+}
+
+async function uploadServiceGallery(event) {
+  event.preventDefault();
+
+  if (galleryBusy || !db) return;
+  galleryBusy = true;
+
+  setButtonBusy(
+    galleryUploadButton,
+    true,
+    "Uploading...",
+    "Upload Photo / Video"
+  );
+
+  try {
+    await verifyAdmin();
+
+    const title = galleryTitle?.value.trim();
+    const service = galleryService?.value;
+    const file = galleryFile?.files?.[0];
+
+    if (!title) throw new Error("Photo / Video Title लिखें।");
+    if (!GALLERY_SERVICES.includes(service)) {
+      throw new Error("Service चुनें।");
+    }
+
+    const mediaType = validateGalleryFile(file);
+    showMessage(galleryMessage, "फ़ाइल अपलोड हो रही है...");
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const filePath =
+      service.toLowerCase().replace(/[^a-z0-9]+/g, "-") +
+      "/" + Date.now() + "-" + crypto.randomUUID() + "-" + safeName;
+
+    const { error: uploadError } = await db.storage
+      .from(GALLERY_BUCKET)
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { error: insertError } = await db
+      .from(GALLERY_TABLE)
+      .insert({
+        title,
+        service,
+        media_type: mediaType,
+        file_path: filePath,
+        is_active: true
+      });
+
+    if (insertError) {
+      // DB row failed; try to clean up the uploaded object.
+      await db.storage.from(GALLERY_BUCKET).remove([filePath]);
+      throw insertError;
+    }
+
+    galleryUploadForm?.reset();
+    showMessage(galleryMessage, "Photo / Video सफलतापूर्वक अपलोड हो गया।");
+    await loadServiceGallery();
+  } catch (error) {
+    showMessage(
+      galleryMessage,
+      "Gallery upload नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  } finally {
+    galleryBusy = false;
+    setButtonBusy(
+      galleryUploadButton,
+      false,
+      "",
+      "Upload Photo / Video"
+    );
+  }
+}
+
+async function loadServiceGallery() {
+  if (!db || !galleryAdminList ||
+      adminDashboard?.classList.contains("hidden")) {
+    return;
+  }
+
+  setButtonBusy(refreshGalleryButton, true, "Loading...", "Refresh Gallery");
+  galleryAdminList.textContent = "Gallery लोड हो रही है...";
+
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from(GALLERY_TABLE)
+      .select("id, title, service, media_type, file_path, is_active, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    galleryAdminList.replaceChildren();
+
+    if (!data?.length) {
+      galleryAdminList.textContent = "अभी कोई Gallery item नहीं है।";
+      return;
+    }
+
+    for (const item of data) {
+      const card = makeElement("article", "record");
+      card.appendChild(makeElement("h3", "", item.title));
+      addField(card, "Service", item.service);
+      addField(card, "Type", item.media_type);
+      addField(card, "Status", item.is_active ? "Visible" : "Hidden");
+      addField(card, "Uploaded", formatDate(item.created_at));
+
+      const { data: publicData } = db.storage
+        .from(GALLERY_BUCKET)
+        .getPublicUrl(item.file_path);
+
+      const url = publicData?.publicUrl;
+
+      if (url && item.media_type === "image") {
+        const img = makeElement("img");
+        img.src = url;
+        img.alt = item.title;
+        img.loading = "lazy";
+        img.style.width = "100%";
+        img.style.maxHeight = "280px";
+        img.style.objectFit = "contain";
+        card.appendChild(img);
+      } else if (url && item.media_type === "video") {
+        const video = makeElement("video");
+        video.src = url;
+        video.controls = true;
+        video.preload = "metadata";
+        video.style.width = "100%";
+        video.style.maxHeight = "320px";
+        card.appendChild(video);
+      }
+
+      card.appendChild(
+        makeActionButton(
+          item.is_active ? "Hide from Website" : "Show on Website",
+          "btn btn-secondary",
+          () => toggleGalleryItem(item.id, !item.is_active)
+        )
+      );
+
+      card.appendChild(
+        makeActionButton(
+          "Delete Item",
+          "btn btn-danger",
+          () => deleteGalleryItem(item)
+        )
+      );
+
+      galleryAdminList.appendChild(card);
+    }
+  } catch (error) {
+    galleryAdminList.textContent =
+      "Gallery नहीं खुली: " + getErrorText(error);
+
+    showMessage(
+      galleryMessage,
+      "Gallery नहीं खुली: " + getErrorText(error),
+      true
+    );
+  } finally {
+    setButtonBusy(refreshGalleryButton, false, "", "Refresh Gallery");
+  }
+}
+
+async function toggleGalleryItem(id, isActive) {
+  try {
+    await verifyAdmin();
+
+    const { data, error } = await db
+      .from(GALLERY_TABLE)
+      .update({ is_active: isActive })
+      .eq("id", id)
+      .select("id, is_active")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) throw new Error("Gallery status अपडेट नहीं हुआ।");
+
+    showMessage(
+      galleryMessage,
+      isActive ? "Gallery item वेबसाइट पर दिखेगा।" : "Gallery item छिपा दिया गया।"
+    );
+
+    await loadServiceGallery();
+  } catch (error) {
+    showMessage(
+      galleryMessage,
+      "Gallery status नहीं बदला: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+async function deleteGalleryItem(item) {
+  if (!window.confirm(
+    "क्या आप इस Gallery item को हमेशा के लिए हटाना चाहते हैं?"
+  )) return;
+
+  try {
+    await verifyAdmin();
+
+    const { error: rowError } = await db
+      .from(GALLERY_TABLE)
+      .delete()
+      .eq("id", item.id);
+
+    if (rowError) throw rowError;
+
+    const { error: fileError } = await db.storage
+      .from(GALLERY_BUCKET)
+      .remove([item.file_path]);
+
+    if (fileError) {
+      showMessage(
+        galleryMessage,
+        "Database से item हट गया, लेकिन Storage file नहीं हटी: " +
+          getErrorText(fileError),
+        true
+      );
+    } else {
+      showMessage(galleryMessage, "Gallery item हटा दिया गया।");
+    }
+
+    await loadServiceGallery();
+  } catch (error) {
+    showMessage(
+      galleryMessage,
+      "Gallery item नहीं हटा: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+/* ---------- EVENT LISTENERS ---------- */
+
+if (loginForm) {
+  loginForm.addEventListener("submit", handleLogin);
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", handleLogout);
+}
+
+if (refreshButton) {
+  refreshButton.addEventListener("click", loadBookings);
+}
+
+if (refreshPaymentsButton) {
+  refreshPaymentsButton.addEventListener("click", loadPayments);
+}
+
+if (paymentFilter) {
+  paymentFilter.addEventListener("change", loadPayments);
+}
+
+if (galleryUploadForm) {
+  galleryUploadForm.addEventListener("submit", uploadServiceGallery);
+}
+
+if (refreshGalleryButton) {
+  refreshGalleryButton.addEventListener("click", loadServiceGallery);
+}
+
+/* ---------- AUTH STATE ---------- */
+
+if (db) {
+  db.auth.onAuthStateChange((event, session) => {
+    // Auth callback में भारी async queries सीधे न चलाएँ।
+    if (event === "SIGNED_OUT" || !session) {
+      showLogin();
+    }
+  });
+}
+
+/* ---------- START ---------- */
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeAdmin, {
+    once: true
+  });
+} else {
+  initializeAdmin();
+}
