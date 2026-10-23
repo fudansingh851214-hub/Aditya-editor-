@@ -12,7 +12,7 @@ h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;tex
 label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:13px;border-radius:10px;border:1px solid #36536d;background:#071522;color:white;font-size:16px}
 .submit{width:100%;margin-top:18px;padding:14px;border:0;border-radius:10px;background:linear-gradient(100deg,#8555ff,#42dfff);color:#06101f;font-weight:bold;font-size:16px}
 #message{white-space:pre-wrap;overflow-wrap:anywhere;text-align:left}.links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{color:#42dfff}
-.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}.profile,.paybox{margin:14px 0;padding:16px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.profile p,.paybox p{text-align:left;margin:7px 0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#153a4b;color:#42dfff;font-size:12px}.paybox{text-align:center}.qr{display:block;width:190px;height:190px;max-width:100%;margin:12px auto;padding:8px;background:#fff;border-radius:12px}.upi{font-weight:bold;color:#42dfff;overflow-wrap:anywhere}.action{display:inline-block;margin:6px 3px;padding:11px 13px;border-radius:9px;background:#42dfff;color:#06101f;text-decoration:none;font-weight:bold;border:0}.note{font-size:12px;color:#9db1c7}.dashgrid a{min-height:55px}.history-section{margin:16px 0;padding:15px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.history-section h3{color:#42dfff;margin:0 0 8px}.history-card{margin:10px 0;padding:12px;border:1px solid #29415d;border-radius:11px;background:#102139}.history-card p{margin:6px 0;text-align:left;overflow-wrap:anywhere}.money-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.money-item{padding:10px;border-radius:9px;background:#071522}.money-item small{display:block;color:#9db1c7}.money-item strong{display:block;margin-top:4px;color:#42dfff}.history-link{color:#42dfff}.history-state{font-size:12px;color:#9db1c7}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}.money-grid{grid-template-columns:1fr 1fr}}
+.dashboard{display:none;margin-top:22px}.dashboard h2{color:#42dfff;text-align:center}.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dashgrid a{display:block;text-align:center;padding:14px 9px;border:1px solid #34516e;border-radius:12px;background:#0a1728;color:#eef7ff;font-weight:bold}.dashgrid a:hover{border-color:#42dfff;color:#42dfff}.logout{width:100%;margin-top:14px;padding:12px;border:1px solid #42dfff;border-radius:10px;background:transparent;color:#42dfff;font-weight:bold}.profile,.paybox{margin:14px 0;padding:16px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.profile p,.paybox p{text-align:left;margin:7px 0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#153a4b;color:#42dfff;font-size:12px}.paybox{text-align:center}.payment-submit{text-align:left;margin-top:16px;padding:14px;border:1px solid #29415d;border-radius:12px;background:#102139}.payment-submit input,.payment-submit select{width:100%;padding:12px;border-radius:9px;border:1px solid #36536d;background:#071522;color:white;font-size:15px}.payment-submit input[type=file]{font-size:13px}.payment-submit input[readonly]{color:#42dfff}.payment-submit label{margin-top:12px}.qr{display:block;width:190px;height:190px;max-width:100%;margin:12px auto;padding:8px;background:#fff;border-radius:12px}.upi{font-weight:bold;color:#42dfff;overflow-wrap:anywhere}.action{display:inline-block;margin:6px 3px;padding:11px 13px;border-radius:9px;background:#42dfff;color:#06101f;text-decoration:none;font-weight:bold;border:0}.note{font-size:12px;color:#9db1c7}.dashgrid a{min-height:55px}.history-section{margin:16px 0;padding:15px;border:1px solid #34516e;border-radius:15px;background:#0a1728}.history-section h3{color:#42dfff;margin:0 0 8px}.history-card{margin:10px 0;padding:12px;border:1px solid #29415d;border-radius:11px;background:#102139}.history-card p{margin:6px 0;text-align:left;overflow-wrap:anywhere}.money-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.money-item{padding:10px;border-radius:9px;background:#071522}.money-item small{display:block;color:#9db1c7}.money-item strong{display:block;margin-top:4px;color:#42dfff}.history-link{color:#42dfff}.history-state{font-size:12px;color:#9db1c7}@media(max-width:380px){.dashgrid{grid-template-columns:1fr}.money-grid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body><main class="wrap">
 <h1>✦ A K EDITOR</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
@@ -32,6 +32,19 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <div class="paybox"><h3>💠 Quick UPI Payment</h3><p>UPI ID</p><p class="upi" id="upiId">7544913754-3@ybl</p>
 <img class="qr" id="upiQr" alt="A K Editor UPI Payment QR Code" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7544913754-3%40ybl%26pn%3DA%2520K%2520Editor%26cu%3DINR">
 <p class="note">भुगतान करने से पहले UPI ID और प्राप्तकर्ता का नाम अपने UPI ऐप में जाँच लें।</p>
+<div class="payment-submit">
+<label for="paymentBooking">Booking Number</label>
+<select id="paymentBooking" required><option value="">अपनी बुकिंग चुनें</option></select>
+<label for="paymentAmount">Payment amount (₹)</label>
+<input id="paymentAmount" type="number" min="1" step="0.01" readonly placeholder="Admin द्वारा तय राशि यहाँ आएगी">
+<label for="paymentUtr">Transaction ID / UTR</label>
+<input id="paymentUtr" type="text" maxlength="120" required placeholder="UPI transaction ID / UTR">
+<label for="paymentProof">Upload payment screenshot or PDF</label>
+<input id="paymentProof" type="file" accept="image/*,application/pdf" required>
+<p class="note">राशि चुनी गई बुकिंग के Admin-set amount और verified payment के आधार पर आएगी। सबमिट करने पर भुगतान Pending रहेगा, जब तक Admin जाँच न कर ले।</p>
+<button class="action" id="submitPayment" type="button">Submit Payment Proof</button>
+<p id="paymentSubmitMessage" class="note" role="status" aria-live="polite"></p>
+</div>
 <button class="action" id="copyUpi" type="button">Copy UPI ID</button>
 <a class="action" href="upi://pay?pa=7544913754-3%40ybl&amp;pn=A%20K%20Editor&amp;cu=INR">Open UPI App</a>
 <p id="upiMessage" class="note" role="status" aria-live="polite"></p>
@@ -45,7 +58,7 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 "use strict";
 const client=window.supabase.createClient("https://okzwtylpmcyurkxvaocy.supabase.co","sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q");
 const form=document.getElementById("authForm"), email=document.getElementById("email"), password=document.getElementById("password"), message=document.getElementById("message"), submitButton=document.getElementById("submitButton");
-function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Customer Dashboard";document.getElementById("customerEmail").textContent=user&&user.email?user.email:"Email उपलब्ध नहीं";message.textContent="";if(user)loadCustomerHistory(user);}
+function showDashboard(user){document.getElementById("authArea").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("welcome").textContent="Customer Dashboard";document.getElementById("customerEmail").textContent=user&&user.email?user.email:"Email उपलब्ध नहीं";message.textContent="";if(user){loadCustomerHistory(user);setupPaymentForm(user);}}
 const money=v=>{const n=Number(v);return Number.isFinite(n)?new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(n):"—";};
 function addText(parent,tag,text,cls){const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;parent.appendChild(el);return el;}
 function dateText(v){if(!v)return "तारीख उपलब्ध नहीं";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});}
@@ -81,6 +94,63 @@ async function loadCustomerHistory(user){
  if(!ownPayments.length){paymentBox.textContent="इन बुकिंग नंबरों के लिए अभी भुगतान रिकॉर्ड नहीं मिला।";return;}
  for(const p of ownPayments){const card=addText(paymentBox,"div","","history-card");addText(card,"p",p.booking_number||"Booking","");addText(card,"p",dateText(p.created_at||p.verified_at)+" · UPI","");addText(card,"p","Amount: "+money(p.amount),"");addText(card,"p","Status: "+(p.status||"Pending"),"");const ref=p.utr||p.payment_reference||p.reference;if(ref)addText(card,"p","Reference: "+ref,"");}
 }
+let customerBookings=[], verifiedPaymentsByBooking={};
+async function setupPaymentForm(user){
+ const select=document.getElementById("paymentBooking"), amountInput=document.getElementById("paymentAmount");
+ const {data:rows,error}=await client.from("bookings").select("booking_number,amount,service,created_at").eq("user_id",user.id).order("created_at",{ascending:false});
+ if(error){document.getElementById("paymentSubmitMessage").textContent="बुकिंग लोड नहीं हुई: "+error.message;return;}
+ customerBookings=rows||[];
+ const ids=customerBookings.map(b=>b.booking_number).filter(Boolean);
+ if(ids.length){
+  const pr=await client.from("payment_submissions").select("booking_number,amount,status").in("booking_number",ids);
+  if(pr.error){document.getElementById("paymentSubmitMessage").textContent="Verified payment की जानकारी लोड नहीं हुई: "+pr.error.message;return;}
+  verifiedPaymentsByBooking={};
+  for(const p of (pr.data||[])){if(["verified","paid","confirmed","success"].includes(String(p.status||"").toLowerCase()))verifiedPaymentsByBooking[p.booking_number]=(verifiedPaymentsByBooking[p.booking_number]||0)+Number(p.amount||0);}
+ }
+ select.innerHTML='<option value="">अपनी बुकिंग चुनें</option>';
+ for(const b of customerBookings){
+  if(!b.booking_number)continue;
+  const opt=document.createElement("option");opt.value=b.booking_number;
+  opt.textContent=b.booking_number+" · "+(b.service||"Service")+" · Admin amount "+money(b.amount);
+  select.appendChild(opt);
+ }
+ function updateAmount(){const b=customerBookings.find(x=>x.booking_number===select.value);if(!b){amountInput.value="";return;}const due=Math.max(0,Number(b.amount||0)-(verifiedPaymentsByBooking[b.booking_number]||0));amountInput.value=due.toFixed(2);}
+ select.addEventListener("change",updateAmount);updateAmount();
+}
+document.getElementById("submitPayment").addEventListener("click",async()=>{
+ const btn=document.getElementById("submitPayment"),out=document.getElementById("paymentSubmitMessage");
+ const select=document.getElementById("paymentBooking"),utr=document.getElementById("paymentUtr"),fileInput=document.getElementById("paymentProof"),amountInput=document.getElementById("paymentAmount");
+ const {data:{user}}=await client.auth.getUser();
+ if(!user){out.textContent="कृपया पहले Login करें।";return;}
+ const booking=customerBookings.find(b=>b.booking_number===select.value);
+ const reference=utr.value.trim(),file=fileInput.files&&fileInput.files[0],amount=Number(amountInput.value);
+ if(!booking){out.textContent="पहले अपनी Booking Number चुनें।";return;}
+ if(!reference){out.textContent="Transaction ID / UTR भरें।";utr.focus();return;}
+ if(!file){out.textContent="Payment screenshot या PDF चुनें।";fileInput.focus();return;}
+ if(!Number.isFinite(amount)||amount<=0){out.textContent="इस बुकिंग पर कोई बकाया राशि नहीं दिख रही। Admin से संपर्क करें।";return;}
+ if(file.size>10*1024*1024){out.textContent="फाइल 10 MB से छोटी होनी चाहिए।";return;}
+ if(!(file.type.startsWith("image/")||file.type==="application/pdf")){out.textContent="केवल image या PDF फाइल अपलोड करें।";return;}
+ btn.disabled=true;out.textContent="Payment proof अपलोड हो रहा है...";
+ try{
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const path=user.id+"/"+booking.booking_number+"/"+Date.now()+"_"+safeName;
+  const upload=await client.storage.from("payment-screenshots").upload(path,file,{upsert:false,contentType:file.type});
+  if(upload.error)throw new Error("Screenshot/PDF upload नहीं हुई: "+upload.error.message);
+  const {error}=await client.from("payment_submissions").insert({
+   booking_number:booking.booking_number,
+   amount:amount,
+   status:"Pending",
+   screenshot_path:path,
+   payment_reference:reference,
+   utr:reference
+  });
+  if(error)throw new Error("फाइल अपलोड हुई, लेकिन payment record save नहीं हुआ: "+error.message);
+  out.textContent="Payment proof जमा हो गया। Status: Pending — Admin की जाँच के बाद अपडेट होगा।";
+  utr.value="";fileInput.value="";
+  await loadCustomerHistory(user);await setupPaymentForm(user);
+ }catch(err){out.textContent="समस्या: "+(err.message||"दोबारा कोशिश करें।");}
+ finally{btn.disabled=false;}
+});
 document.getElementById("copyUpi").addEventListener("click",async()=>{const out=document.getElementById("upiMessage");try{await navigator.clipboard.writeText("7544913754-3@ybl");out.textContent="UPI ID कॉपी हो गई।";}catch(e){out.textContent="UPI ID को दबाकर चुनें और Copy करें: 7544913754-3@ybl";}});
 document.getElementById("logoutButton").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("dashboard").style.display="none";document.getElementById("authArea").style.display="block";setMode("login");message.textContent="आप Sign Out हो गए हैं।";});
 let mode="login";
