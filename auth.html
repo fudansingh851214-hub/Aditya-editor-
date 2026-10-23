@@ -118,9 +118,20 @@ async function setupPaymentForm(user){
   opt.textContent=b.booking_number+" · "+(b.service||"Service")+" · Admin amount "+money(b.amount);
   select.appendChild(opt);
  }
- function updateAmount(){const b=customerBookings.find(x=>x.booking_number===select.value);if(!b){amountInput.value="";return;}const due=Math.max(0,Number(b.amount||0)-(verifiedPaymentsByBooking[b.booking_number]||0));amountInput.value=due.toFixed(2);}
+ const upiPayLink=document.getElementById("upiPayLink");
+ function updateUpiLink(){
+  const amount=Number(amountInput.value);
+  if(Number.isFinite(amount)&&amount>0){
+   upiPayLink.textContent="Pay ₹"+amount.toLocaleString("en-IN",{maximumFractionDigits:2})+" with PhonePe / UPI";
+   upiPayLink.href="upi://pay?pa=7544913754-3%40ybl&pn=A%20K%20Editor&am="+encodeURIComponent(amount.toFixed(2))+"&cu=INR&tn="+encodeURIComponent("A K Editor payment");
+  }else{
+   upiPayLink.textContent="Pay with PhonePe / UPI";
+   upiPayLink.href="upi://pay?pa=7544913754-3%40ybl&pn=A%20K%20Editor&cu=INR";
+  }
+ }
+ function updateAmount(){const b=customerBookings.find(x=>x.booking_number===select.value);if(!b){amountInput.value="";updateUpiLink();return;}const due=Math.max(0,Number(b.amount||0)-(verifiedPaymentsByBooking[b.booking_number]||0));amountInput.value=due.toFixed(2);updateUpiLink();}
  if(customerBookings.length){select.value=customerBookings[0].booking_number||"";}
- select.addEventListener("change",updateAmount);updateAmount();
+ select.addEventListener("change",updateAmount);amountInput.addEventListener("input",updateUpiLink);updateAmount();
 }
 document.getElementById("submitPayment").addEventListener("click",async()=>{
  const btn=document.getElementById("submitPayment"),out=document.getElementById("paymentSubmitMessage");
