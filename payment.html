@@ -8,176 +8,26 @@
   <title>Aditya Editor | Secure Payment</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 18px;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: #eaf6ff;
-      background: #07111f;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 20px auto;
-      padding: 22px;
-      background: #0d1c2d;
-      border: 1px solid #1d526b;
-      border-radius: 18px;
-      box-shadow: 0 12px 35px rgba(0,0,0,.25);
-    }
-
-    h1, h2 {
-      text-align: center;
-    }
-
-    h1 {
-      color: #56e7ff;
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      font-size: 19px;
-      margin-top: 25px;
-    }
-
-    .hint {
-      color: #a8bfd0;
-      text-align: center;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    label {
-      display: block;
-      margin: 16px 0 7px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #31536d;
-      border-radius: 9px;
-      background: #071522;
-      color: white;
-      font-size: 16px;
-    }
-
-    input:focus {
-      outline: 2px solid #56e7ff;
-      border-color: #56e7ff;
-    }
-
-    input[type="file"] {
-      font-size: 13px;
-    }
-
-    button, .pay-link {
-      display: block;
-      width: 100%;
-      margin-top: 12px;
-      padding: 13px;
-      border: 0;
-      border-radius: 9px;
-      font-size: 15px;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .primary {
-      background: #56e7ff;
-      color: #04111a;
-    }
-
-    .secondary {
-      background: #1a354c;
-      color: white;
-      border: 1px solid #31536d;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .panel {
-      margin-top: 18px;
-      padding: 15px;
-      background: #142b40;
-      border-radius: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .panel p {
-      line-height: 1.5;
-    }
-
-    .amount {
-      margin: 12px 0;
-      text-align: center;
-      font-size: 30px;
-      font-weight: bold;
-      color: #67e8a5;
-    }
-
-    .qr-box {
-      display: flex;
-      justify-content: center;
-      padding: 15px;
-      margin: 15px auto;
-      background: white;
-      border-radius: 12px;
-      width: fit-content;
-      max-width: 100%;
-      min-height: 30px;
-    }
-
-    #qrcode img, #qrcode canvas {
-      max-width: 100%;
-      height: auto;
-    }
-
-    #paymentSection {
-      display: none;
-    }
-
-    #message {
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-      font-size: 14px;
-    }
-
-    .warning {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #302817;
-      color: #ffdfa0;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .back {
-      display: block;
-      margin-top: 20px;
-      text-align: center;
-      color: #56e7ff;
-      text-decoration: none;
-    }
-
-    .required {
-      color: #ffb1b1;
-    }
-  </style>
+*{box-sizing:border-box}:root{color-scheme:dark;--cyan:#19d9ff;--green:#08d69a;--muted:#b7d4ef}
+body{margin:0;padding:0;min-height:100vh;font-family:Arial,sans-serif;color:#edf7ff;background:radial-gradient(ellipse at top,#092b50 0,#03132b 48%,#020817 100%)}
+.container{width:min(1050px,calc(100% - 28px));margin:24px auto;padding:clamp(16px,3vw,30px);background:linear-gradient(145deg,rgba(4,25,51,.98),rgba(3,17,38,.98));border:1px solid #0876c8;border-radius:22px;box-shadow:0 20px 60px #0007}
+body:before{content:"✦ A K EDITOR   •   Photo & Video Editing Service";display:block;padding:19px clamp(16px,4vw,48px);background:#031027;border-bottom:1px solid #143b60;color:var(--cyan);font-weight:800;letter-spacing:.5px}
+h1,h2{text-align:left}h1{color:var(--cyan);font-size:clamp(25px,3vw,34px);margin:0 0 8px}h2{font-size:20px;margin:22px 0 12px}
+.container>h1{text-align:left}.hint{color:var(--muted);line-height:1.65;font-size:14px}
+label{display:block;margin:16px 0 7px;font-size:14px;font-weight:bold}
+input{width:100%;padding:13px;border:1px solid #17618e;border-radius:9px;background:#03142a;color:white;font-size:16px}input:focus{outline:2px solid var(--cyan);border-color:var(--cyan)}input[type=file]{font-size:13px}
+button,.pay-link{display:block;width:100%;margin-top:12px;padding:13px 16px;border:1px solid #0785c9;border-radius:10px;font-size:15px;font-weight:bold;text-align:center;text-decoration:none;cursor:pointer}.primary{background:linear-gradient(100deg,#05d39a,#00b8cf);color:#032031;border:0}.secondary{background:#061b34;color:var(--cyan)}button:disabled{opacity:.6;cursor:not-allowed}
+.panel{margin-top:18px;padding:18px;background:#041a34;border:1px solid #0b4778;border-radius:14px;overflow-wrap:anywhere}.panel p{line-height:1.5}
+#paymentSection{display:none}#qrcode{max-width:100%}.qr-box{display:flex;justify-content:center;padding:15px;margin:15px auto;background:white;border:5px solid #1687ff;border-radius:16px;width:fit-content;max-width:100%;min-height:30px;box-shadow:0 0 0 3px #3c36ff}#qrcode img,#qrcode canvas{max-width:100%;height:auto}
+.amount{margin:12px 0;text-align:center;font-size:clamp(26px,3vw,34px);font-weight:bold;color:#26eaa4}
+#paymentForm{margin-top:22px;padding:18px;background:#04172f;border:1px solid #075b91;border-radius:15px}
+#message{line-height:1.6;overflow-wrap:anywhere;font-size:14px;color:#bdeaff}.warning{margin-top:20px;padding:15px;border-radius:12px;background:#2b2511;border:1px solid #7d641a;color:#ffe69b;font-size:13px;line-height:1.7}.back{display:block;margin-top:20px;text-align:center;color:var(--cyan);text-decoration:none}.required{color:#ffb1b1}
+#paymentSection>.panel:first-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;border-color:#0876c8;background:#03162f}#paymentSection>.panel:first-child p{margin:6px 0}
+#paymentSection>.hint{text-align:center}
+#copyUPI{background:#061b34;color:var(--cyan)}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px clamp(16px,4vw,48px);border-top:1px solid #143b60;color:#a9cce9;font-size:13px}
+@media(max-width:650px){.container{width:calc(100% - 18px);margin:10px auto;padding:15px}.panel{padding:13px}#paymentSection>.panel:first-child{grid-template-columns:1fr}.qr-box{padding:10px}.container>h1{font-size:25px}}
+</style>
 </head>
 
 <body>
