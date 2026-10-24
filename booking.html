@@ -655,6 +655,15 @@
                       autocomplete="street-address"
                       required></textarea>
           </div>
+
+          <div class="field full">
+            <label for="specialRequirement">Special Requirement / Message (वैकल्पिक)</label>
+            <p class="hint">आप किस तरह की एडिटिंग करवाना चाहते हैं, यहाँ बताएं।</p>
+            <textarea id="specialRequirement" name="special_requirement"
+                      maxlength="2000"
+                      placeholder="जैसे: फोटो का background बदलना है, चेहरे की retouching, wedding video में music और transitions, reel में text लगाना, delivery की जरूरत या कोई अन्य जानकारी..."></textarea>
+            <p class="hint">यह जानकारी देना जरूरी नहीं है, लेकिन इससे हमें आपकी जरूरत समझने में मदद मिलेगी।</p>
+          </div>
         </div>
       </section>
 
@@ -957,6 +966,7 @@
       const customerName = $("customerName").value.trim();
       const phone = $("phone").value.trim();
       const address = $("address").value.trim();
+      const specialRequirement = $("specialRequirement").value.trim();
       const files = Array.from($("mediaFiles").files || []);
 
       if (!serviceElement) {
@@ -1030,6 +1040,7 @@
           customer_name: customerName,
           phone: phone,
           address: address,
+          special_requirement: specialRequirement || null,
           service: serviceElement.value,
           amount: calculateBookingAmount().total,
           status: "Booking Submitted",
