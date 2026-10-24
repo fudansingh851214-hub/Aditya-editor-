@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fudansingh851214-hub.github.io/Aditya-editor-/sitemap.xml
