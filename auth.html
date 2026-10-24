@@ -110,6 +110,11 @@ async function loadCustomerHistory(user) {
     const { data, error } = await client.from("bookings").select("*")
       .eq("user_id", user.id).order("created_at", { ascending: false });
     if (error) throw error;
+    const { data: cancellationRows, error: cancellationError } = await client
+      .from("cancellation_requests").select("booking_number,status,created_at")
+      .eq("user_id", user.id).order("created_at", { ascending: false });
+    if (cancellationError) throw cancellationError;
+    const cancellationByBooking = new Map((cancellationRows || []).map(row => [row.booking_number, row]));
     if (!data || !data.length) {
       box.textContent = "इस Login अकाउंट से जुड़ी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
@@ -122,6 +127,13 @@ async function loadCustomerHistory(user) {
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
+      const cancellationRequest = cancellationByBooking.get(booking.booking_number);
+      if (cancellationRequest) {
+        const cancellationLabel = cancellationRequest.status === "pending" ? "Request Pending · Admin की पुष्टि बाकी"
+          : cancellationRequest.status === "approved" ? "Cancellation Approved · Booking Cancelled"
+          : "Cancellation Request Rejected";
+        addText(card, "p", "Cancellation: " + cancellationLabel, "history-state");
+      }
 
       // Customer uploaded files: show filename and preview/open link inside YOUR BOOKINGS.
       const filesSection = addText(card, "div", "", "customer-files");
