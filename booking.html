@@ -818,13 +818,45 @@
         .slice(-120);
     }
 
+    function calculateBookingAmount() {
+      const chosen = document.querySelector('input[name="service"]:checked');
+      if (!chosen) return { total: 0, quantity: 0, unitPrice: 0, label: "" };
+
+      const files = Array.from($("mediaFiles").files || []);
+      const service = chosen.value;
+      const unitPrice = SERVICE_PRICES[service] || 0;
+      const photos = files.filter(file => file.type.startsWith("image/")).length;
+      const videos = files.filter(file => file.type.startsWith("video/")).length;
+
+      let quantity = 0;
+      let label = "";
+      if (service === "Photo Editing" || service === "Graphic Design") {
+        quantity = photos;
+        label = "फोटो/डिजाइन";
+      } else {
+        quantity = videos;
+        label = "वीडियो";
+      }
+
+      return { total: unitPrice * quantity, quantity, unitPrice, label };
+    }
+
     function updateBookingAmount() {
       const chosen = document.querySelector('input[name="service"]:checked');
-      const total = chosen ? SERVICE_PRICES[chosen.value] : null;
-      $("bookingTotal").textContent = total
-        ? "Payment amount: ₹" + total
-        : "अपनी सेवा चुनें — राशि यहाँ दिखाई जाएगी।";
+      if (!chosen) {
+        $("bookingTotal").textContent = "अपनी सेवा चुनें — राशि यहाँ दिखाई जाएगी।";
+        return;
+      }
+      const amount = calculateBookingAmount();
+      if (amount.quantity === 0) {
+        $("bookingTotal").textContent = chosen.value + " — ₹" + amount.unitPrice +
+          " प्रति " + amount.label + "। राशि देखने के लिए संबंधित फाइल चुनें।";
+        return;
+      }
+      $("bookingTotal").textContent = amount.label + " Quantity: " + amount.quantity +
+        " × ₹" + amount.unitPrice + " = कुल राशि: ₹" + amount.total;
     }
+
     document.querySelectorAll('input[name="service"]').forEach(input => {
       input.addEventListener("change", updateBookingAmount);
     });
@@ -999,7 +1031,7 @@
           phone: phone,
           address: address,
           service: serviceElement.value,
-          amount: SERVICE_PRICES[serviceElement.value],
+          amount: calculateBookingAmount().total,
           status: "Booking Submitted",
           file_paths: uploadedPaths
         };
