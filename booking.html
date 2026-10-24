@@ -850,12 +850,21 @@
         return;
       }
 
+      const photoQuantity = files.filter(file => file.type.startsWith("image/")).length;
+      const videoQuantity = files.filter(file => file.type.startsWith("video/")).length;
+      const otherQuantity = files.length - photoQuantity - videoQuantity;
+
+      const quantitySummary =
+        "Selected Quantity: " + photoQuantity + " Photos, " +
+        videoQuantity + " Videos" +
+        (otherQuantity ? ", " + otherQuantity + " Other Files" : "");
+
       list.textContent = files.length
-        ? files.map(file =>
+        ? quantitySummary + "\\n" + files.map(file =>
             file.name + " (" +
             (file.size / (1024 * 1024)).toFixed(1) + " MB)"
           ).join(" • ")
-        : "";
+        : "Selected Quantity: 0 Photos, 0 Videos";
     });
 
     async function uploadFiles(files, bookingNumber) {
