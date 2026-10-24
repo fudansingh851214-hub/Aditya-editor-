@@ -64,6 +64,10 @@ const paymentFilter = $("paymentFilter");
 const paymentMessage = $("paymentMessage");
 const paymentsList = $("paymentsList");
 
+const cancellationMessage = $("cancellationMessage");
+const cancellationsList = $("cancellationsList");
+const refreshCancellationsButton = $("refreshCancellationsButton");
+
 const galleryUploadForm = $("galleryUploadForm");
 const galleryTitle = $("galleryTitle");
 const galleryService = $("galleryService");
@@ -370,6 +374,7 @@ async function loadAllAdminData() {
   const results = [];
   results.push(await Promise.allSettled([loadBookings()]));
   results.push(await Promise.allSettled([loadPayments()]));
+  results.push(await Promise.allSettled([loadCancellationRequests()]));
   results.push(await Promise.allSettled([loadServiceGallery()]));
   return results;
 }
@@ -704,6 +709,68 @@ async function saveStatus(bookingId) {
       "Status अपडेट नहीं हुआ: " + getErrorText(error),
       true
     );
+  }
+}
+
+/* ---------- CANCELLATION REQUESTS ---------- */
+async function loadCancellationRequests() {
+  if (!db || adminDashboard?.classList.contains("hidden")) return;
+  if (cancellationsList) cancellationsList.textContent = "Cancellation requests लोड हो रही हैं...";
+  setButtonBusy(refreshCancellationsButton, true, "Loading...", "Refresh Requests");
+  try {
+    await verifyAdmin();
+    const { data, error } = await db.from("cancellation_requests")
+      .select("id, booking_number, user_id, reason, status, created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    cancellationsList.replaceChildren();
+    if (!data?.length) {
+      cancellationsList.textContent = "अभी कोई Cancellation Request नहीं मिली।";
+      showMessage(cancellationMessage, "0 cancellation requests.");
+      return;
+    }
+    for (const req of data) {
+      const card = makeElement("article", "record");
+      card.appendChild(makeElement("h3", "", "Booking: " + req.booking_number));
+      addField(card, "Customer Account ID", req.user_id);
+      addField(card, "Reason", req.reason || "दर्ज नहीं");
+      addField(card, "Request Status", req.status);
+      addField(card, "Requested At", formatDate(req.created_at));
+      const actions = makeElement("div", "record-actions");
+      if (req.status === "pending") {
+        actions.appendChild(makeActionButton("Approve Cancellation", "btn", () => updateCancellation(req, "approved")));
+        actions.appendChild(makeActionButton("Reject Request", "btn btn-danger", () => updateCancellation(req, "rejected")));
+      }
+      card.appendChild(actions);
+      cancellationsList.appendChild(card);
+    }
+    showMessage(cancellationMessage, data.length + " cancellation request(s) मिलीं।");
+  } catch (error) {
+    cancellationsList.textContent = "Cancellation requests नहीं खुलीं: " + getErrorText(error);
+    showMessage(cancellationMessage, "Cancellation requests नहीं खुलीं: " + getErrorText(error), true);
+  } finally {
+    setButtonBusy(refreshCancellationsButton, false, "", "Refresh Requests");
+  }
+}
+async function updateCancellation(req, status) {
+  try {
+    await verifyAdmin();
+    if (!window.confirm("Booking " + req.booking_number + " की request " + status + " करें?")) return;
+    const { data, error } = await db.from("cancellation_requests")
+      .update({ status }).eq("id", req.id).select("id, status").maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error("Request update नहीं हुई। Admin RLS policy जाँचें।");
+    if (status === "approved") {
+      const { error: bookingError } = await db.from("bookings")
+        .update({ booking_status: "Cancelled", status: "Cancelled" })
+        .eq("booking_number", req.booking_number);
+      if (bookingError) throw bookingError;
+    }
+    showMessage(cancellationMessage, "Cancellation request " + status + " हुई।");
+    await loadCancellationRequests();
+    await loadBookings();
+  } catch (error) {
+    showMessage(cancellationMessage, "Request update नहीं हुई: " + getErrorText(error), true);
   }
 }
 
