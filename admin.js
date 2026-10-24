@@ -24,7 +24,8 @@ const BOOKING_STATUSES = [
   "Payment Confirmed",
   "Editing In Progress",
   "Ready for Delivery",
-  "Completed"
+  "Completed",
+  "Cancellation Rejected"
 ];
 
 const GALLERY_SERVICES = [
@@ -778,6 +779,11 @@ async function updateCancellation(req, status) {
     if (status === "approved") {
       const { error: bookingError } = await db.from("bookings")
         .update({ booking_status: "Cancelled", status: "Cancelled" })
+        .eq("booking_number", req.booking_number);
+      if (bookingError) throw bookingError;
+    } else if (status === "rejected") {
+      const { error: bookingError } = await db.from("bookings")
+        .update({ booking_status: "Cancellation Rejected", status: "Cancellation Rejected" })
         .eq("booking_number", req.booking_number);
       if (bookingError) throw bookingError;
     }
