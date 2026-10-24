@@ -1003,34 +1003,16 @@
           throw error;
         }
 
-        $("successBookingNumber").textContent = bookingNumber;
-        $("trackBookingLink").href =
-          "tracking.html?id=" +
-          encodeURIComponent(bookingNumber);
+        // Booking database में सफलतापूर्वक save होने के बाद confirmation page खोलें.
+        try {
+          sessionStorage.setItem("adityaLastBookingId", bookingNumber);
+        } catch (storageError) {
+          console.info("Session storage unavailable:", storageError);
+        }
 
-        const whatsappMessage =
-          "Namaste Aditya Editor! Meri booking submit hui hai." +
-          "\nBooking Number: " + bookingNumber +
-          "\nName: " + customerName +
-          "\nService: " + serviceElement.value;
-
-        $("whatsappBookingLink").href =
-          "https://wa.me/917544913754?text=" +
-          encodeURIComponent(whatsappMessage);
-
-        $("successCard").hidden = false;
-        $("successCard").scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-        $("bookingForm").reset();
-        $("fileList").textContent = "";
-
-        showMessage(
-          "Booking सफलतापूर्वक सबमिट हो गई।",
-          "success"
-        );
+        window.location.href =
+          "confirmation.html?id=" + encodeURIComponent(bookingNumber);
+        return;
 
       } catch (error) {
         console.error("Booking submit error:", error);
