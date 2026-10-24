@@ -52,6 +52,18 @@ header {
 }
 .links { display:flex;align-items:center;gap:17px;font-size:14px; }
 .links a:hover { color:var(--cyan); }
+.account-wrap{position:relative;flex-shrink:0}
+.account-trigger{display:flex;align-items:center;gap:9px;padding:12px 16px;border:1px solid #d5a329;border-radius:12px;background:#b98708;color:#fff;font-weight:700;cursor:pointer;max-width:220px}
+.account-trigger .account-name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-menu{display:none;position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 30px));background:#fff;color:#242424;border:1px solid #e7e2d8;border-radius:16px;box-shadow:0 16px 42px #0004;z-index:30;overflow:hidden}
+.account-menu.open{display:block}
+.account-signed{padding:22px 20px 16px;color:#666;border-bottom:1px solid #eee;overflow-wrap:anywhere}
+.account-signed strong{display:block;color:#333;margin-top:5px}
+.account-menu a,.account-menu button{display:flex;align-items:center;gap:12px;width:100%;padding:14px 20px;border:0;background:#fff;color:#222;text-align:left;font:inherit;cursor:pointer}
+.account-menu a:hover,.account-menu button:hover{background:#f4f7fb}
+.account-menu .logout-item{border-top:1px solid #eee;color:#a23b32}
+@media(max-width:850px){.nav{flex-wrap:wrap;padding:10px 0}.account-wrap{margin-left:auto}.links{top:72px}.account-trigger{padding:9px 12px}.account-menu{right:0}}
+
 .btn {
   display:inline-flex;align-items:center;justify-content:center;
   padding:12px 18px;border:0;border-radius:10px;
@@ -148,6 +160,19 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
     <button id="menu" type="button" aria-expanded="false"
       aria-label="Menu खोलें">☰</button>
 
+    <div class="account-wrap" id="accountWrap">
+      <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false">
+        <span>👤</span><span class="account-name" id="accountName">Sign In / Create Account</span><span>▾</span>
+      </button>
+      <div class="account-menu" id="accountMenu">
+        <div class="account-signed">Account <strong id="accountSigned">Guest</strong></div>
+        <a href="auth.html">👤 <span>My Account / Sign In</span></a>
+        <a href="auth.html">📋 <span>My Bookings</span></a>
+        <a href="tracking.html">📍 <span>Track Booking</span></a>
+        <a href="auth.html">🪪 <span>My Details</span></a>
+        <button class="logout-item" id="accountLogout" type="button">🚪 <span>Logout</span></button>
+      </div>
+    </div>
     <nav class="links" id="links">
       <a href="index.html">Home</a>
       <a href="services.html">Our Services</a>
@@ -318,6 +343,59 @@ document.getElementById("year").textContent =
 
 const menu = document.getElementById("menu");
 const links = document.getElementById("links");
+const accountTrigger = document.getElementById("accountTrigger");
+const accountMenu = document.getElementById("accountMenu");
+const accountName = document.getElementById("accountName");
+const accountSigned = document.getElementById("accountSigned");
+const accountLogout = document.getElementById("accountLogout");
+
+accountTrigger.addEventListener("click", function() {
+  const open = accountMenu.classList.toggle("open");
+  accountTrigger.setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", function(event) {
+  if (!event.target.closest("#accountWrap")) {
+    accountMenu.classList.remove("open");
+    accountTrigger.setAttribute("aria-expanded", "false");
+  }
+});
+
+// Update the account menu from the existing Supabase sign-in session.
+const HOME_SUPABASE_URL = "https://okzwtylpmcyurkxvaocy.supabase.co";
+const HOME_SUPABASE_KEY = "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+if (window.supabase?.createClient) {
+  const homeDb = window.supabase.createClient(HOME_SUPABASE_URL, HOME_SUPABASE_KEY);
+  async function updateAccountMenu() {
+    const { data } = await homeDb.auth.getUser();
+    const user = data?.user;
+    if (user) {
+      const label = user.user_metadata?.full_name || user.user_metadata?.name || user.email || "My Account";
+      accountName.textContent = label;
+      accountSigned.textContent = "Signed in as " + label;
+      accountMenu.querySelector('a[href="auth.html"]').innerHTML = "👤 <span>My Account</span>";
+      accountLogout.style.display = "flex";
+    } else {
+      accountName.textContent = "Sign In / Create Account";
+      accountSigned.textContent = "Guest — Sign in to manage bookings";
+      accountLogout.style.display = "none";
+    }
+  }
+  updateAccountMenu();
+  homeDb.auth.onAuthStateChange(() => updateAccountMenu());
+  accountLogout.addEventListener("click", async function() {
+    const { error } = await homeDb.auth.signOut();
+    if (error) {
+      accountSigned.textContent = "Logout नहीं हुआ: " + error.message;
+      return;
+    }
+    accountMenu.classList.remove("open");
+    accountTrigger.setAttribute("aria-expanded", "false");
+    await updateAccountMenu();
+  });
+} else {
+  accountSigned.textContent = "Sign in to manage your account";
+  accountLogout.style.display = "none";
+}
 
 menu.addEventListener("click", function() {
   const isOpen = links.classList.toggle("open");
@@ -331,5 +409,6 @@ links.querySelectorAll("a").forEach(function(link) {
   });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
