@@ -461,15 +461,6 @@ function renderBookings(bookings) {
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
 
-    // Photo/video quantities are shown for every service, including Wedding Projects,
-    // Graphic Design, and Social Media Reels.
-    article.appendChild(
-      makeElement(
-        "h4",
-        "",
-        "Photo / Video Quantity — सभी Services"
-      )
-    );
     const customerFiles = parseFilePaths(booking.file_paths);
     const fileNames = customerFiles.map((file) => {
       if (typeof file === "string") return file;
