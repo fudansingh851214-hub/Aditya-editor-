@@ -719,8 +719,10 @@ async function loadCancellationRequests() {
   setButtonBusy(refreshCancellationsButton, true, "Loading...", "Refresh Requests");
   try {
     await verifyAdmin();
+    // Admin list shows only pending requests; approved/rejected requests stay in the database but disappear from this list.
     const { data, error } = await db.from("cancellation_requests")
       .select("id, booking_number, user_id, reason, status, created_at")
+      .eq("status", "pending")
       .order("created_at", { ascending: false });
     if (error) throw error;
     cancellationsList.replaceChildren();
