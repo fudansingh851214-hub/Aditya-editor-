@@ -552,7 +552,7 @@ function renderBookings(bookings) {
     for (const status of BOOKING_STATUSES) {
       const option = makeElement("option", "", status);
       option.value = status;
-      option.selected = status === normalizeStatus(booking.status);
+      option.selected = status === normalizeStatus(booking.booking_status || booking.status);
       statusSelect.appendChild(option);
     }
 
@@ -686,9 +686,9 @@ async function saveStatus(bookingId) {
 
     const { data, error } = await db
       .from("bookings")
-      .update({ status })
+      .update({ status, booking_status: status })
       .eq("id", bookingId)
-      .select("id, status")
+      .select("id, status, booking_status")
       .maybeSingle();
 
     if (error) throw error;
@@ -696,7 +696,7 @@ async function saveStatus(bookingId) {
       throw new Error("Status अपडेट नहीं हुआ। Permissions जाँचें।");
     }
 
-    showMessage(message, "Status अपडेट हो गया: " + data.status);
+    showMessage(message, "Booking Status अपडेट हो गया: " + (data.booking_status || data.status));
     await loadBookings();
   } catch (error) {
     showMessage(
