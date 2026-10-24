@@ -628,6 +628,11 @@
                    autocomplete="name" required>
           </div>
 
+          <div class="field full">
+            <label>Login Email</label>
+            <p id="accountEmail" class="note">आपके अकाउंट से Email लोड हो रहा है...</p>
+          </div>
+
           <div class="field">
             <label for="phone">
               मोबाइल नंबर <span class="required">*</span>
@@ -757,6 +762,34 @@
     const $ = id => document.getElementById(id);
 
     $("year").textContent = new Date().getFullYear();
+
+    // Prefill booking details from the signed-in customer's account.
+    async function fillCustomerDetailsFromAccount() {
+      if (!client) return;
+      try {
+        const { data, error } = await client.auth.getUser();
+        if (error || !data?.user) return;
+
+        const user = data.user;
+        const meta = user.user_metadata || {};
+        const email = user.email || "";
+        const fullName =
+          meta.full_name || meta.name || meta.fullName ||
+          (email.includes("@") ? email.split("@")[0] : "");
+        const mobile = meta.phone || meta.mobile || meta.phone_number || "";
+
+        if (!$("customerName").value.trim() && fullName) {
+          $("customerName").value = fullName;
+        }
+        if (!$("phone").value.trim() && mobile) {
+          $("phone").value = String(mobile).replace(/\\D/g, "").slice(-10);
+        }
+        $("accountEmail").textContent = email || "Email उपलब्ध नहीं";
+      } catch (error) {
+        console.warn("Customer account details could not be prefilled:", error);
+      }
+    }
+    fillCustomerDetailsFromAccount();
 
     function showMessage(message, type = "") {
       const element = $("formMessage");
@@ -948,6 +981,7 @@
         const bookingData = {
           booking_number: bookingNumber,
           user_id: authData.user.id,
+          email: authData.user.email || null,
           customer_name: customerName,
           phone: phone,
           address: address,
