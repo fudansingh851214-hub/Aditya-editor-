@@ -406,7 +406,20 @@ async function loadBookings() {
 
     if (error) throw error;
 
-    currentBookings = data || [];
+    // Hide bookings while a customer cancellation request is pending, and hide bookings after approval.
+    // Rejected requests remain visible in Booking Management so the booking can continue.
+    const { data: cancellationRows, error: cancellationError } = await db
+      .from("cancellation_requests")
+      .select("booking_number, status");
+    if (cancellationError) throw cancellationError;
+    const hiddenBookingNumbers = new Set(
+      (cancellationRows || [])
+        .filter((request) => ["pending", "approved"].includes(String(request.status || "").toLowerCase()))
+        .map((request) => String(request.booking_number || ""))
+    );
+    currentBookings = (data || []).filter(
+      (booking) => !hiddenBookingNumbers.has(String(booking.booking_number || ""))
+    );
     const { data: paymentRows, error: paymentError } = await db.from("payment_submissions")
       .select("id, booking_number, amount, status, utr, payment_reference, screenshot_path, created_at, verified_at, verified_by");
     if (paymentError) throw paymentError;
