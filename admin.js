@@ -1384,6 +1384,10 @@ if (refreshPaymentsButton) {
   refreshPaymentsButton.addEventListener("click", loadPayments);
 }
 
+if (refreshCancellationsButton) {
+  refreshCancellationsButton.addEventListener("click", loadCancellationRequests);
+}
+
 if (paymentFilter) {
   paymentFilter.addEventListener("change", loadPayments);
 }
