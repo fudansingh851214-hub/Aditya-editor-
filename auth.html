@@ -122,6 +122,61 @@ async function loadCustomerHistory(user) {
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
+
+      // Customer uploaded files: show filename and preview/open link inside YOUR BOOKINGS.
+      const filesSection = addText(card, "div", "", "customer-files");
+      filesSection.style.cssText = "margin:12px 0;padding:12px;border:1px solid #34516e;border-radius:10px;background:#071522";
+      const filesHeading = addText(filesSection, "h4", "📁 Your Files", "");
+      filesHeading.style.cssText = "color:#42dfff;margin:0 0 10px";
+      let uploadedFiles = booking.file_paths;
+      if (typeof uploadedFiles === "string") {
+        try { uploadedFiles = JSON.parse(uploadedFiles); } catch (_) { uploadedFiles = [uploadedFiles]; }
+      }
+      if (!Array.isArray(uploadedFiles)) uploadedFiles = uploadedFiles ? [uploadedFiles] : [];
+      if (!uploadedFiles.length) {
+        addText(filesSection, "p", "इस बुकिंग में कोई uploaded file path नहीं मिला।", "note");
+      } else {
+        const filesList = addText(filesSection, "div", "", "customer-file-list");
+        filesList.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px";
+        for (const item of uploadedFiles) {
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name)) || "";
+          if (!filePath) continue;
+          const fileCard = addText(filesList, "div", "", "customer-file-item");
+          fileCard.style.cssText = "min-width:0;padding:8px;border:1px solid #29415d;border-radius:9px;background:#102139";
+          const fileName = filePath.split("/").pop() || "Uploaded file";
+          const fileLabel = addText(fileCard, "p", "📄 " + fileName, "");
+          fileLabel.style.cssText = "font-size:12px;overflow-wrap:anywhere;margin:0 0 8px;color:#eef7ff";
+          const openLabel = addText(fileCard, "p", "फाइल लोड हो रही है...", "note");
+          try {
+            const { data: signedData, error: signedError } = await client.storage
+              .from("customer-media").createSignedUrl(filePath, 3600);
+            if (signedError || !signedData?.signedUrl) throw signedError || new Error("Signed URL नहीं बना");
+            const fileUrl = signedData.signedUrl;
+            const ext = fileName.split(".").pop().toLowerCase();
+            const isImage = /^(png|jpe?g|gif|webp|bmp|avif)$/i.test(ext);
+            const isVideo = /^(mp4|mov|webm|m4v|ogg|avi)$/i.test(ext);
+            if (isImage) {
+              const preview = document.createElement("img");
+              preview.src = fileUrl; preview.alt = fileName; preview.loading = "lazy";
+              preview.style.cssText = "display:block;width:100%;max-height:180px;object-fit:contain;border-radius:7px;background:#06101f;margin-bottom:8px";
+              fileCard.insertBefore(preview, openLabel);
+            } else if (isVideo) {
+              const preview = document.createElement("video");
+              preview.src = fileUrl; preview.controls = true; preview.playsInline = true; preview.preload = "metadata";
+              preview.style.cssText = "display:block;width:100%;max-height:200px;border-radius:7px;background:#000;margin-bottom:8px";
+              fileCard.insertBefore(preview, openLabel);
+            }
+            openLabel.textContent = "";
+            const openFile = addText(fileCard, "a", "👁️ View Uploaded File", "action");
+            openFile.href = fileUrl; openFile.target = "_blank"; openFile.rel = "noopener noreferrer";
+            openFile.style.cssText = "display:block;text-align:center;margin:0;padding:9px 6px;font-size:12px";
+          } catch (fileError) {
+            openLabel.textContent = "फाइल नहीं खुली: " + (fileError?.message || "Storage permission जाँचें");
+            openLabel.style.color = "#ffb3b3";
+          }
+        }
+      }
+
       const invoiceActions = addText(card, "div", "", "upi-actions");
       const invoiceBtn = addText(invoiceActions, "button", "🧾 Print / Save Invoice", "action");
       invoiceBtn.type = "button";
