@@ -26,7 +26,7 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="कम से कम 8 characters">
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
-<div class="or-divider">OR</div>
+<div id="forgotArea" style="text-align:center;margin:14px 0"><a href="#" id="forgotLink" style="color:#42dfff">Forgot Password? / पासवर्ड भूल गए?</a></div><div class="or-divider">OR</div>
 <a class="guest-link" href="booking.html">Continue Without Login →</a>
 <p id="message" role="status" aria-live="polite"></p></div>
 <section class="dashboard" id="dashboard" aria-label="Customer Dashboard">
@@ -56,6 +56,7 @@ const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
 let mode = "login";
 let client = null;
+let recoveryMode = false;
 
 function setMessage(text) {
   if (message) message.textContent = text;
@@ -64,8 +65,10 @@ function setMode(next) {
   mode = next;
   loginTab.classList.toggle("active", mode === "login");
   signupTab.classList.toggle("active", mode === "signup");
-  submitButton.textContent = mode === "login" ? "Login" : "Create Account";
+  submitButton.textContent = mode === "login" ? "Login" : mode === "signup" ? "Create Account" : "Set New Password";
   password.autocomplete = mode === "login" ? "current-password" : "new-password";
+  password.placeholder = mode === "reset" ? "नया password (कम से कम 8 characters)" : "कम से कम 8 characters";
+  document.getElementById("forgotArea").style.display = mode === "login" ? "block" : "none";
   setMessage("");
 }
 window.setMode = setMode;
@@ -218,17 +221,17 @@ async function loadCustomerHistory(user) {
 loginTab.addEventListener("click", () => setMode("login"));
 signupTab.addEventListener("click", () => setMode("signup"));
 
-form.addEventListener("submit", async (event) => {
+document.getElementById("forgotLink").addEventListener("click", async (event) => {\n  event.preventDefault();\n  if (!client) { setMessage("Supabase लोड नहीं हुई। पेज refresh करें।"); return; }\n  const address = email.value.trim();\n  if (!address) { setMessage("पहले Email Address भरें, फिर Forgot Password दबाएँ।"); email.focus(); return; }\n  const link = document.getElementById("forgotLink");\n  link.style.pointerEvents = "none";\n  setMessage("Password reset email भेज रहे हैं...");\n  try {\n    const { error } = await client.auth.resetPasswordForEmail(address, { redirectTo: "https://fudansingh851214-hub.github.io/Aditya-editor-/auth.html" });\n    if (error) throw error;\n    setMessage("यदि इस Email से account मौजूद है, तो password reset link भेज दिया गया है। Inbox/Spam खोलें और link पर click करके नया password बनाएँ।");\n  } catch (error) { setMessage("Reset email नहीं भेजा जा सका: " + (error.message || "दोबारा कोशिश करें।")); }\n  finally { link.style.pointerEvents = "auto"; }\n});\n\nform.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!client) {
     setMessage("Supabase library लोड नहीं हुई। Internet चालू करके पेज refresh करें।");
     return;
   }
   submitButton.disabled = true;
-  setMessage(mode === "login" ? "Login हो रहा है..." : "Account बनाया जा रहा है...");
+  setMessage(mode === "login" ? "Login हो रहा है..." : mode === "signup" ? "Account बनाया जा रहा है..." : "नया password सेव हो रहा है...");
   try {
     let result;
-    if (mode === "signup") {
+    if (mode === "reset") {\n      result = await client.auth.updateUser({ password: password.value });\n      if (result.error) throw result.error;\n      recoveryMode = false;\n      password.value = "";\n      setMode("login");\n      setMessage("नया password सफलतापूर्वक सेव हो गया। अब नए password से Login करें।");\n    } else if (mode === "signup") {
       result = await client.auth.signUp({
         email: email.value.trim(),
         password: password.value
@@ -272,7 +275,7 @@ function initSupabase() {
       "https://okzwtylpmcyurkxvaocy.supabase.co",
       "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q"
     );
-    client.auth.getSession().then(({ data, error }) => {
+    client.auth.onAuthStateChange((event, session) => {\n      if (event === "PASSWORD_RECOVERY") {\n        recoveryMode = true;\n        document.getElementById("authArea").style.display = "block";\n        document.getElementById("dashboard").style.display = "none";\n        setMode("reset");\n        setMessage("नया password बनाएँ। कम से कम 8 characters रखें।");\n      }\n    });\n    client.auth.getSession().then(({ data, error }) => {
       if (error) setMessage("Session जाँचने में समस्या: " + error.message);
       else if (data && data.session) showDashboard(data.session.user);
     }).catch(error => setMessage("Session जाँचने में समस्या: " + (error.message || "दोबारा कोशिश करें।")));
