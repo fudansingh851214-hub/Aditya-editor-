@@ -148,17 +148,27 @@ async function loadCustomerHistory(user) {
           addText(cell, "small", item[0]);
           addText(cell, "strong", "₹" + item[1].toLocaleString("en-IN"));
         }
-        if (history.length) {
-          addText(card, "p", "Payment History", "history-state");
-          for (const payment of history) {
-            const status = String(payment.status || "pending");
-            addText(card, "p", dateText(payment.created_at) + " · UPI · ₹" + (Number(payment.amount) || 0).toLocaleString("en-IN") + " · " + status);
-            const ref = payment.utr || payment.payment_reference;
-            if (ref) addText(card, "p", "Reference: " + ref, "history-state");
-          }
-        }
         if (remaining > 0 && booking.booking_number) {
           const payBox = addText(card, "section", "", "paybox");
+          if (history.length) {
+            const historyBox = addText(payBox, "div", "", "history-section");
+            addText(historyBox, "h3", "Payment History");
+            addText(historyBox, "p", "इस बुकिंग में ग्राहक द्वारा जमा किए गए भुगतान:", "history-state");
+            for (const payment of history) {
+              const paymentCard = addText(historyBox, "div", "", "history-card");
+              const status = String(payment.status || "pending");
+              const paidAmount = Number(payment.amount) || 0;
+              addText(paymentCard, "p", dateText(payment.created_at) + " · UPI");
+              addText(paymentCard, "p", "Amount: ₹" + paidAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
+              addText(paymentCard, "p", "Status: " + status);
+              const ref = payment.utr || payment.payment_reference;
+              if (ref) addText(paymentCard, "p", "Reference / UTR: " + ref, "history-state");
+            }
+          } else {
+            const emptyHistory = addText(payBox, "div", "", "history-section");
+            addText(emptyHistory, "h3", "Payment History");
+            addText(emptyHistory, "p", "इस बुकिंग के लिए अभी कोई payment record नहीं मिला।", "history-state");
+          }
           addText(payBox, "h3", "QR Payment Screen · Pay Remaining Amount");
           addText(payBox, "p", "Booking: " + booking.booking_number);
           addText(payBox, "p", "Amount due: ₹" + remaining.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
