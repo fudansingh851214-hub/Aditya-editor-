@@ -162,19 +162,6 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
     <button id="menu" type="button" aria-expanded="false"
       aria-label="Menu खोलें">☰</button>
 
-    <div class="account-wrap" id="accountWrap">
-      <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false">
-        <span>👤</span><span class="account-name" id="accountName">Sign In / Create Account</span><span>▾</span>
-      </button>
-      <div class="account-menu" id="accountMenu">
-        <div class="account-signed">Account <strong id="accountSigned">Guest</strong></div>
-        <a href="auth.html">👤 <span>My Account / Sign In</span></a>
-        <a href="auth.html">📋 <span>My Bookings</span></a>
-        <a href="tracking.html">📍 <span>Track Booking</span></a>
-        <a href="auth.html">🪪 <span>My Details</span></a>
-        <button class="logout-item" id="accountLogout" type="button">🚪 <span>Logout</span></button>
-      </div>
-    </div>
     <nav class="links" id="links">
       <a href="index.html">Home</a>
       <a href="services.html">Our Services</a>
@@ -182,6 +169,19 @@ footer { padding:28px 0;text-align:center;border-top:1px solid var(--border); }
       <a href="tracking.html">Track Your Booking</a>
       <a href="#contact">Contact</a>
     </nav>
+    <div class="account-wrap" id="accountWrapAfterNav">
+      <button class="account-trigger" id="accountTriggerAfterNav" type="button" aria-expanded="false">
+        <span>👤</span><span class="account-name" id="accountNameAfterNav">Sign In / Create Account</span><span>▾</span>
+      </button>
+      <div class="account-menu" id="accountMenuAfterNav">
+        <div class="account-signed">Account <strong id="accountSignedAfterNav">Guest — Sign in to manage bookings</strong></div>
+        <a href="auth.html">👤 <span>My Account</span></a>
+        <a href="auth.html">📋 <span>My Bookings</span></a>
+        <a href="tracking.html">📍 <span>Track Booking</span></a>
+        <a href="auth.html">🪪 <span>My Details</span></a>
+        <button class="logout-item" id="accountLogoutAfterNav" type="button" style="display:none">🚪 <span>Logout</span></button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -344,18 +344,18 @@ document.getElementById("year").textContent =
 
 const menu = document.getElementById("menu");
 const links = document.getElementById("links");
-const accountTrigger = document.getElementById("accountTrigger");
-const accountMenu = document.getElementById("accountMenu");
-const accountName = document.getElementById("accountName");
-const accountSigned = document.getElementById("accountSigned");
-const accountLogout = document.getElementById("accountLogout");
+const accountTrigger = document.getElementById("accountTriggerAfterNav");
+const accountMenu = document.getElementById("accountMenuAfterNav");
+const accountName = document.getElementById("accountNameAfterNav");
+const accountSigned = document.getElementById("accountSignedAfterNav");
+const accountLogout = document.getElementById("accountLogoutAfterNav");
 
 accountTrigger.addEventListener("click", function() {
   const open = accountMenu.classList.toggle("open");
   accountTrigger.setAttribute("aria-expanded", String(open));
 });
 document.addEventListener("click", function(event) {
-  if (!event.target.closest("#accountWrap")) {
+  if (!event.target.closest("#accountWrapAfterNav")) {
     accountMenu.classList.remove("open");
     accountTrigger.setAttribute("aria-expanded", "false");
   }
