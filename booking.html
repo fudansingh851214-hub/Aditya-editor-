@@ -625,7 +625,7 @@
                    name="customer_name"
                    maxlength="100"
                    placeholder="अपना नाम लिखें"
-                   autocomplete="name" required>
+                   autocomplete="off" required>
           </div>
 
           <div class="field full">
@@ -782,14 +782,10 @@
         const user = data.user;
         const meta = user.user_metadata || {};
         const email = user.email || "";
-        const fullName =
-          meta.full_name || meta.name || meta.fullName ||
-          (email.includes("@") ? email.split("@")[0] : "");
         const mobile = meta.phone || meta.mobile || meta.phone_number || "";
 
-        if (!$("customerName").value.trim() && fullName) {
-          $("customerName").value = fullName;
-        }
+        // Keep Customer Name blank so the customer enters it manually.
+        $("customerName").value = "";
         if (!$("phone").value.trim() && mobile) {
           $("phone").value = String(mobile).replace(/\\D/g, "").slice(-10);
         }
