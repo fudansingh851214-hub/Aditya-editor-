@@ -401,7 +401,7 @@ async function loadBookings() {
     const { data, error } = await db
       .from("bookings")
       .select(
-        "id, booking_number, customer_name, phone, email, address, user_id, service, status, booking_status, payment_status, payment_reference, file_paths, created_at, amount"
+        "id, booking_number, customer_name, phone, email, address, special_requirement, user_id, service, status, booking_status, payment_status, payment_reference, file_paths, created_at, amount"
       )
       .order("created_at", { ascending: false });
 
@@ -477,6 +477,7 @@ function renderBookings(bookings) {
     addField(article, "Email", booking.email);
     addField(article, "Mobile", booking.phone);
     addField(article, "Address", booking.address);
+    addField(article, "Special Requirement / Message", booking.special_requirement || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
 
