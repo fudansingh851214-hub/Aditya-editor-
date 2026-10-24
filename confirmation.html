@@ -178,6 +178,12 @@
       border: 1px solid #e6d8b9;
     }
 
+    .confirm-payment {
+      background: linear-gradient(100deg, #08a96b, #06b6d4);
+      color: #032031;
+      box-shadow: 0 8px 20px rgba(8, 169, 107, 0.16);
+    }
+
     .confirm-note {
       margin-top: 28px;
       color: #777064;
@@ -242,7 +248,8 @@
       }
 
       .confirm-whatsapp,
-      .confirm-home {
+      .confirm-home,
+      .confirm-payment {
         font-size: 18px;
         padding: 19px 12px;
       }
@@ -295,6 +302,11 @@
         WhatsApp पर भेजें
       </a>
 
+      <a class="confirm-payment" id="paymentNow"
+         href="payment.html">
+        💳 Payment Now — अपनी Booking का भुगतान करें
+      </a>
+
       <a class="confirm-home" href="index.html">
         Home पर जाएँ
       </a>
@@ -322,6 +334,8 @@
         document.getElementById("sendWhatsapp");
       const topWhatsapp =
         document.getElementById("topWhatsapp");
+      const paymentNow =
+        document.getElementById("paymentNow");
 
       document.getElementById("year").textContent =
         new Date().getFullYear();
@@ -354,6 +368,7 @@
 
         whatsappButton.href = whatsappURL;
         topWhatsapp.href = whatsappURL;
+        paymentNow.href = "payment.html?id=" + encodeURIComponent(id);
       } else {
         bookingNumberElement.textContent =
           "Booking Number नहीं मिला";
@@ -363,6 +378,7 @@
 
         whatsappButton.href = "https://wa.me/917544913754";
         topWhatsapp.href = "https://wa.me/917544913754";
+        paymentNow.href = "payment.html";
       }
     })();
   </script>
