@@ -855,16 +855,16 @@
       const otherQuantity = files.length - photoQuantity - videoQuantity;
 
       const quantitySummary =
-        "Selected Quantity: " + photoQuantity + " Photos, " +
-        videoQuantity + " Videos" +
-        (otherQuantity ? ", " + otherQuantity + " Other Files" : "");
+        "Photos Quantity: " + photoQuantity +
+        "  |  Videos Quantity: " + videoQuantity +
+        (otherQuantity ? "  |  Other Files: " + otherQuantity : "");
 
       list.textContent = files.length
-        ? quantitySummary + "\\n" + files.map(file =>
+        ? quantitySummary + "\nSelected Files: " + files.map(file =>
             file.name + " (" +
             (file.size / (1024 * 1024)).toFixed(1) + " MB)"
           ).join(" • ")
-        : "Selected Quantity: 0 Photos, 0 Videos";
+        : "Photos Quantity: 0  |  Videos Quantity: 0";
     });
 
     async function uploadFiles(files, bookingNumber) {
