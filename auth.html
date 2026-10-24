@@ -183,13 +183,23 @@ function showDashboard(user) {
   const meta = user && user.user_metadata ? user.user_metadata : {};
   const customerEmail = user && user.email ? user.email : "Email उपलब्ध नहीं";
   const fullName = meta.full_name || meta.name || meta.fullName || (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
-  const mobile = meta.phone || meta.mobile || meta.phone_number || "अभी दर्ज नहीं";
+  const mobile = meta.phone || meta.mobile || meta.phone_number || user.phone || "";
   document.getElementById("signedInName").textContent = fullName;
   document.getElementById("signedInEmail").textContent = customerEmail;
   document.getElementById("profileFullName").textContent = fullName;
   document.getElementById("profileEmail").textContent = customerEmail;
-  document.getElementById("profileMobile").textContent = mobile;
+  document.getElementById("profileMobile").textContent = mobile || "बुकिंग से नंबर खोज रहे हैं...";
   document.getElementById("profileStatus").textContent = user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending";
+  if (!mobile && user && user.id && window.supabaseClient) {
+    window.supabaseClient.from("bookings").select("phone,created_at")
+      .eq("user_id", user.id).not("phone","is",null)
+      .order("created_at",{ascending:false}).limit(1).maybeSingle()
+      .then(({data,error}) => {
+        document.getElementById("profileMobile").textContent =
+          (!error && data && data.phone) ? data.phone : "अभी दर्ज नहीं";
+      })
+      .catch(() => { document.getElementById("profileMobile").textContent = "अभी दर्ज नहीं"; });
+  }
   document.getElementById("customerEmail").textContent = customerEmail;
   if (user) loadCustomerHistory(user);
 }
