@@ -36,7 +36,7 @@ label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:
 <div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="tracking.html">📦 Booking Status / History</a><a href="payment.html">💳 Secure Payment / QR</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
 <section class="history-section"><h3>YOUR BOOKINGS</h3><p>Booking History · <a class="history-link" href="tracking.html">Track booking →</a></p><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div></section>
 <p class="note">Booking और payment की वास्तविक जानकारी संबंधित पेज पर देखें। केवल QR/UTR से भुगतान अपने-आप verified नहीं होता; Admin की पुष्टि आवश्यक है।</p>
-<section class="profile extra-customer-actions" aria-label="More customer options"><h3 style="color:#42dfff;margin:0 0 8px">📄 My Bookings &amp; Invoices</h3><p>Download invoices, request cancellation or repeat a booking.</p><a class="action" href="tracking.html">Manage My Bookings →</a></section>
+<section class="profile extra-customer-actions" aria-label="My Bookings and Invoices"><h3 style="color:#42dfff;margin:0 0 8px">📄 My Bookings &amp; Invoices</h3><p>अपनी बुकिंग का बिल प्रिंट/Save as PDF करें, भुगतान इतिहास देखें और नई बुकिंग शुरू करें।</p><p class="note">हर बुकिंग कार्ड में Print / Save Invoice और Book Again विकल्प उपलब्ध होंगे। Cancellation के लिए Tracking पेज पर अनुरोध करें या Contact Us से टीम से संपर्क करें।</p><a class="action" href="tracking.html">Manage My Bookings →</a><a class="action" href="booking.html">Book Again / New Booking →</a></section>
 <section class="profile extra-customer-actions" aria-label="Customer feedback"><h3 style="color:#42dfff;margin:0 0 8px">💬 Share Your Feedback</h3><p>Tell us about your experience with our website, bartan rental or decoration service.</p><a class="action" href="index.html#contact">Give Feedback →</a></section>
 </section>
 
@@ -121,6 +121,25 @@ async function loadCustomerHistory(user) {
       addText(card, "p", "Date: " + dateText(booking.created_at));
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
+      const bookingStatus = booking.booking_status || booking.status || "Submitted";
+      const invoiceActions = addText(card, "div", "", "upi-actions");
+      const invoiceBtn = addText(invoiceActions, "button", "🧾 Print / Save Invoice", "action");
+      invoiceBtn.type = "button";
+      invoiceBtn.addEventListener("click", () => {
+        const invoiceWindow = window.open("", "_blank");
+        if (!invoiceWindow) { alert("Invoice खोलने के लिए browser pop-up अनुमति दें।"); return; }
+        const esc = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+        const total = Math.max(0, Number(booking.amount) || 0);
+        const invoiceDate = dateText(booking.created_at);
+        const invoiceHtml = `<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Invoice - ${esc(booking.booking_number)}</title><style>body{font:15px Arial,sans-serif;color:#172033;margin:28px;line-height:1.55}header{border-bottom:3px solid #087f8c;padding-bottom:14px}h1{color:#087f8c;margin:0}h2{margin-top:25px}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #ddd;padding:9px 0}.total{font-size:20px;font-weight:bold}.note{color:#555;font-size:12px;margin-top:28px}.print{padding:10px 16px;background:#087f8c;color:white;border:0;border-radius:7px}@media print{.print{display:none}body{margin:0}}</style></head><body><header><h1>EDIT CONCEPT</h1><div>Photo &amp; Video Editing Service</div><div>Invoice: ${esc(booking.booking_number || booking.id)}</div></header><h2>Booking Invoice</h2><div class="row"><span>Booking Number</span><strong>${esc(booking.booking_number || booking.id)}</strong></div><div class="row"><span>Booking Date</span><strong>${esc(invoiceDate)}</strong></div><div class="row"><span>Customer</span><strong>${esc(booking.customer_name || "Customer")}</strong></div><div class="row"><span>Phone</span><strong>${esc(booking.phone)}</strong></div><div class="row"><span>Service</span><strong>${esc(booking.service)}</strong></div><div class="row"><span>Status</span><strong>${esc(bookingStatus)}</strong></div><div class="row total"><span>Total Amount</span><span>${booking.amount == null ? "Admin से राशि की पुष्टि बाकी" : "₹" + total.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div><div class="note">यह बिल वेबसाइट में उपलब्ध बुकिंग रिकॉर्ड पर आधारित है। भुगतान केवल Admin द्वारा सत्यापित होने पर प्राप्त माना जाएगा। Event/Return Date या item-wise विवरण डेटाबेस में उपलब्ध होने पर ही अलग से दिखाए जा सकते हैं.</div><p><button class="print" onclick="window.print()">Print / Save as PDF</button></p></body></html>`;
+        invoiceWindow.document.open(); invoiceWindow.document.write(invoiceHtml); invoiceWindow.document.close();
+      });
+      const againBtn = addText(invoiceActions, "a", "＋ Book Again", "action");
+      againBtn.href = "booking.html";
+      const cancelBtn = addText(invoiceActions, "a", "Request Cancellation", "action");
+      cancelBtn.href = "https://fudansingh851214-hub.github.io/Aditya-editor-/tracking.html";
+      cancelBtn.title = "Tracking page खोलकर cancellation के लिए संपर्क करें";
+
       if (booking.amount !== null && booking.amount !== undefined) {
         const total = Math.max(0, Number(booking.amount) || 0);
         let verifiedOnline = 0;
