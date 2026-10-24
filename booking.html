@@ -900,10 +900,14 @@
         return;
       }
 
-      const { data: authData, error: authError } = await client.auth.getUser();
-      if (authError || !authData?.user) {
-        location.href = "auth.html?next=booking";
-        return;
+      // Guest booking is allowed: signed-in customers are linked to their user ID,
+      // while Continue Without Login customers are saved with user_id = null.
+      let currentUser = null;
+      try {
+        const { data: authData } = await client.auth.getUser();
+        currentUser = authData?.user || null;
+      } catch (authLookupError) {
+        console.info("Guest booking mode:", authLookupError?.message || "No active session");
       }
 
       const serviceElement =
@@ -980,8 +984,8 @@
 
         const bookingData = {
           booking_number: bookingNumber,
-          user_id: authData.user.id,
-          email: authData.user.email || null,
+          user_id: currentUser ? currentUser.id : null,
+          email: currentUser ? (currentUser.email || null) : null,
           customer_name: customerName,
           phone: phone,
           address: address,
