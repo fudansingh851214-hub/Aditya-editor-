@@ -115,12 +115,17 @@ async function loadCustomerHistory(user) {
       .eq("user_id", user.id).order("created_at", { ascending: false });
     if (cancellationError) throw cancellationError;
     const cancellationByBooking = new Map((cancellationRows || []).map(row => [row.booking_number, row]));
-    if (!data || !data.length) {
-      box.textContent = "इस Login अकाउंट से जुड़ी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
+    // Resolved cancellation requests (approved/rejected) hide that booking from the customer dashboard.
+    const visibleBookings = (data || []).filter(booking => {
+      const request = cancellationByBooking.get(booking.booking_number);
+      return !request || request.status === "pending";
+    });
+    if (!visibleBookings.length) {
+      box.textContent = "दिखाने के लिए कोई बुकिंग नहीं है। यदि Cancellation Request का निर्णय हो चुका है, तो वह बुकिंग यहाँ नहीं दिखाई जाएगी। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
     }
     box.textContent = "";
-    for (const booking of data) {
+    for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
       addText(card, "p", booking.booking_number || ("Booking #" + (booking.id ?? "")));
       addText(card, "p", "Date: " + dateText(booking.created_at));
