@@ -191,9 +191,42 @@ async function loadCustomerHistory(user) {
       });
       const againBtn = addText(invoiceActions, "a", "＋ Book Again", "action");
       againBtn.href = "booking.html";
-      const cancelBtn = addText(invoiceActions, "a", "Request Cancellation", "action");
-      cancelBtn.href = "https://fudansingh851214-hub.github.io/Aditya-editor-/tracking.html";
-      cancelBtn.title = "Tracking page खोलकर cancellation के लिए संपर्क करें";
+      const cancelBtn = addText(invoiceActions, "button", "Request Cancellation", "action");
+      cancelBtn.type = "button";
+      cancelBtn.style.cursor = "pointer";
+      cancelBtn.title = "इस बुकिंग को cancel करने का अनुरोध भेजें";
+      cancelBtn.addEventListener("click", async () => {
+        const currentStatus = String(booking.booking_status || booking.status || "").toLowerCase();
+        if (currentStatus.includes("cancel")) {
+          alert("इस बुकिंग का cancellation पहले से दर्ज है।");
+          return;
+        }
+        const confirmed = window.confirm("क्या आप Booking " + (booking.booking_number || booking.id) + " के लिए Cancellation Request भेजना चाहते हैं? Admin इसे review करेगा।");
+        if (!confirmed) return;
+        cancelBtn.disabled = true;
+        cancelBtn.textContent = "Request भेजी जा रही है...";
+        try {
+          const { data: sessionData } = await client.auth.getSession();
+          const currentUser = sessionData?.session?.user;
+          if (!currentUser) throw new Error("पहले अपने अकाउंट में Login करें।");
+          const { error: requestError } = await client.from("cancellation_requests").insert({
+            booking_number: String(booking.booking_number || ""),
+            user_id: currentUser.id,
+            reason: "Customer requested cancellation from Customer Dashboard"
+          });
+          if (requestError) {
+            if (requestError.code === "23505") throw new Error("इस बुकिंग के लिए Cancellation Request पहले ही भेजी जा चुकी है।");
+            throw requestError;
+          }
+          cancelBtn.textContent = "✓ Cancellation Requested";
+          cancelBtn.disabled = true;
+          alert("Cancellation Request सफलतापूर्वक भेज दी गई। Admin की पुष्टि के बाद स्थिति अपडेट होगी।");
+        } catch (err) {
+          cancelBtn.disabled = false;
+          cancelBtn.textContent = "Request Cancellation";
+          alert("Cancellation Request नहीं भेजी गई: " + (err?.message || "कृपया दोबारा कोशिश करें।"));
+        }
+      });
 
       if (booking.amount !== null && booking.amount !== undefined) {
         const total = Math.max(0, Number(booking.amount) || 0);
