@@ -492,6 +492,26 @@ function renderBookings(bookings) {
     addField(article, "Selected / Uploaded Files", fileNames.length);
     addField(article, "Photos Quantity", photoCount);
     addField(article, "Videos Quantity", videoCount);
+
+    // The booking form selects one service per booking, so show 1 for the
+    // selected category and 0 for the other categories.
+    const selectedService = String(booking.service || "").trim().toLowerCase();
+    const isService = (...names) => names.some((name) => selectedService === name);
+    addField(
+      article,
+      "Wedding Projects Quantity",
+      isService("wedding projects", "wedding project") ? 1 : 0
+    );
+    addField(
+      article,
+      "Graphic Design Quantity",
+      isService("graphic design", "graphics design") ? 1 : 0
+    );
+    addField(
+      article,
+      "Social Media Reels Quantity",
+      isService("social media reels", "social media reel") ? 1 : 0
+    );
     if (otherCount) addField(article, "Other Files Quantity", otherCount);
 
     addField(article, "Booking Status", booking.booking_status || booking.status);
