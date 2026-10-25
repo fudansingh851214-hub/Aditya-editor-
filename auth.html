@@ -115,6 +115,13 @@ body{background:#f7f8fa!important;color:#263238!important}
 #bookingHistory .money-item strong{color:#d81b70!important}
 #bookingHistory .history-card .money-item,
 #bookingHistory .history-card .money-grid .money-item{background:#fff!important}
+
+/* Customer welcome box after account creation/login */
+#signedInCustomer{background:linear-gradient(120deg,#fff,#fff7f7)!important;border:2px solid #c62828!important;border-left:7px solid #c62828!important;border-radius:20px!important;padding:24px!important;box-shadow:0 10px 28px #c6282812!important}
+#signedInCustomer .pill{align-self:flex-start;background:#c62828!important;color:#fff!important;padding:7px 11px!important;letter-spacing:1px!important}
+#signedInCustomer #signedInName{font-size:clamp(25px,4vw,34px)!important;color:#c62828!important;font-family:Georgia,serif}
+#signedInCustomer #signedInEmail{color:#59636e!important;overflow-wrap:anywhere}
+#signedInCustomer #logoutButton{align-self:flex-start;margin:8px 0 0!important;background:#fff!important;border:1px solid #c62828!important;color:#c62828!important}
 </style></head>
 <body><div class="home-top"><a href="index.html">← Home</a></div><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
@@ -138,7 +145,7 @@ body{background:#f7f8fa!important;color:#263238!important}
 <div class="brand-slogan"><span>Create</span> · <span>Edit</span> · <span>Deliver</span></div><div class="brand-stripes" aria-hidden="true"></div>
 </div>
 
-<div class="profile" id="signedInCustomer" style="display:flex;flex-direction:column;gap:6px"><span class="pill">SIGNED-IN CUSTOMER</span><strong id="signedInName" style="font-size:20px">लोड हो रहा है...</strong><span id="signedInEmail">Email लोड हो रहा है...</span><button class="logout" id="logoutButton" type="button">Log out</button></div><h2 id="welcome">Customer Dashboard</h2><p>आपका Aditya Kumar Project Edit Concept Customer Portal</p>
+<div class="profile" id="signedInCustomer" style="display:flex;flex-direction:column;gap:8px"><span class="pill">WELCOME TO EDIT CONCEPT</span><strong id="signedInName" style="font-size:28px">लोड हो रहा है...</strong><span id="signedInEmail">Email लोड हो रहा है...</span><button class="logout" id="logoutButton" type="button">Log out</button></div><h2 id="welcome">Welcome to Edit Concept</h2><p>आपका Aditya Kumar Project Edit Concept Customer Portal</p>
 <div class="profile" id="personalInformation"><span class="pill">🔒 Private account</span><h3 style="color:#42dfff;margin:12px 0 6px">PERSONAL INFORMATION</h3><p style="font-weight:bold">My Details</p><p><strong>Full name</strong><br><span id="profileFullName">लोड हो रहा है...</span></p><p><strong>Email address</strong><br><span id="profileEmail">लोड हो रहा है...</span></p><p><strong>Mobile number</strong><br><span id="profileMobile">अभी दर्ज नहीं</span></p><p><strong>Account status</strong><br><span id="profileStatus">जाँच हो रही है...</span></p><p class="note">यह जानकारी आपके Login अकाउंट से ली जाती है। यदि मोबाइल नंबर अकाउंट में सेव नहीं है, तो यहाँ “अभी दर्ज नहीं” दिखेगा।</p></div>
 <div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
 <div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="tracking.html">📦 Booking Status / History</a><a href="payment.html">💳 Secure Payment / QR</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
