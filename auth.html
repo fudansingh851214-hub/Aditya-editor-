@@ -333,13 +333,54 @@ async function loadCustomerHistory(user) {
       const invoiceActions = addText(card, "div", "", "upi-actions");
       const invoiceBtn = addText(invoiceActions, "button", "🧾 Print / Save Invoice", "action");
       invoiceBtn.type = "button";
-      invoiceBtn.addEventListener("click", () => {
+      invoiceBtn.addEventListener("click", async () => {
+        // Open the print window immediately so the browser does not block the popup.
         const invoiceWindow = window.open("", "_blank");
         if (!invoiceWindow) { alert("Invoice खोलने के लिए browser pop-up अनुमति दें।"); return; }
+        invoiceWindow.document.open();
+        invoiceWindow.document.write("<!DOCTYPE html><html lang='hi'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width'><title>Booking Invoice</title></head><body style='font:15px Arial,sans-serif;padding:24px;color:#172033'>Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।</body></html>");
+        invoiceWindow.document.close();
         const esc = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
         const total = Math.max(0, Number(booking.amount) || 0);
         const invoiceDate = dateText(booking.created_at);
-        const invoiceHtml = `<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Invoice - ${esc(booking.booking_number)}</title><style>body{font:15px Arial,sans-serif;color:#172033;margin:28px;line-height:1.55}header{border-bottom:3px solid #087f8c;padding-bottom:14px}h1{color:#087f8c;margin:0}h2{margin-top:25px}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #ddd;padding:9px 0}.total{font-size:20px;font-weight:bold}.note{color:#555;font-size:12px;margin-top:28px}.print{padding:10px 16px;background:#087f8c;color:white;border:0;border-radius:7px}@media print{.print{display:none}body{margin:0}}</style></head><body><header><h1>EDIT CONCEPT</h1><div>Photo &amp; Video Editing Service</div><div>Invoice: ${esc(booking.booking_number || booking.id)}</div></header><h2>Booking Invoice</h2><div class="row"><span>Booking Number</span><strong>${esc(booking.booking_number || booking.id)}</strong></div><div class="row"><span>Booking Date</span><strong>${esc(invoiceDate)}</strong></div><div class="row"><span>Customer</span><strong>${esc(booking.customer_name || "Customer")}</strong></div><div class="row"><span>Phone</span><strong>${esc(booking.phone)}</strong></div><div class="row"><span>Service</span><strong>${esc(booking.service)}</strong></div><div class="row"><span>Status</span><strong>${esc(bookingStatus)}</strong></div><div class="row total"><span>Total Amount</span><span>${booking.amount == null ? "Admin से राशि की पुष्टि बाकी" : "₹" + total.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div><div class="note">यह बिल वेबसाइट में उपलब्ध बुकिंग रिकॉर्ड पर आधारित है। भुगतान केवल Admin द्वारा सत्यापित होने पर प्राप्त माना जाएगा। Event/Return Date या item-wise विवरण डेटाबेस में उपलब्ध होने पर ही अलग से दिखाए जा सकते हैं.</div><p><button class="print" onclick="window.print()">Print / Save as PDF</button></p></body></html>`;
+        const mediaPaths = Array.isArray(booking.file_paths) ? booking.file_paths : (typeof booking.file_paths === "string" ? (() => { try { const parsed = JSON.parse(booking.file_paths); return Array.isArray(parsed) ? parsed : []; } catch { return []; } })() : []);
+        const mediaItems = [];
+        for (const item of mediaPaths) {
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name || item.url)) || "";
+          if (!filePath) continue;
+          // Existing uploads are stored in the private customer-media bucket.
+          try {
+            let fileUrl = "";
+            if (/^https?:\/\//i.test(filePath)) {
+              fileUrl = filePath;
+            } else {
+              const { data, error } = await client.storage.from("customer-media").createSignedUrl(filePath, 3600);
+              if (error || !data?.signedUrl) throw error || new Error("Signed URL नहीं बना");
+              fileUrl = data.signedUrl;
+            }
+            const fileName = filePath.split("/").pop().split("?")[0] || "Customer upload";
+            const ext = fileName.split(".").pop().toLowerCase();
+            const isImage = /^(png|jpe?g|gif|webp|bmp|avif|heic)$/i.test(ext);
+            const isVideo = /^(mp4|mov|webm|m4v|ogg|avi|3gp|mkv)$/i.test(ext);
+            if (isImage || isVideo) mediaItems.push({fileName,fileUrl,isImage,isVideo});
+            else mediaItems.push({fileName,fileUrl,isImage:false,isVideo:false});
+          } catch (mediaError) {
+            mediaItems.push({fileName:String(filePath).split("/").pop() || "Customer upload",error:mediaError?.message || "फाइल उपलब्ध नहीं"});
+          }
+        }
+        const mediaHtml = mediaItems.length ? mediaItems.map((item, index) => {
+          if (item.error) return '<div class="media-item"><p>' + esc(item.fileName) + '</p><p class="note">फाइल नहीं खुली: ' + esc(item.error) + '</p></div>';
+          const src = esc(item.fileUrl);
+          const preview = item.isImage
+            ? '<img src="' + src + '" alt="' + esc(item.fileName) + '">'
+            : item.isVideo
+              ? '<video src="' + src + '" controls playsinline preload="metadata"></video>'
+              : '<a href="' + src + '" target="_blank" rel="noopener">Uploaded file खोलें</a>';
+          return '<div class="media-item"><div class="media-label">' + (index + 1) + '. ' + esc(item.fileName) + '</div>' + preview + '</div>';
+        }).join("") : '<p class="note">इस booking record में customer की uploaded photo/video का path नहीं मिला।</p>';
+        const invoiceHtml = `<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Invoice - ${esc(booking.booking_number || booking.id)}</title><style>
+          *{box-sizing:border-box}body{font:15px Arial,sans-serif;color:#172033;margin:28px;line-height:1.55}header{border-bottom:3px solid #c62828;padding-bottom:14px}h1{color:#c62828;margin:0}h2{margin-top:25px}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #ddd;padding:9px 0}.total{font-size:20px;font-weight:bold}.note{color:#555;font-size:12px;margin-top:12px}.media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.media-item{min-width:0;border:1px solid #ddd;border-radius:10px;padding:8px;break-inside:avoid}.media-label{font-size:12px;overflow-wrap:anywhere;margin-bottom:8px}.media-item img,.media-item video{display:block;width:100%;max-height:360px;object-fit:contain;background:#f4f4f4;border-radius:6px}.print{padding:10px 16px;background:#c62828;color:white;border:0;border-radius:7px}@media(max-width:600px){body{margin:14px}.media-grid{grid-template-columns:1fr}}@media print{.print{display:none}body{margin:0}.media-item{break-inside:avoid}}
+          </style></head><body><header><h1>ADITYA KUMAR · PROJECT EDIT CONCEPT</h1><div>Photo &amp; Video Editing Service</div><div>Invoice: ${esc(booking.booking_number || booking.id)}</div></header><h2>🧾 Booking Invoice</h2><div class="row"><span>Booking Number</span><strong>${esc(booking.booking_number || booking.id)}</strong></div><div class="row"><span>Booking Date</span><strong>${esc(invoiceDate)}</strong></div><div class="row"><span>Customer</span><strong>${esc(booking.customer_name || "Customer")}</strong></div><div class="row"><span>Phone</span><strong>${esc(booking.phone)}</strong></div><div class="row"><span>Service</span><strong>${esc(booking.service)}</strong></div><div class="row"><span>Status</span><strong>${esc(bookingStatus)}</strong></div><div class="row total"><span>Total Amount</span><span>${booking.amount == null ? "Admin से राशि की पुष्टि बाकी" : "₹" + total.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div><h2>Customer Photos &amp; Videos</h2><div class="media-grid">${mediaHtml}</div><div class="note">यह बिल वेबसाइट में उपलब्ध booking record पर आधारित है। भुगतान केवल Admin द्वारा सत्यापित होने पर प्राप्त माना जाएगा। फोटो/वीडियो print में तभी आएँगे जब browser उन्हें लोड कर पाए।</div><p><button class="print" onclick="window.print()">Print / Save as PDF</button></p></body></html>`;
         invoiceWindow.document.open(); invoiceWindow.document.write(invoiceHtml); invoiceWindow.document.close();
       });
       const againBtn = addText(invoiceActions, "a", "＋ Book Again", "action");
