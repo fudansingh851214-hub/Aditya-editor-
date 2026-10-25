@@ -193,6 +193,18 @@
 
     .message.error { color: var(--red); }
 
+    .home-under-track {
+      display: flex;
+      width: 100%;
+      margin-top: 12px;
+      background: linear-gradient(135deg, #f5a0b5, #c51e47);
+      color: #fff;
+      border: 1px solid #f2a2b6;
+      box-shadow: 0 6px 15px #c51e4720;
+    }
+
+    .home-under-track:hover { filter: brightness(.97); }
+
     [hidden] { display: none !important; }
 
     .booking-banner {
@@ -454,6 +466,10 @@
              class="message"
              role="status"
              aria-live="polite"></div>
+
+        <a class="button home-under-track" href="index.html">
+          🏠 Home Page पर जाएँ
+        </a>
       </form>
     </section>
 
