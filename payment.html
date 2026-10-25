@@ -58,6 +58,8 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
     <section id="paymentSection">
 
+      <div class="panel" id="paymentSummary" aria-live="polite"></div>
+
       <div class="panel">
         <p>
           <strong>Booking Number:</strong>
@@ -286,7 +288,13 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         let verifiedAmount = 0;
         let pendingAmount = 0;
         const verifiedStatuses = ["verified", "paid", "confirmed", "success", "successful"];
-        for (const row of (paymentRows || [])) { const paidAmount = Math.max(0, Number(row.amount) || 0); const state = String(row.status || "pending").toLowerCase(); if (verifiedStatuses.includes(state)) verifiedAmount += paidAmount; else pendingAmount += paidAmount; }
+        const pendingStatuses = ["pending", "submitted", "under_review", "review"];
+        for (const row of (paymentRows || [])) {
+          const rowAmount = Math.max(0, Number(row.amount) || 0);
+          const state = String(row.status || "pending").toLowerCase();
+          if (verifiedStatuses.includes(state)) verifiedAmount += rowAmount;
+          else if (pendingStatuses.includes(state)) pendingAmount += rowAmount;
+        }
         const amount = Math.max(0, totalAmount - verifiedAmount);
         if (!data.payment_token) {
           showMessage(
@@ -311,6 +319,24 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
         document.getElementById("showAmount").textContent =
           "₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " बाकी (कुल ₹" + totalAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + ")";
+        const summary = document.getElementById("paymentSummary");
+        if (summary) {
+          summary.replaceChildren();
+          const items = [
+            ["Total Amount", totalAmount],
+            ["Verified Online", verifiedAmount],
+            ["Online Pending", pendingAmount],
+            ["Remaining", amount]
+          ];
+          for (const [label, value] of items) {
+            const p = document.createElement("p");
+            const strong = document.createElement("strong");
+            strong.textContent = label + ": ";
+            p.appendChild(strong);
+            p.appendChild(document.createTextNode("₹" + Number(value).toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2})));
+            summary.appendChild(p);
+          }
+        }
         paymentAmountInput.value = amount.toFixed(2);
         paymentAmountInput.max = amount.toFixed(2);
 
