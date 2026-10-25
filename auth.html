@@ -496,7 +496,11 @@ async function loadCustomerHistory(user) {
           }
           addText(payBox, "h3", "QR Payment Screen · Pay Remaining Amount");
           addText(payBox, "p", "Booking: " + booking.booking_number);
-          addText(payBox, "p", "Amount due: ₹" + remaining.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
+          const dueBox = addText(payBox, "div", "", "amount-due-card");
+          dueBox.style.cssText = "margin:16px 0;padding:20px 18px;text-align:center;background:linear-gradient(135deg,#fff4f4,#fff);border:2px solid #efb2b2;border-radius:16px;box-shadow:0 7px 20px #c6282814";
+          addText(dueBox, "div", "AMOUNT DUE", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:2px;color:#a61b1b;margin-bottom:8px";
+          addText(dueBox, "div", "₹" + remaining.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}), "").style.cssText = "font-size:clamp(30px,6vw,42px);line-height:1.2;font-weight:900;color:#c62828;overflow-wrap:anywhere";
+          addText(dueBox, "div", "Remaining payment for this booking", "").style.cssText = "font-size:12px;color:#5f6368;margin-top:7px";
           const qr = addText(payBox, "div", "", "qr");
           const upiParams = new URLSearchParams({pa: UPI_ID, pn: PAYEE_NAME, am: remaining.toFixed(2), cu: "INR", tn: "Booking " + booking.booking_number});
           const upiUrl = "upi://pay?" + upiParams.toString();
