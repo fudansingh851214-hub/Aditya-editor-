@@ -233,11 +233,16 @@ function addText(parent, tag, value, className) {
   parent.appendChild(el);
   return el;
 }
-function dateText(value) {
-  if (!value) return "तारीख उपलब्ध नहीं";
+function dateTimeText(value) {
+  if (!value) return { date: "तारीख उपलब्ध नहीं", time: "समय उपलब्ध नहीं", day: "दिन उपलब्ध नहीं" };
   const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? String(value) :
-    d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  if (Number.isNaN(d.getTime())) return { date: String(value), time: "समय उपलब्ध नहीं", day: "दिन उपलब्ध नहीं" };
+  const options = { timeZone: "Asia/Kolkata" };
+  return {
+    date: d.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Kolkata" }),
+    time: d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true, timeZone: "Asia/Kolkata" }),
+    day: d.toLocaleDateString("hi-IN", { weekday: "long", timeZone: "Asia/Kolkata" })
+  };
 }
 async function loadCustomerHistory(user) {
   const box = document.getElementById("bookingHistory");
@@ -268,7 +273,15 @@ async function loadCustomerHistory(user) {
       bookingNumberBox.style.cssText = "margin:0 0 14px;padding:14px 16px;background:#fff0f0;border:2px solid #c62828;border-radius:12px;text-align:center";
       addText(bookingNumberBox, "div", "YOUR BOOKING NUMBER", "booking-number-label").style.cssText = "font-size:13px;font-weight:800;letter-spacing:1.5px;color:#a61b1b;margin-bottom:5px";
       addText(bookingNumberBox, "div", bookingNumber, "booking-number-value").style.cssText = "font-size:clamp(24px,5vw,34px);font-weight:900;line-height:1.25;letter-spacing:1px;color:#c62828;overflow-wrap:anywhere";
-      addText(card, "p", "Date: " + dateText(booking.created_at));
+      const bookingDateTime = dateTimeText(booking.created_at);
+      const bookingWhen = addText(card, "div", "", "booking-date-time");
+      bookingWhen.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0;padding:12px;background:#f4f7fb;border:1px solid #dfe5ec;border-radius:12px";
+      for (const [label, value] of [["📅 DATE", bookingDateTime.date], ["🕒 TIME (IST)", bookingDateTime.time], ["📆 DAY", bookingDateTime.day]]) {
+        const item = addText(bookingWhen, "div", "", "booking-date-item");
+        item.style.cssText = "min-width:0;padding:8px;background:#fff;border-radius:8px";
+        addText(item, "div", label, "").style.cssText = "font-size:11px;font-weight:800;color:#667085;letter-spacing:.5px;margin-bottom:4px";
+        addText(item, "div", value, "").style.cssText = "font-size:15px;font-weight:800;color:#c62828;overflow-wrap:anywhere";
+      }
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
