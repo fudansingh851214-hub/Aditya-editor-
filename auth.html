@@ -263,7 +263,11 @@ async function loadCustomerHistory(user) {
     box.textContent = "";
     for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
-      addText(card, "p", booking.booking_number || ("Booking #" + (booking.id ?? "")));
+      const bookingNumber = booking.booking_number || ("Booking #" + (booking.id ?? ""));
+      const bookingNumberBox = addText(card, "div", "", "customer-booking-number");
+      bookingNumberBox.style.cssText = "margin:0 0 14px;padding:14px 16px;background:#fff0f0;border:2px solid #c62828;border-radius:12px;text-align:center";
+      addText(bookingNumberBox, "div", "YOUR BOOKING NUMBER", "booking-number-label").style.cssText = "font-size:13px;font-weight:800;letter-spacing:1.5px;color:#a61b1b;margin-bottom:5px";
+      addText(bookingNumberBox, "div", bookingNumber, "booking-number-value").style.cssText = "font-size:clamp(24px,5vw,34px);font-weight:900;line-height:1.25;letter-spacing:1px;color:#c62828;overflow-wrap:anywhere";
       addText(card, "p", "Date: " + dateText(booking.created_at));
       addText(card, "p", "Service: " + (booking.service || "—"));
       addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
