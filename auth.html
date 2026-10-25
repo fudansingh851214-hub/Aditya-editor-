@@ -282,8 +282,8 @@ async function loadCustomerHistory(user) {
         addText(item, "div", label, "").style.cssText = "font-size:11px;font-weight:800;color:#667085;letter-spacing:.5px;margin-bottom:4px";
         addText(item, "div", value, "").style.cssText = "font-size:15px;font-weight:800;color:#c62828;overflow-wrap:anywhere";
       }
-      addText(card, "p", "Service: " + (booking.service || "—"));
-      addText(card, "p", "Status: " + (booking.booking_status || booking.status || "Submitted"));
+      addText(card, "p", "YOUR SERVICE: " + (booking.service || "—"));
+      addText(card, "p", "YOUR BOOKING STATUS: " + (booking.booking_status || booking.status || "Submitted"));
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
       const cancellationRequest = cancellationByBooking.get(booking.booking_number);
       if (cancellationRequest) {
