@@ -244,6 +244,9 @@ function dateTimeText(value) {
     day: d.toLocaleDateString("hi-IN", { weekday: "long", timeZone: "Asia/Kolkata" })
   };
 }
+function dateText(value) {
+  return dateTimeText(value).date;
+}
 async function loadCustomerHistory(user) {
   const box = document.getElementById("bookingHistory");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
