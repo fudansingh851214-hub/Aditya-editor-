@@ -109,18 +109,8 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         <label for="paymentAmount">
           Payment Amount (₹)
         </label>
-        <input
-          id="paymentAmount"
-          name="payment_amount"
-          type="text"
-          value="Admin द्वारा तय राशि लोड होगी"
-          readonly
-          aria-describedby="amountHint"
-        >
-        <p class="hint" id="amountHint">
-          यह राशि Admin की Booking में सेट की गई राशि से अपने-आप आएगी।
-          ग्राहक इसे बदल नहीं सकता।
-        </p>
+        <input id="paymentAmount" name="payment_amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="जैसे 200" required aria-describedby="amountHint">
+        <p class="hint" id="amountHint">ग्राहक बाकी राशि में से अपनी सुविधा के अनुसार भुगतान राशि डाल सकता है। राशि बाकी बकाया से अधिक नहीं हो सकती।</p>
 
         <label for="utr">
           UTR / Reference Number
@@ -217,8 +207,9 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
     const paymentForm = document.getElementById("paymentForm");
     const screenshotInput = document.getElementById("paymentScreenshot");
     const utrInput = document.getElementById("utr");
-
+    const paymentAmountInput = document.getElementById("paymentAmount");
     let currentBooking = null;
+    let paymentClickBusy = false;
 
     function showMessage(text) {
       message.textContent = text;
@@ -320,17 +311,14 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
         document.getElementById("showAmount").textContent =
           "₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " बाकी (कुल ₹" + totalAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + ")";
-        document.getElementById("paymentAmount").value =
-          "₹" + amount.toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          });
+        paymentAmountInput.value = amount.toFixed(2);
+        paymentAmountInput.max = amount.toFixed(2);
 
         document.getElementById("showStatus").textContent =
           amount <= 0 ? "Paid / Verified" : (pendingAmount > 0 ? "Pending Verification" : (data.payment_status || "Pending"));
 
-        payNow.href = makeUPILink(data.booking_number, amount);
-        payNow.textContent = "Pay ₹" + amount.toLocaleString("en-IN", {minimumFractionDigits: 0, maximumFractionDigits: 2}) + " with PhonePe / UPI";
+        payNow.href = "#";
+        payNow.textContent = "Pay with PhonePe / UPI";
         if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; }
 
         if (amount > 0 && window.QRCode) {
@@ -357,6 +345,51 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
       }
     });
 
+    paymentAmountInput.addEventListener("input", () => {
+      if (!currentBooking) return;
+      const amount = Number(paymentAmountInput.value);
+      payNow.textContent = Number.isFinite(amount) && amount > 0 && amount <= currentBooking.amount
+        ? "Pay ₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " with PhonePe / UPI"
+        : "Pay with PhonePe / UPI";
+    });
+
+    payNow.addEventListener("click", async (event) => {
+      event.preventDefault();
+      if (paymentClickBusy) return;
+      if (!db || !currentBooking) {
+        showMessage("पहले Booking Number खोजें।");
+        return;
+      }
+      const amount = Number(paymentAmountInput.value);
+      if (!Number.isFinite(amount) || amount <= 0 || amount > currentBooking.amount) {
+        showMessage("₹1 या उससे अधिक और बाकी बकाया से कम/बराबर राशि दर्ज करें।");
+        paymentAmountInput.focus();
+        return;
+      }
+      paymentClickBusy = true;
+      payNow.style.pointerEvents = "none";
+      payNow.textContent = "Pending payment दर्ज हो रही है...";
+      try {
+        const { error } = await db.from("payment_submissions").insert({
+          booking_number: currentBooking.booking_number,
+          amount: Number(amount.toFixed(2)),
+          status: "pending",
+          payment_reference: "UPI initiated - awaiting customer UTR",
+          utr: null
+        });
+        if (error) throw new Error("Pending रिकॉर्ड नहीं बना। payment_submissions INSERT policy जाँचें: " + error.message);
+        showMessage("₹" + amount.toFixed(2) + " का Pending रिकॉर्ड बन गया। अब UPI ऐप में भुगतान करें। वापस आकर UTR और Screenshot जमा करें।");
+        window.location.href = makeUPILink(currentBooking.booking_number, amount);
+      } catch (error) {
+        console.error("Create Pending Payment Error:", error);
+        showMessage(error.message || "Pending payment दर्ज नहीं हो सकी।");
+      } finally {
+        paymentClickBusy = false;
+        payNow.style.pointerEvents = "";
+        payNow.textContent = "Pay with PhonePe / UPI";
+      }
+    });
+
     document.getElementById("copyUPI").addEventListener(
       "click",
       async () => {
@@ -379,6 +412,12 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
       const utr = utrInput.value.trim();
       const screenshot = screenshotInput.files[0];
+      const chosenAmount = Number(paymentAmountInput.value);
+      if (!Number.isFinite(chosenAmount) || chosenAmount <= 0 || chosenAmount > currentBooking.amount) {
+        showMessage("मान्य भुगतान राशि भरें। यह बाकी बकाया से अधिक नहीं हो सकती।");
+        paymentAmountInput.focus();
+        return;
+      }
 
       if (!utr) {
         showMessage("कृपया UTR / Reference Number दर्ज करें।");
@@ -435,7 +474,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
         formData.append("utr", utr);
         formData.append("screenshot", screenshot);
-        formData.append("amount", currentBooking.amount.toFixed(2));
+        formData.append("amount", chosenAmount.toFixed(2));
 
         const response = await fetch(PAYMENT_FUNCTION_URL, {
           method: "POST",
@@ -462,7 +501,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         }
 
         showMessage(
-          "UTR और Payment Screenshot/PDF जमा हो गए। Admin Verification का इंतजार करें।"
+          "₹" + chosenAmount.toFixed(2) + " का UTR और Screenshot जमा हो गया। Admin Verification का इंतजार करें।"
         );
 
         paymentForm.reset();
