@@ -282,8 +282,15 @@ async function loadCustomerHistory(user) {
         addText(item, "div", label, "").style.cssText = "font-size:11px;font-weight:800;color:#667085;letter-spacing:.5px;margin-bottom:4px";
         addText(item, "div", value, "").style.cssText = "font-size:15px;font-weight:800;color:#c62828;overflow-wrap:anywhere";
       }
-      addText(card, "p", "YOUR SERVICE: " + (booking.service || "—"));
-      addText(card, "p", "YOUR BOOKING STATUS: " + (booking.booking_status || booking.status || "Submitted"));
+      const serviceBox = addText(card, "div", "", "booking-info-box");
+      serviceBox.style.cssText = "margin:12px 0;padding:16px;background:#fff7fb;border:1px solid #f0bfd5;border-left:5px solid #d81b70;border-radius:14px;box-shadow:0 4px 12px #d81b7010";
+      addText(serviceBox, "div", "✂️ YOUR SERVICE", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#ad1457;margin-bottom:8px";
+      addText(serviceBox, "div", booking.service || "—", "").style.cssText = "font-size:20px;font-weight:800;color:#263238;overflow-wrap:anywhere";
+      const statusBox = addText(card, "div", "", "booking-info-box");
+      statusBox.style.cssText = "margin:12px 0;padding:16px;background:#fff8f0;border:1px solid #f3d0a5;border-left:5px solid #ef8f00;border-radius:14px;box-shadow:0 4px 12px #ef8f0010";
+      addText(statusBox, "div", "📌 YOUR BOOKING STATUS", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#a85b00;margin-bottom:8px";
+      const statusValue = addText(statusBox, "div", booking.booking_status || booking.status || "Submitted", "");
+      statusValue.style.cssText = "display:inline-block;padding:7px 13px;border-radius:999px;background:#fff0d9;border:1px solid #efc27c;color:#8a4b00;font-size:16px;font-weight:900;overflow-wrap:anywhere";
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
       const cancellationRequest = cancellationByBooking.get(booking.booking_number);
       if (cancellationRequest) {
