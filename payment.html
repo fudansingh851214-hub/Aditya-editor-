@@ -343,13 +343,13 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         document.getElementById("showStatus").textContent =
           amount <= 0 ? "Paid / Verified" : (pendingAmount > 0 ? "Pending Verification" : (data.payment_status || "Pending"));
 
-        payNow.href = "#";
+        payNow.href = makeUPILink(data.booking_number, Math.min(amount, Number(paymentAmountInput.value) || amount));
         payNow.textContent = "Pay with PhonePe / UPI";
         if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; }
 
         if (amount > 0 && window.QRCode) {
           new QRCode(document.getElementById("qrcode"), {
-            text: payNow.href,
+            text: makeUPILink(data.booking_number, Number(paymentAmountInput.value) || amount),
             width: 190,
             height: 190,
             correctLevel: QRCode.CorrectLevel.M
