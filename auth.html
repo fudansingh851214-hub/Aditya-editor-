@@ -120,8 +120,13 @@ body{background:#f7f8fa!important;color:#263238!important}
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
 <div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button" onclick="setMode('login')">Login</button><button id="signupTab" type="button" onclick="setMode('signup')">Create Account</button></div>
 <form id="authForm">
+<div id="signupFields" style="display:none">
+<label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Enter your full name">
+<label for="mobileNumber">Mobile Number</label><input id="mobileNumber" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number"><p class="note" style="text-align:left;margin:5px 0">Enter your 10-digit Indian mobile number.</p>
+</div>
 <label for="email">Email Address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
-<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="कम से कम 8 characters">
+<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Enter your password">
+<div id="confirmPasswordField" style="display:none"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter your password"></div>
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
 <div id="forgotArea" style="text-align:center;margin:14px 0"><a href="#" id="forgotLink" style="color:#42dfff">Forgot Password? / पासवर्ड भूल गए?</a></div><div class="or-divider">OR</div>
@@ -171,7 +176,14 @@ function setMode(next) {
   signupTab.classList.toggle("active", mode === "signup");
   submitButton.textContent = mode === "login" ? "Login" : mode === "signup" ? "Create Account" : "Set New Password";
   password.autocomplete = mode === "login" ? "current-password" : "new-password";
-  password.placeholder = mode === "reset" ? "नया password (कम से कम 8 characters)" : "कम से कम 8 characters";
+  password.placeholder = mode === "reset" ? "नया password (कम से कम 8 characters)" : mode === "signup" ? "Enter your password (at least 8 characters)" : "Enter your password";
+  const signingUp = mode === "signup";
+  document.getElementById("signupFields").style.display = signingUp ? "block" : "none";
+  document.getElementById("confirmPasswordField").style.display = signingUp ? "block" : "none";
+  document.getElementById("fullName").required = signingUp;
+  document.getElementById("mobileNumber").required = signingUp;
+  document.getElementById("confirmPassword").required = signingUp;
+  document.getElementById("confirmPassword").autocomplete = "new-password";
   document.getElementById("forgotArea").style.display = mode === "login" ? "block" : "none";
   setMessage("");
 }
@@ -538,9 +550,17 @@ form.addEventListener("submit", async (event) => {
       setMode("login");
       setMessage("नया password सफलतापूर्वक सेव हो गया। अब नए password से Login करें।");
     } else if (mode === "signup") {
+      const fullNameValue = document.getElementById("fullName").value.trim();
+      const mobileValue = document.getElementById("mobileNumber").value.trim();
+      const confirmValue = document.getElementById("confirmPassword").value;
+      if (fullNameValue.length < 2) throw new Error("अपना पूरा नाम भरें।");
+      if (!/^[6-9][0-9]{9}$/.test(mobileValue)) throw new Error("सही 10-digit Indian mobile number भरें।");
+      if (password.value.length < 8) throw new Error("Password कम से कम 8 characters का होना चाहिए।");
+      if (password.value !== confirmValue) throw new Error("Password और Confirm Password एक जैसे नहीं हैं।");
       result = await client.auth.signUp({
         email: email.value.trim(),
-        password: password.value
+        password: password.value,
+        options: { data: { full_name: fullNameValue, phone: mobileValue } }
       });
       if (result.error) throw result.error;
       if (result.data.session) {
