@@ -122,6 +122,22 @@ body{background:#f7f8fa!important;color:#263238!important}
 #signedInCustomer #signedInName{font-size:clamp(25px,4vw,34px)!important;color:#c62828!important;font-family:Georgia,serif}
 #signedInCustomer #signedInEmail{color:#59636e!important;overflow-wrap:anywhere}
 #signedInCustomer #logoutButton{align-self:flex-start;margin:8px 0 0!important;background:#fff!important;border:1px solid #c62828!important;color:#c62828!important}
+
+/* Highlight booking actions after customer login */
+.dashgrid a[href="booking.html"],
+.extra-customer-actions a.action[href="booking.html"]{
+  background:linear-gradient(135deg,#c62828,#e53935)!important;
+  border:1px solid #a51f1f!important;
+  color:#fff!important;
+  box-shadow:0 6px 18px #c628282b!important;
+}
+.dashgrid a[href="booking.html"]:hover,
+.extra-customer-actions a.action[href="booking.html"]:hover{
+  background:linear-gradient(135deg,#a51f1f,#c62828)!important;
+  border-color:#8e1919!important;
+  color:#fff!important;
+  transform:translateY(-1px);
+}
 </style></head>
 <body><div class="home-top"><a href="index.html">← Home</a></div><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
