@@ -670,7 +670,7 @@ async function saveAmount(bookingId) {
 
     const { data, error } = await db
       .from("bookings")
-      .update({ amount })
+      .update({ amount, payment_status: "Pending" })
       .eq("id", bookingId)
       .select("id, amount")
       .maybeSingle();
