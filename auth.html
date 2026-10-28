@@ -334,7 +334,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         cameraTrack.href = "camera-tracking.html?id=" + encodeURIComponent(bookingNumber);
         cameraTrack.style.cssText = "display:block;text-align:center;margin:10px 0;padding:12px;background:#c62828;color:white;border-radius:10px;font-weight:800;text-decoration:none";
       } else {
-        const editingTrack = addText(card, "a", "🎨 Track This Editing Booking →", "action");
+        const editingTrack = addText(card, "a", "🎨 Track Editing Booking", "action");
         editingTrack.href = "tracking.html?id=" + encodeURIComponent(bookingNumber);
         editingTrack.style.cssText = "display:block;text-align:center;margin:10px 0;padding:12px;background:#c62828;color:white;border-radius:10px;font-weight:800;text-decoration:none";
       }
