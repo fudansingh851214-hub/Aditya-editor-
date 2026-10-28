@@ -166,7 +166,7 @@ body{background:#f7f8fa!important;color:#263238!important}
 <div class="profile" id="personalInformation"><span class="pill">🔒 Private account</span><h3 style="color:#42dfff;margin:12px 0 6px">PERSONAL INFORMATION</h3><p style="font-weight:bold">My Details</p><p><strong>Full name</strong><br><span id="profileFullName">लोड हो रहा है...</span></p><p><strong>Email address</strong><br><span id="profileEmail">लोड हो रहा है...</span></p><p><strong>Mobile number</strong><br><span id="profileMobile">अभी दर्ज नहीं</span></p><p><strong>Account status</strong><br><span id="profileStatus">जाँच हो रही है...</span></p><p class="note">यह जानकारी आपके Login अकाउंट से ली जाती है। यदि मोबाइल नंबर अकाउंट में सेव नहीं है, तो यहाँ “अभी दर्ज नहीं” दिखेगा।</p></div>
 <div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
 <div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="booking.html?service=camera">📸 Camera Book Now</a><a href="tracking.html">📦 Booking Status / History</a><a href="camera-tracking.html">📸 Track Camera Booking</a><a href="payment.html">💳 Secure Payment / QR</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
-<section class="history-section"><h3>YOUR BOOKINGS</h3><p>Booking History · <a class="history-link" href="tracking.html">Track booking →</a> · <a class="history-link" href="camera-tracking.html">📸 Track Camera Booking →</a></p><div style="margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 YOUR MOBILE NUMBER</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="अपना 10-digit registered mobile number" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#fff;color:#263238;font-size:16px"><button id="findMyBookings" type="button" style="margin-top:10px;padding:11px 16px;border:0;border-radius:9px;background:#c62828;color:#fff;font-weight:800;cursor:pointer">Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">अपनी बुकिंग देखने के लिए वही मोबाइल नंबर डालें जो आपके Login account में registered है।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div></section>
+<section class="history-section"><h3>YOUR BOOKINGS</h3><p>Booking History · <a class="history-link" href="tracking.html">Track booking →</a> · <a class="history-link" href="camera-tracking.html">📸 Track Camera Booking →</a></p><div style="margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 YOUR MOBILE NUMBER</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="बुकिंग में दिया गया 10-digit mobile number" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#fff;color:#263238;font-size:16px"><button id="findMyBookings" type="button" style="margin-top:10px;padding:11px 16px;border:0;border-radius:9px;background:#c62828;color:#fff;font-weight:800;cursor:pointer">Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">Guest या पुराने booking देखने के लिए booking form में दिया गया mobile number डालें।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div></section>
 <p class="note">Booking और payment की वास्तविक जानकारी संबंधित पेज पर देखें। केवल QR/UTR से भुगतान अपने-आप verified नहीं होता; Admin की पुष्टि आवश्यक है।</p>
 <section class="profile extra-customer-actions" aria-label="My Bookings and Invoices"><h3 style="color:#42dfff;margin:0 0 8px">📄 My Bookings &amp; Invoices</h3><p>अपनी बुकिंग का बिल प्रिंट/Save as PDF करें, भुगतान इतिहास देखें और नई बुकिंग शुरू करें।</p><p class="note">हर बुकिंग कार्ड में Print / Save Invoice और Book Again विकल्प उपलब्ध होंगे। Cancellation के लिए Tracking पेज पर अनुरोध करें या Contact Us से टीम से संपर्क करें।</p><a class="action" href="tracking.html">Manage My Bookings →</a><a class="action" href="booking.html">Book Again / New Booking →</a></section>
 <section class="profile extra-customer-actions" aria-label="Customer feedback"><h3 style="color:#42dfff;margin:0 0 8px">💬 Share Your Feedback</h3><p>Tell us about your experience with our website, bartan rental or decoration service.</p><a class="action" href="index.html#contact">Give Feedback →</a></section>
@@ -277,8 +277,14 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    let bookingQuery = client.from("bookings").select("*").eq("user_id", user.id);
-    if (mobileFilter) bookingQuery = bookingQuery.eq("phone", mobileFilter);
+    // Show this account's linked bookings by default. When a mobile number is entered,
+    // include guest/older bookings that were submitted with that same booking phone too.
+    let bookingQuery = client.from("bookings").select("*");
+    if (mobileFilter) {
+      bookingQuery = bookingQuery.or("user_id.eq." + user.id + ",phone.eq." + mobileFilter);
+    } else {
+      bookingQuery = bookingQuery.eq("user_id", user.id);
+    }
     const { data, error } = await bookingQuery.order("created_at", { ascending: false });
     if (error) throw error;
     // Prefer the phone number actually entered on the customer's latest linked booking.
@@ -305,7 +311,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       return !request || request.status === "pending";
     });
     if (!visibleBookings.length) {
-      box.textContent = mobileFilter ? "इस registered mobile number से जुड़ी कोई बुकिंग नहीं मिली। नंबर जाँचें या बिना नंबर फ़िल्टर के बुकिंग देखने के लिए नीचे वाला नंबर खाली करके Find My Bookings दबाएँ।" : "दिखाने के लिए कोई बुकिंग नहीं है। यदि Cancellation Request का निर्णय हो चुका है, तो वह बुकिंग यहाँ नहीं दिखाई जाएगी। नई बुकिंग के लिए Book New Service दबाएँ।";
+      box.textContent = mobileFilter ? "इस मोबाइल नंबर से जुड़ी कोई बुकिंग नहीं मिली। नंबर जाँचें या account से जुड़ी बुकिंग देखने के लिए मोबाइल नंबर खाली करके Find My Bookings दबाएँ।" : "दिखाने के लिए कोई बुकिंग नहीं है। यदि Cancellation Request का निर्णय हो चुका है, तो वह बुकिंग यहाँ नहीं दिखाई जाएगी। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
     }
     box.textContent = "";
@@ -641,13 +647,9 @@ document.getElementById("findMyBookings").addEventListener("click", async () => 
     document.getElementById("bookingMobileMessage").textContent = "कृपया सही 10-digit Indian mobile number डालें।";
     return;
   }
-  const meta = user.user_metadata || {};
-  const registeredMobile = meta.phone || meta.mobile || meta.phone_number || user.phone || "";
-  if (registeredMobile && mobileValue && mobileValue !== registeredMobile) {
-    document.getElementById("bookingMobileMessage").textContent = "यह नंबर आपके Login account में registered mobile number से मेल नहीं खाता।";
-    return;
-  }
-  document.getElementById("bookingMobileMessage").textContent = mobileValue ? "Registered mobile number से बुकिंग खोज रहे हैं..." : "आपके Login account की सभी बुकिंग दिखा रहे हैं...";
+  document.getElementById("bookingMobileMessage").textContent = mobileValue
+    ? "इस मोबाइल नंबर से की गई बुकिंग और आपके account से जुड़ी बुकिंग खोज रहे हैं..."
+    : "आपके Login account से जुड़ी सभी बुकिंग दिखा रहे हैं...";
   await loadCustomerHistory(user, mobileValue);
 });
 
