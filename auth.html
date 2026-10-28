@@ -151,6 +151,10 @@ body{background:#f7f8fa!important;color:#263238!important}
 .invoice-history .invoice-hint{padding:12px 14px!important;margin:0 0 10px!important;background:#eff6ff!important;border:1px solid #bfdbfe!important;border-radius:10px!important;color:#1d4ed8!important;line-height:1.6!important}
 @media(max-width:520px){.invoice-history .invoice-page-heading{padding:14px!important}.invoice-history .invoice-shortcuts{display:grid!important;grid-template-columns:1fr 1fr!important}.invoice-history .invoice-shortcuts a{width:100%!important;text-align:center!important}}
 
+
+/* Final bottom stack: payment note, feedback, then bookings/invoices */
+.extra-customer-actions,.invoice-history{display:block!important;width:100%!important;grid-column:1/-1!important;clear:both!important;margin-top:22px!important}
+.invoice-history{margin-bottom:0!important}
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
@@ -245,10 +249,17 @@ body:has(.invoice-history){background:#f5f3ff!important}
 <div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
 <div class="dashgrid"><a href="booking.html">📝 Book New Service</a><a href="booking.html?service=camera">📸 Camera Book Now</a><a id="editingTrackDashboardLink" href="tracking.html" style="display:none">Track Editing Booking</a><a id="cameraTrackDashboardLink" href="camera-tracking.html" style="display:none">📸 Track Camera Booking</a><a href="payment.html">💳 Secure Payment / QR</a><a href="services.html">🎨 Our Services</a><a href="index.html#contact">☎ Contact Us</a></div>
 
+
+
+
+
+
+
+
+
+
+
 <p class="note">Booking और payment की वास्तविक जानकारी संबंधित पेज पर देखें। केवल QR/UTR से भुगतान अपने-आप verified नहीं होता; Admin की पुष्टि आवश्यक है।</p>
-
-
-
 
 <section class="profile extra-customer-actions" aria-label="Customer feedback"><h3 style="color:#42dfff;margin:0 0 8px">💬 Share Your Feedback</h3><p>Tell us about your experience with our website, bartan rental or decoration service.</p><a class="action" href="index.html#contact">Give Feedback →</a></section>
 
