@@ -104,13 +104,6 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         Open UPI App
       </a>
 
-      <section class="panel" id="cardPaymentPanel" aria-labelledby="cardPaymentHeading">
-        <h2 id="cardPaymentHeading">Credit Card / Debit Card</h2>
-        <p class="hint">Card से भुगतान करने के लिए Secure Checkout इस्तेमाल करें। कार्ड नंबर, CVV या OTP इस वेबसाइट पर सेव नहीं होंगे।</p>
-        <button class="primary" type="button" id="payByCard">Pay by Credit / Debit Card</button>
-        <p class="hint" id="cardPaymentHint" role="status">Card payment शुरू करने के लिए Razorpay Merchant Account और Supabase Edge Function secrets configure होना जरूरी है।</p>
-      </section>
-
       <form id="paymentForm">
 
         <h2>Payment Details</h2>
@@ -182,7 +175,6 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
   </main>
 
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -214,11 +206,6 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
     const paymentSection = document.getElementById("paymentSection");
     const payNow = document.getElementById("payNow");
     const submitButton = document.getElementById("submitButton");
-    const payByCardButton = document.getElementById("payByCard");
-    const cardPaymentHint = document.getElementById("cardPaymentHint");
-    const CARD_ORDER_FUNCTION_URL = SUPABASE_URL + "/functions/v1/create-razorpay-order";
-    const CARD_VERIFY_FUNCTION_URL = SUPABASE_URL + "/functions/v1/verify-razorpay-payment";
-    let cardPaymentBusy = false;
     const paymentForm = document.getElementById("paymentForm");
     const screenshotInput = document.getElementById("paymentScreenshot");
     const utrInput = document.getElementById("utr");
@@ -358,7 +345,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
         payNow.href = makeUPILink(data.booking_number, Math.min(amount, Number(paymentAmountInput.value) || amount));
         payNow.textContent = "Pay with PhonePe / UPI";
-        if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; document.getElementById("cardPaymentPanel").style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; document.getElementById("cardPaymentPanel").style.display = "block"; }
+        if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; }
 
         if (amount > 0 && window.QRCode) {
           new QRCode(document.getElementById("qrcode"), {
@@ -381,97 +368,6 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         );
       } finally {
         lookupButton.disabled = false;
-      }
-    });
-
-    payByCardButton.addEventListener("click", async () => {
-      if (cardPaymentBusy) return;
-      if (!db || !currentBooking) {
-        showMessage("पहले Booking Number खोजें।");
-        return;
-      }
-      const amount = Number(paymentAmountInput.value);
-      if (!Number.isFinite(amount) || amount <= 0 || amount > currentBooking.amount) {
-        showMessage("मान्य भुगतान राशि भरें। यह बाकी बकाया से अधिक नहीं हो सकती।");
-        paymentAmountInput.focus();
-        return;
-      }
-      if (!window.Razorpay) {
-        cardPaymentHint.textContent = "Secure Checkout लोड नहीं हुआ। Internet connection जाँचें।";
-        return;
-      }
-
-      cardPaymentBusy = true;
-      payByCardButton.disabled = true;
-      cardPaymentHint.textContent = "Secure card checkout तैयार हो रहा है...";
-      try {
-        const orderResponse = await fetch(CARD_ORDER_FUNCTION_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
-          body: JSON.stringify({
-            booking_number: currentBooking.booking_number,
-            payment_token: currentBooking.payment_token,
-            amount: Number(amount.toFixed(2))
-          })
-        });
-        const order = await orderResponse.json().catch(() => ({}));
-        if (!orderResponse.ok || !order.success || !order.order_id || !order.key_id) {
-          throw new Error(order.error || "Card gateway setup पूरा नहीं है। Admin से संपर्क करें।");
-        }
-
-        const checkout = new Razorpay({
-          key: order.key_id,
-          order_id: order.order_id,
-          amount: order.amount,
-          currency: order.currency || "INR",
-          name: "Aditya Editor",
-          description: "Booking " + currentBooking.booking_number,
-          prefill: {},
-          notes: { booking_number: currentBooking.booking_number },
-          theme: { color: "#168b52" },
-          modal: { ondismiss: () => { cardPaymentHint.textContent = "Checkout बंद हुआ। अगर भुगतान किया है, तो कुछ देर बाद Booking दोबारा खोलकर Status जाँचें।"; cardPaymentBusy = false; payByCardButton.disabled = false; } },
-          handler: async (response) => {
-            cardPaymentHint.textContent = "Payment gateway से पुष्टि हो रही है...";
-            try {
-              const verifyResponse = await fetch(CARD_VERIFY_FUNCTION_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
-                body: JSON.stringify({
-                  booking_number: currentBooking.booking_number,
-                  payment_token: currentBooking.payment_token,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature
-                })
-              });
-              const verification = await verifyResponse.json().catch(() => ({}));
-              if (!verifyResponse.ok || !verification.success) {
-                throw new Error(verification.error || "Gateway confirmation नहीं मिली। Admin से संपर्क करें; दोबारा तुरंत भुगतान न करें।");
-              }
-              cardPaymentHint.textContent = "Card payment gateway से verify हो गया। बाकी राशि और Status अपडेट करने के लिए Booking दोबारा खोजें।";
-              showMessage("Card payment verified: ₹" + amount.toFixed(2) + ". Booking Status refresh करने के लिए Booking Number फिर से खोजें।");
-            } catch (verifyError) {
-              cardPaymentHint.textContent = verifyError.message || "Payment confirmation जाँचें।";
-              showMessage(cardPaymentHint.textContent);
-            } finally {
-              cardPaymentBusy = false;
-              payByCardButton.disabled = false;
-            }
-          }
-        });
-        checkout.on("payment.failed", (event) => {
-          cardPaymentHint.textContent = event.error && event.error.description
-            ? "Payment पूरा नहीं हुआ: " + event.error.description
-            : "Payment पूरा नहीं हुआ। कोई राशि कटने की स्थिति में gateway receipt जाँचें।";
-          cardPaymentBusy = false;
-          payByCardButton.disabled = false;
-        });
-        checkout.open();
-      } catch (error) {
-        cardPaymentHint.textContent = error.message || "Card payment शुरू नहीं हो सका।";
-        showMessage(cardPaymentHint.textContent);
-        cardPaymentBusy = false;
-        payByCardButton.disabled = false;
       }
     });
 
