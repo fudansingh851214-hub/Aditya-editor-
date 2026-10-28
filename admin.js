@@ -617,6 +617,29 @@ function renderBookingList(bookings, targetList, emptyMessage) {
 
     article.append(amountLabel, amountInput, amountButton);
 
+    // Camera bookings get their own editable Payment Status control here.
+    // Actual payment verification (screenshot/UTR review) remains in Payment Verification.
+    if (isCameraBooking(booking)) {
+      const paymentStatusLabel = makeElement("label", "", "Payment Status");
+      const paymentStatusSelect = makeElement("select");
+      paymentStatusSelect.id = "payment-status-" + booking.id;
+      paymentStatusLabel.htmlFor = paymentStatusSelect.id;
+      const paymentStatuses = ["Pending", "Partially Paid", "Paid", "Rejected"];
+      const currentPaymentStatus = String(booking.payment_status || "Pending");
+      for (const paymentStatus of paymentStatuses) {
+        const option = makeElement("option", "", paymentStatus);
+        option.value = paymentStatus;
+        option.selected = paymentStatus === currentPaymentStatus;
+        paymentStatusSelect.appendChild(option);
+      }
+      const paymentStatusButton = makeActionButton(
+        "Update Payment Status",
+        "btn",
+        () => savePaymentStatus(booking.id)
+      );
+      article.append(paymentStatusLabel, paymentStatusSelect, paymentStatusButton);
+    }
+
     const statusLabel = makeElement("label", "", "Booking Status");
     const statusSelect = makeElement("select");
     statusSelect.id = "status-" + booking.id;
@@ -739,6 +762,46 @@ async function saveAmount(bookingId) {
     showMessage(
       message,
       "Amount सेव नहीं हुआ: " + getErrorText(error),
+      true
+    );
+  }
+}
+
+async function savePaymentStatus(bookingId) {
+  try {
+    await verifyAdmin();
+
+    const paymentStatus = $("payment-status-" + bookingId)?.value;
+    const allowedStatuses = ["Pending", "Partially Paid", "Paid", "Rejected"];
+    if (!allowedStatuses.includes(paymentStatus)) {
+      throw new Error("मान्य Payment Status चुनें।");
+    }
+
+    if (!window.confirm("Payment Status '" + paymentStatus + "' करना चाहते हैं?")) {
+      return;
+    }
+
+    const { data, error } = await db
+      .from("bookings")
+      .update({ payment_status: paymentStatus })
+      .eq("id", bookingId)
+      .select("id, payment_status")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw new Error("Payment Status अपडेट नहीं हुआ। Permissions जाँचें।");
+    }
+
+    showMessage(
+      message,
+      "Camera Booking का Payment Status अपडेट हो गया: " + data.payment_status
+    );
+    await loadBookings();
+  } catch (error) {
+    showMessage(
+      message,
+      "Payment Status अपडेट नहीं हुआ: " + getErrorText(error),
       true
     );
   }
