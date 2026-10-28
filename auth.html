@@ -153,6 +153,13 @@ body{background:#f7f8fa!important;color:#263238!important}
 
 
 /* Final bottom stack: payment note, feedback, then bookings/invoices */
+/* Force the pictured feedback and bookings panels to remain at the very end */
+#dashboard{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+#dashboard>.note{order:900!important;width:100%!important}
+#dashboard>.extra-customer-actions{order:910!important;width:100%!important;flex:0 0 auto!important}
+#dashboard>.invoice-history{order:920!important;width:100%!important;flex:0 0 auto!important}
+#dashboard>.extra-customer-actions,#dashboard>.invoice-history{position:static!important;float:none!important;grid-column:auto!important}
+
 .extra-customer-actions,.invoice-history{display:block!important;width:100%!important;grid-column:1/-1!important;clear:both!important;margin-top:22px!important}
 .invoice-history{margin-bottom:0!important}
 </style><style id="invoice-screenshot-match">
