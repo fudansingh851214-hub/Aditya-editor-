@@ -192,10 +192,28 @@
     }
 
     .stat {
+      display: block;
       padding: 20px;
+      color: inherit;
+      text-decoration: none;
       background: var(--panel2);
       border: 1px solid var(--border);
       border-radius: 15px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .stat:hover, .stat:focus-visible {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .stat-link-hint {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .stat-title {
@@ -339,22 +357,38 @@
         ग्राहक की booking और payment details केवल अधिकृत Admin access से देखें।
       </div>
 
-      <div class="grid">
-        <div class="stat">
+      <div class="grid" id="adminQuickLinks">
+        <a class="stat" href="#bookingsSection">
           <div class="stat-title">Booking Management</div>
-          <div class="stat-value">Bookings</div>
-          <p class="muted">ग्राहकों की बुकिंग और काम का स्टेटस</p>
-        </div>
+          <div class="stat-value" id="regularBookingCount">0</div>
+          <p class="muted">Photo Editing, Video Editing, Wedding Projects, Graphic Design और Social Media Reels</p>
+          <span class="stat-link-hint">बुकिंग खोलें →</span>
+        </a>
 
-        <div class="stat">
+        <a class="stat" href="#cameraBookingsSection">
+          <div class="stat-title">Camera Booking Management</div>
+          <div class="stat-value" id="cameraBookingCount">0</div>
+          <p class="muted">कितने ग्राहकों ने Camera Book Now किया</p>
+          <span class="stat-link-hint">Camera bookings खोलें →</span>
+        </a>
+
+        <a class="stat" href="#paymentsSection">
           <div class="stat-title">Payment Management</div>
-          <div class="stat-value">Payments</div>
-          <p class="muted">भुगतान की जाँच और पुष्टि</p>
-        </div>
+          <div class="stat-value" id="paymentRecordCount">0</div>
+          <p class="muted">कुल payment records · सत्यापित भुगतान <strong id="verifiedPaymentTotal">₹0</strong></p>
+          <span class="stat-link-hint">Payments खोलें →</span>
+        </a>
+
+        <a class="stat" href="#cameraBookingsSection">
+          <div class="stat-title">Camera Booking Summary</div>
+          <div class="stat-value" id="cameraBookingAmountTotal">₹0</div>
+          <p class="muted">Camera bookings की तय कुल राशि</p>
+          <span class="stat-link-hint">राशि और status देखें →</span>
+        </a>
       </div>
 
       <!-- BOOKINGS -->
-      <section class="card" style="margin-top:22px">
+      <section class="card" id="bookingsSection" style="margin-top:22px">
         <div class="toolbar">
           <h2>Booking Management</h2>
           <button id="refreshButton" class="btn btn-secondary"
@@ -372,7 +406,7 @@
       </section>
 
       <!-- SEPARATE CAMERA BOOKING MANAGEMENT -->
-      <section class="card">
+      <section class="card" id="cameraBookingsSection">
         <div class="toolbar">
           <h2>📸 Camera Booking Management</h2>
           <button id="refreshCameraBookingsButton" class="btn btn-secondary" type="button">
@@ -396,7 +430,7 @@
       </section>
 
       <!-- PAYMENTS -->
-      <section class="card">
+      <section class="card" id="paymentsSection">
         <div class="toolbar">
           <h2>Payment Verification</h2>
           <button id="refreshPaymentsButton"
@@ -440,6 +474,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Load admin logic once -->
-  <script src="./admin.js?v=20261028-camera-payment-controls-4"></script>
+  <script src="./admin.js?v=20261028-admin-dashboard-summary-5"></script>
 </body>
 </html>
