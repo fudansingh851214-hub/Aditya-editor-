@@ -363,18 +363,25 @@
           </button>
         </div>
 
-        <label for="bookingCategoryFilter">Booking Category</label>
-        <select id="bookingCategoryFilter">
-          <option value="all">सभी Bookings</option>
-          <option value="camera">📸 Camera Bookings</option>
-          <option value="other">अन्य Service Bookings</option>
-        </select>
-
         <p id="message" class="message" role="status"
            aria-live="polite"></p>
 
         <div id="bookingsList">
           <p class="muted">Bookings लोड होने की प्रतीक्षा करें...</p>
+        </div>
+      </section>
+
+      <!-- SEPARATE CAMERA BOOKING MANAGEMENT -->
+      <section class="card">
+        <div class="toolbar">
+          <h2>📸 Camera Booking Management</h2>
+          <button id="refreshCameraBookingsButton" class="btn btn-secondary" type="button">
+            Refresh Camera Bookings
+          </button>
+        </div>
+        <p class="muted">यहाँ केवल Photo Camera Book, Video Camera Book और Photo &amp; Video Camera Book दिखाई देंगे। Booking Status, Payment Status, Amount और अपडेट के विकल्प इसी अलग सेक्शन में मिलेंगे।</p>
+        <div id="cameraBookingsList">
+          <p class="muted">Camera Bookings लोड होने की प्रतीक्षा करें...</p>
         </div>
       </section>
 
