@@ -545,6 +545,7 @@
       { status: "Booking Submitted", title: "Submit Camera Book", description: "आपकी Camera Book request मिल गई है।" },
       { status: "Booking Confirmed", title: "Camera Book Confirmed", description: "Admin ने आपकी camera booking confirm कर दी है।" },
       { status: "Payment Pending", title: "Payment Pending", description: "Admin द्वारा तय राशि का payment करें और verification का इंतज़ार करें।" },
+      { status: "Payment Confirmed", title: "Payment Confirmed", description: "आपका payment Admin द्वारा verify कर दिया गया है।" },
       { status: "Completed", title: "Complete", description: "आपकी camera booking पूरी हो गई है।" }
     ];
 
@@ -647,12 +648,10 @@
 
       if (normalizedStatus === "Completed") {
         currentIndex = stages.length;
-      } else if (paid) {
+      } else if (paid || normalizedStatus === "Payment Confirmed") {
         currentIndex = 3;
       } else if (normalizedStatus === "Booking Confirmed") {
         currentIndex = 2;
-      } else if (normalizedStatus === "Payment Confirmed") {
-        currentIndex = 3;
       }
 
       stages.forEach((stage, index) => {
