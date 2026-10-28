@@ -173,6 +173,12 @@ h1{color:#ef4444!important}
 .submit{background:linear-gradient(100deg,#b91c1c,#ef4444)!important;color:#fff!important}
 .links a,#forgotLink{color:#ef4444!important}
 
+
+/* Keep the customer dashboard hidden until a user is signed in */
+#dashboard{display:none!important}
+#authArea{display:block!important}
+#dashboard[style*="display: block"]{display:block!important}
+
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
@@ -325,8 +331,8 @@ function setMode(next) {
 }
 window.setMode = setMode;
 function showDashboard(user) {
-  document.getElementById("authArea").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
+  document.getElementById("authArea").style.setProperty("display", "none", "important");
+  document.getElementById("dashboard").style.setProperty("display", "block", "important");
   document.getElementById("welcome").textContent = "Customer Dashboard";
   const meta = user && user.user_metadata ? user.user_metadata : {};
   const customerEmail = user && user.email ? user.email : "Email उपलब्ध नहीं";
@@ -924,8 +930,8 @@ form.addEventListener("submit", async (event) => {
 
 document.getElementById("logoutButton").addEventListener("click", async () => {
   if (client) await client.auth.signOut();
-  document.getElementById("dashboard").style.display = "none";
-  document.getElementById("authArea").style.display = "block";
+  document.getElementById("dashboard").style.setProperty("display", "none", "important");
+  document.getElementById("authArea").style.setProperty("display", "block", "important");
   setMode("login");
   setMessage("आप Sign Out हो गए हैं।");
 });
@@ -944,7 +950,7 @@ function initSupabase() {
       if (event === "PASSWORD_RECOVERY") {
         recoveryMode = true;
         document.getElementById("authArea").style.display = "block";
-        document.getElementById("dashboard").style.display = "none";
+        document.getElementById("dashboard").style.setProperty("display", "none", "important");
         setMode("reset");
         setMessage("नया password बनाएँ। कम से कम 8 characters रखें।");
       }
