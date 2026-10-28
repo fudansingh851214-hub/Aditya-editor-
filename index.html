@@ -185,6 +185,10 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
 .camera-book-card .btn:hover{background:#e84b70!important;border-color:#e84b70!important}
 @media(max-width:760px){.camera-booking-grid{grid-template-columns:1fr}.camera-book-card{min-height:0}.links{max-height:75vh;overflow-y:auto}}
 
+
+/* Sign In / Create Account should open only the login page, not a dropdown */
+#accountMenuAfterNav{display:none!important}
+#accountTriggerAfterNav{cursor:pointer}
 </style>
 </head>
 
@@ -437,8 +441,7 @@ const accountSigned = document.getElementById("accountSignedAfterNav");
 const accountLogout = document.getElementById("accountLogoutAfterNav");
 
 accountTrigger.addEventListener("click", function() {
-  const open = accountMenu.classList.toggle("open");
-  accountTrigger.setAttribute("aria-expanded", String(open));
+  window.location.href = "auth.html";
 });
 document.addEventListener("click", function(event) {
   if (!event.target.closest("#accountWrapAfterNav")) {
