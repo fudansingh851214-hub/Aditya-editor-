@@ -347,6 +347,12 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       bookingNumberBox.style.cssText = "margin:0 0 14px;padding:14px 16px;background:#fff0f0;border:2px solid #c62828;border-radius:12px;text-align:center";
       addText(bookingNumberBox, "div", "YOUR BOOKING NUMBER", "booking-number-label").style.cssText = "font-size:13px;font-weight:800;letter-spacing:1.5px;color:#a61b1b;margin-bottom:5px";
       addText(bookingNumberBox, "div", bookingNumber, "booking-number-value").style.cssText = "font-size:clamp(24px,5vw,34px);font-weight:900;line-height:1.25;letter-spacing:1px;color:#c62828;overflow-wrap:anywhere";
+      // Show the exact mobile number saved on this individual booking card.
+      const bookingPhoneBox = addText(card, "div", "", "booking-phone-box");
+      bookingPhoneBox.style.cssText = "display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:10px 0 14px;padding:14px 16px;background:#f0fbf5;border:1px solid #b8e0c9;border-left:5px solid #168b52;border-radius:12px";
+      addText(bookingPhoneBox, "div", "📱 BOOKING MOBILE NUMBER", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:.7px;color:#246443";
+      const bookingPhoneValue = addText(bookingPhoneBox, "div", booking.phone && String(booking.phone).trim() ? String(booking.phone).trim() : "इस बुकिंग में मोबाइल नंबर सेव नहीं है", "");
+      bookingPhoneValue.style.cssText = "font-size:18px;font-weight:900;color:#18392e;overflow-wrap:anywhere";
       const bookingDateTime = dateTimeText(booking.created_at);
       const bookingWhen = addText(card, "div", "", "booking-date-time");
       bookingWhen.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0;padding:12px;background:#f4f7fb;border:1px solid #dfe5ec;border-radius:12px";
