@@ -1005,9 +1005,9 @@ $("mediaFiles").addEventListener("change", function() {
         return;
       }
 
-      const button = $("submitButton");
+      const button = cameraMode ? $("cameraSubmitButton") : $("submitButton");
       button.disabled = true;
-      button.textContent = "Booking Submit हो रही है...";
+      button.textContent = cameraMode ? "📸 Camera Booking Submit हो रही है..." : "Booking Submit हो रही है...";
       showMessage("कृपया इंतज़ार करें। फाइलें अपलोड हो रही हैं...");
 
       let uploadedPaths = [];
@@ -1022,11 +1022,9 @@ $("mediaFiles").addEventListener("change", function() {
         const bookingData = {
           booking_number: bookingNumber,
           user_id: currentUser ? currentUser.id : null,
-          email: currentUser ? (currentUser.email || null) : null,
           customer_name: customerName,
           phone: phone,
           address: address,
-          special_requirement: specialRequirement || null,
           service: serviceElement.value,
           amount: null,
           status: "Booking Submitted",
