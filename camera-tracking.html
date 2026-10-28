@@ -641,9 +641,8 @@
       timeline.replaceChildren();
       const normalizedStatus = normalizeTrackingStatus(status);
       const paid = ["paid","verified","confirmed","success","successful"].includes(String(paymentStatus || "").toLowerCase()) || normalizedStatus === "Payment Confirmed" || normalizedStatus === "Completed";
-      let currentIndex = 0;
+      let currentIndex = 1;
       if (normalizedStatus === "Completed") currentIndex = 3;
-      else if (normalizedStatus === "Booking Confirmed" || normalizedStatus === "Payment Confirmed") currentIndex = paid ? 2 : 1;
       else if (paid) currentIndex = 2;
       stages.forEach((stage,index) => {
         const step=document.createElement("div");
