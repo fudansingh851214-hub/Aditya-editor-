@@ -430,6 +430,7 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
 
@@ -464,7 +465,7 @@ if (window.supabase?.createClient) {
     const { data } = await homeDb.auth.getUser();
     const user = data?.user;
     if (user) {
-      const label = user.user_metadata?.full_name || user.user_metadata?.name || user.email || "My Account";
+      const label = user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.fullName || (user.email ? user.email.split("@")[0] : "My Account");
       accountName.textContent = label;
       accountSigned.textContent = "Signed in as " + label;
       accountMenu.querySelector('a[href="auth.html"]').innerHTML = "👤 <span>My Account</span>";
@@ -504,6 +505,5 @@ links.querySelectorAll("a").forEach(function(link) {
   });
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
