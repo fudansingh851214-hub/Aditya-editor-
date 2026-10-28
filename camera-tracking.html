@@ -498,6 +498,8 @@
       <div class="action-row">
         <a class="button" href="index.html">← Home पर जाएँ</a>
 
+        <a class="button" id="cameraPaymentLink" href="payment.html">💳 Camera Booking Payment</a>
+
         <a class="button secondary"
            id="whatsappLink"
            href="https://wa.me/917544913754"
@@ -801,6 +803,8 @@
             "Booking Number: " +
             (booking.booking_number || bookingNumber) +
             ". Current Status: " + status + ".";
+
+          $("cameraPaymentLink").href = "payment.html?id=" + encodeURIComponent(booking.booking_number || bookingNumber);
 
           $("whatsappLink").href =
             "https://wa.me/917544913754?text=" +
