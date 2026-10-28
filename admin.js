@@ -687,13 +687,20 @@ function renderBookingList(bookings, targetList, emptyMessage) {
 
     article.append(statusLabel, statusSelect, statusButton);
 
-    article.appendChild(
-      makeActionButton(
-        "View Customer Files",
-        "btn",
-        () => viewFiles(booking.id)
-      )
-    );
+    if (!isCameraBooking(booking)) {
+      article.appendChild(
+        makeActionButton(
+          "View Customer Files",
+          "btn",
+          () => viewFiles(booking.id)
+        )
+      );
+
+      const fileOutput = makeElement("div");
+      fileOutput.id = "files-" + booking.id;
+      fileOutput.style.marginTop = "12px";
+      article.appendChild(fileOutput);
+    }
 
     article.appendChild(
       makeActionButton(
@@ -702,11 +709,6 @@ function renderBookingList(bookings, targetList, emptyMessage) {
         () => deleteBooking(booking)
       )
     );
-
-    const fileOutput = makeElement("div");
-    fileOutput.id = "files-" + booking.id;
-    fileOutput.style.marginTop = "12px";
-    article.appendChild(fileOutput);
 
     targetList.appendChild(article);
   }
