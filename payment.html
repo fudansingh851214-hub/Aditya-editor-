@@ -1,12 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>EDIT CONCEPT | Secure Payment</title>
-
   <style>
 *{box-sizing:border-box}:root{color-scheme:light;--pink:#e83e83;--green:#188653;--red:#d94747;--ink:#24352e;--muted:#64736c}
 body{margin:0;padding:0;min-height:100vh;font-family:Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fff8fb 0,#f3faf5 48%,#fff 100%)}
@@ -23,183 +20,66 @@ button,.pay-link{display:block;width:100%;margin-top:12px;padding:13px 16px;bord
 #paymentForm{margin-top:22px;padding:18px;background:#fff9fc;border:1px solid #f2d4e1;border-radius:15px}
 #message{line-height:1.6;overflow-wrap:anywhere;font-size:14px;color:#176b45}.warning{margin-top:20px;padding:15px;border-radius:12px;background:#fff7e8;border:1px solid #f0d39a;color:#80571a;font-size:13px;line-height:1.7}.back{display:block;margin-top:20px;text-align:center;color:var(--green);text-decoration:none}.required{color:var(--red)}
 #paymentSection>.panel:first-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;border-color:#dcebe0;background:#f8fcf9}#paymentSection>.panel:first-child p{margin:6px 0}
-#paymentSection>.hint{text-align:center}
-#copyUPI{background:#f0f8f2;color:var(--green)}
+#paymentSection>.hint{text-align:center}#copyUPI{background:#f0f8f2;color:var(--green)}
 footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px clamp(16px,4vw,48px);border-top:1px solid #e5eee7;color:#64736c;font-size:13px}
 @media(max-width:650px){.container{width:calc(100% - 18px);margin:10px auto;padding:15px}.panel{padding:13px}#paymentSection>.panel:first-child{grid-template-columns:1fr}.qr-box{padding:10px}.container>h1{font-size:25px}}
+/* Keep this page UPI-only: hide any legacy card-payment panel if an old snippet is present. */
+#cardPaymentPanel,#cardPaymentSection,#creditCardPanel,.card-payment-panel,.razorpay-card-panel{display:none!important}
 </style>
 </head>
-
 <body>
   <main class="container">
-
     <h1>ADITYA KUMAR · PROJECT EDIT CONCEPT</h1>
     <p class="hint">Secure Booking Payment Verification</p>
-
     <form id="lookupForm">
       <label for="bookingNumber">Booking Number</label>
-
-      <input
-        id="bookingNumber"
-        name="booking_number"
-        type="text"
-        placeholder="अपना Booking Number डालें"
-        maxlength="100"
-        autocomplete="off"
-        required
-      >
-
-      <button class="primary" id="lookupButton" type="submit">
-        Find My Booking
-      </button>
+      <input id="bookingNumber" name="booking_number" type="text" placeholder="अपना Booking Number डालें" maxlength="100" autocomplete="off" required>
+      <button class="primary" id="lookupButton" type="submit">Find My Booking</button>
     </form>
-
     <p id="message" role="status" aria-live="polite"></p>
-
     <section id="paymentSection">
-
       <div class="panel" id="paymentSummary" aria-live="polite"></div>
-
       <div class="panel">
-        <p>
-          <strong>Booking Number:</strong>
-          <span id="showBooking"></span>
-        </p>
-
-        <p>
-          <strong>Service:</strong>
-          <span id="showService"></span>
-        </p>
-
-        <p>
-          <strong>Payment Status:</strong>
-          <span id="showStatus">Pending</span>
-        </p>
-
+        <p><strong>Booking Number:</strong> <span id="showBooking"></span></p>
+        <p><strong>Service:</strong> <span id="showService"></span></p>
+        <p><strong>Payment Status:</strong> <span id="showStatus">Pending</span></p>
         <p>Admin द्वारा तय की गई राशि:</p>
-
         <div class="amount" id="showAmount">₹0.00</div>
       </div>
-
       <h2>UPI Payment</h2>
-
-      <p class="hint">
-        QR Code स्कैन करें या UPI ऐप खोलें।
-        भुगतान करने से पहले राशि और प्राप्तकर्ता का नाम जाँचें।
-      </p>
-
-      <div class="qr-box">
-        <div id="qrcode"></div>
-      </div>
-
-      <p class="hint">
-        UPI ID: <strong>7544913754-3@ybl</strong>
-      </p>
-
-      <button class="secondary" id="copyUPI" type="button">
-        Copy UPI ID
-      </button>
-
-      <a class="pay-link primary" id="payNow" href="#">
-        Open UPI App
-      </a>
-
+      <p class="hint">QR Code स्कैन करें या UPI ऐप खोलें। भुगतान करने से पहले राशि और प्राप्तकर्ता का नाम जाँचें।</p>
+      <div class="qr-box"><div id="qrcode"></div></div>
+      <p class="hint">UPI ID: <strong>7544913754-3@ybl</strong></p>
+      <button class="secondary" id="copyUPI" type="button">Copy UPI ID</button>
+      <a class="pay-link primary" id="payNow" href="#">Open UPI App</a>
       <form id="paymentForm">
-
         <h2>Payment Details</h2>
-
-        <label for="paymentAmount">
-          Payment Amount (₹)
-        </label>
+        <label for="paymentAmount">Payment Amount (₹)</label>
         <input id="paymentAmount" name="payment_amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="जैसे 200" required aria-describedby="amountHint">
         <p class="hint" id="amountHint">ग्राहक बाकी राशि में से अपनी सुविधा के अनुसार भुगतान राशि डाल सकता है। राशि बाकी बकाया से अधिक नहीं हो सकती।</p>
-
-        <label for="utr">
-          UTR / Reference Number
-          <span class="required">*</span>
-        </label>
-
-        <input
-          id="utr"
-          name="utr"
-          type="text"
-          placeholder="UPI Transaction का UTR नंबर भरें"
-          maxlength="100"
-          autocomplete="off"
-          autocapitalize="characters"
-          required
-        >
-
-        <p class="hint">
-          भुगतान के बाद अपने UPI ऐप की Transaction Details में
-          UTR / Reference Number देखें।
-        </p>
-
-        <label for="paymentScreenshot">
-          Upload Payment Screenshot or PDF
-          <span class="required">*</span>
-        </label>
-
-        <input
-          id="paymentScreenshot"
-          name="screenshot"
-          type="file"
-          accept="image/jpeg,image/png,image/webp,application/pdf,.pdf"
-          required
-        >
-
-        <p class="hint">
-          JPG, PNG, WebP या PDF फाइल, अधिकतम 5 MB।
-        </p>
-
-        <button class="primary" id="submitButton" type="submit">
-          Submit Payment Details
-        </button>
-
+        <label for="utr">UTR / Reference Number <span class="required">*</span></label>
+        <input id="utr" name="utr" type="text" placeholder="UPI Transaction का UTR नंबर भरें" maxlength="100" autocomplete="off" autocapitalize="characters" required>
+        <p class="hint">भुगतान के बाद अपने UPI ऐप की Transaction Details में UTR / Reference Number देखें।</p>
+        <label for="paymentScreenshot">Upload Payment Screenshot or PDF <span class="required">*</span></label>
+        <input id="paymentScreenshot" name="screenshot" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,.pdf" required>
+        <p class="hint">JPG, PNG, WebP या PDF फाइल, अधिकतम 5 MB।</p>
+        <button class="primary" id="submitButton" type="submit">Submit Payment Details</button>
       </form>
-
-      <p class="hint">
-        Admin आपके UTR और Screenshot की जाँच करके
-        Payment Status अपडेट करेगा।
-      </p>
-
+      <p class="hint">Admin आपके UTR और Screenshot की जाँच करके Payment Status अपडेट करेगा।</p>
     </section>
-
-    <div class="warning">
-      <strong>महत्वपूर्ण:</strong>
-      केवल UTR नंबर या Screenshot जमा होने से Payment Verified
-      नहीं होता। Admin द्वारा वास्तविक भुगतान की जाँच आवश्यक है।
-    </div>
-
+    <div class="warning"><strong>महत्वपूर्ण:</strong> केवल UTR नंबर या Screenshot जमा होने से Payment Verified नहीं होता। Admin द्वारा वास्तविक भुगतान की जाँच आवश्यक है।</div>
     <a class="back" href="index.html">← Back to Home</a>
-
   </main>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
     "use strict";
-
-    const SUPABASE_URL =
-      "https://okzwtylpmcyurkxvaocy.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
-
+    const SUPABASE_URL = "https://okzwtylpmcyurkxvaocy.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
     const UPI_ID = "7544913754-3@ybl";
     const PAYEE_NAME = "Aditya Kumar Project Edit Concept";
-
-    const PAYMENT_FUNCTION_URL =
-      SUPABASE_URL + "/functions/v1/submit-payment-screenshot";
-
-    const db = window.supabase
-      ? window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        )
-      : null;
-
+    const PAYMENT_FUNCTION_URL = SUPABASE_URL + "/functions/v1/submit-payment-screenshot";
+    const db = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
     const lookupForm = document.getElementById("lookupForm");
     const lookupButton = document.getElementById("lookupButton");
     const message = document.getElementById("message");
@@ -212,348 +92,85 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
     const paymentAmountInput = document.getElementById("paymentAmount");
     let currentBooking = null;
     let paymentClickBusy = false;
-
-    function showMessage(text) {
-      message.textContent = text;
-    }
-
+    function showMessage(text) { message.textContent = text; }
     function makeUPILink(bookingNumber, amount) {
-      const params = new URLSearchParams({
-        pa: UPI_ID,
-        pn: PAYEE_NAME,
-        am: Number(amount).toFixed(2),
-        cu: "INR",
-        tn: "Booking " + bookingNumber
-      });
-
+      const params = new URLSearchParams({pa:UPI_ID,pn:PAYEE_NAME,am:Number(amount).toFixed(2),cu:"INR",tn:"Booking "+bookingNumber});
       return "upi://pay?" + params.toString();
     }
-
-    function clearQRCode() {
-      document.getElementById("qrcode").replaceChildren();
-    }
-
+    function clearQRCode() { document.getElementById("qrcode").replaceChildren(); }
     lookupForm.addEventListener("submit", async (event) => {
       event.preventDefault();
-
-      const bookingNumber = document
-        .getElementById("bookingNumber")
-        .value.trim();
-
-      paymentSection.style.display = "none";
-      currentBooking = null;
-      paymentForm.reset();
-      clearQRCode();
-
-      if (!db) {
-        showMessage("Supabase लोड नहीं हुआ। इंटरनेट जाँचें।");
-        return;
-      }
-
-      if (!bookingNumber) {
-        showMessage("Booking Number डालें।");
-        return;
-      }
-
-      lookupButton.disabled = true;
-      showMessage("आपकी Booking खोजी जा रही है...");
-
+      const bookingNumber = document.getElementById("bookingNumber").value.trim();
+      paymentSection.style.display = "none"; currentBooking = null; paymentForm.reset(); clearQRCode();
+      if (!db) { showMessage("Supabase लोड नहीं हुआ। इंटरनेट जाँचें।"); return; }
+      if (!bookingNumber) { showMessage("Booking Number डालें।"); return; }
+      lookupButton.disabled = true; showMessage("आपकी Booking खोजी जा रही है...");
       try {
-        const { data, error } = await db
-          .from("bookings")
-          .select(
-            "booking_number, service, amount, payment_token, payment_status"
-          )
-          .eq("booking_number", bookingNumber)
-          .maybeSingle();
-
+        const {data,error} = await db.from("bookings").select("booking_number, service, amount, payment_token, payment_status").eq("booking_number",bookingNumber).maybeSingle();
         if (error) throw error;
-
-        if (!data) {
-          showMessage("Booking नहीं मिली। Booking Number जाँचें।");
-          return;
-        }
-
+        if (!data) { showMessage("Booking नहीं मिली। Booking Number जाँचें।"); return; }
         const totalAmount = Number(data.amount);
-
-        if (!Number.isFinite(totalAmount) || totalAmount <= 0) {
-          showMessage(
-            "इस Booking की राशि तय नहीं है। Admin से संपर्क करें।"
-          );
-          return;
-        }
-
-        const { data: paymentRows, error: paymentRowsError } = await db.from("payment_submissions").select("amount,status,utr,payment_reference,created_at").eq("booking_number", bookingNumber);
+        if (!Number.isFinite(totalAmount) || totalAmount <= 0) { showMessage("इस Booking की राशि तय नहीं है। Admin से संपर्क करें।"); return; }
+        const {data:paymentRows,error:paymentRowsError} = await db.from("payment_submissions").select("amount,status,utr,payment_reference,created_at").eq("booking_number",bookingNumber);
         if (paymentRowsError) throw new Error("Payment history नहीं पढ़ सकी। payment_submissions की SELECT permission जाँचें।");
-        let verifiedAmount = 0;
-        let pendingAmount = 0;
-        const verifiedStatuses = ["verified", "paid", "confirmed", "success", "successful"];
-        const pendingStatuses = ["pending", "submitted", "under_review", "review"];
+        let verifiedAmount = 0, pendingAmount = 0;
+        const verifiedStatuses = ["verified","paid","confirmed","success","successful"];
+        const pendingStatuses = ["pending","submitted","under_review","review"];
         for (const row of (paymentRows || [])) {
-          const rowAmount = Math.max(0, Number(row.amount) || 0);
-          const state = String(row.status || "pending").toLowerCase();
+          const rowAmount = Math.max(0,Number(row.amount)||0), state = String(row.status||"pending").toLowerCase();
           if (verifiedStatuses.includes(state)) verifiedAmount += rowAmount;
           else if (pendingStatuses.includes(state)) pendingAmount += rowAmount;
         }
-        const amount = Math.max(0, totalAmount - verifiedAmount);
-        if (!data.payment_token) {
-          showMessage(
-            "इस Booking का Payment Token उपलब्ध नहीं है। Admin से संपर्क करें।"
-          );
-          return;
+        const amount = Math.max(0,totalAmount-verifiedAmount);
+        if (!data.payment_token) { showMessage("इस Booking का Payment Token उपलब्ध नहीं है। Admin से संपर्क करें।"); return; }
+        currentBooking = {booking_number:data.booking_number,service:data.service,amount,payment_token:data.payment_token,payment_status:data.payment_status||"pending"};
+        document.getElementById("showBooking").textContent = data.booking_number;
+        document.getElementById("showService").textContent = data.service || "Service";
+        document.getElementById("showAmount").textContent = "₹"+amount.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})+" बाकी (कुल ₹"+totalAmount.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})+")";
+        const summary = document.getElementById("paymentSummary"); summary.replaceChildren();
+        for (const [label,value] of [["Total Amount",totalAmount],["Verified Online",verifiedAmount],["Online Pending",pendingAmount],["Remaining",amount]]) {
+          const p=document.createElement("p"),strong=document.createElement("strong"); strong.textContent=label+": "; p.appendChild(strong); p.appendChild(document.createTextNode("₹"+Number(value).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}))); summary.appendChild(p);
         }
-
-        currentBooking = {
-          booking_number: data.booking_number,
-          service: data.service,
-          amount: amount,
-          payment_token: data.payment_token,
-          payment_status: data.payment_status || "pending"
-        };
-
-        document.getElementById("showBooking").textContent =
-          data.booking_number;
-
-        document.getElementById("showService").textContent =
-          data.service || "Service";
-
-        document.getElementById("showAmount").textContent =
-          "₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " बाकी (कुल ₹" + totalAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + ")";
-        const summary = document.getElementById("paymentSummary");
-        if (summary) {
-          summary.replaceChildren();
-          const items = [
-            ["Total Amount", totalAmount],
-            ["Verified Online", verifiedAmount],
-            ["Online Pending", pendingAmount],
-            ["Remaining", amount]
-          ];
-          for (const [label, value] of items) {
-            const p = document.createElement("p");
-            const strong = document.createElement("strong");
-            strong.textContent = label + ": ";
-            p.appendChild(strong);
-            p.appendChild(document.createTextNode("₹" + Number(value).toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2})));
-            summary.appendChild(p);
-          }
-        }
-        paymentAmountInput.value = amount.toFixed(2);
-        paymentAmountInput.max = amount.toFixed(2);
-
-        document.getElementById("showStatus").textContent =
-          amount <= 0 ? "Paid / Verified" : (pendingAmount > 0 ? "Pending Verification" : (data.payment_status || "Pending"));
-
-        payNow.href = makeUPILink(data.booking_number, Math.min(amount, Number(paymentAmountInput.value) || amount));
-        payNow.textContent = "Pay with PhonePe / UPI";
-        if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; }
-
-        if (amount > 0 && window.QRCode) {
-          new QRCode(document.getElementById("qrcode"), {
-            text: makeUPILink(data.booking_number, Number(paymentAmountInput.value) || amount),
-            width: 190,
-            height: 190,
-            correctLevel: QRCode.CorrectLevel.M
-          });
-        }
-
-        paymentSection.style.display = "block";
-        showMessage(
-          "Booking मिल गई। भुगतान से पहले राशि जाँचें।"
-        );
-
-      } catch (error) {
-        console.error("Booking Lookup Error:", error);
-        showMessage(
-          "Booking नहीं खुली। Supabase permissions और table columns जाँचें।"
-        );
-      } finally {
-        lookupButton.disabled = false;
-      }
+        paymentAmountInput.value=amount.toFixed(2); paymentAmountInput.max=amount.toFixed(2);
+        document.getElementById("showStatus").textContent=amount<=0?"Paid / Verified":(pendingAmount>0?"Pending Verification":(data.payment_status||"Pending"));
+        payNow.href=makeUPILink(data.booking_number,Math.min(amount,Number(paymentAmountInput.value)||amount)); payNow.textContent="Pay with PhonePe / UPI";
+        if (amount<=0) { document.getElementById("qrcode").textContent="पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display="none"; document.getElementById("copyUPI").style.display="none"; paymentForm.style.display="none"; }
+        else { payNow.style.display="block"; document.getElementById("copyUPI").style.display="block"; paymentForm.style.display="block"; }
+        if (amount>0 && window.QRCode) new QRCode(document.getElementById("qrcode"),{text:makeUPILink(data.booking_number,Number(paymentAmountInput.value)||amount),width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
+        paymentSection.style.display="block"; showMessage("Booking मिल गई। भुगतान से पहले राशि जाँचें।");
+      } catch(error) { console.error("Booking Lookup Error:",error); showMessage("Booking नहीं खुली। Supabase permissions और table columns जाँचें।"); }
+      finally { lookupButton.disabled=false; }
     });
-
-    paymentAmountInput.addEventListener("input", () => {
-      if (!currentBooking) return;
-      const amount = Number(paymentAmountInput.value);
-      payNow.textContent = Number.isFinite(amount) && amount > 0 && amount <= currentBooking.amount
-        ? "Pay ₹" + amount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}) + " with PhonePe / UPI"
-        : "Pay with PhonePe / UPI";
+    paymentAmountInput.addEventListener("input",()=>{if(!currentBooking)return;const amount=Number(paymentAmountInput.value);payNow.textContent=Number.isFinite(amount)&&amount>0&&amount<=currentBooking.amount?"Pay ₹"+amount.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})+" with PhonePe / UPI":"Pay with PhonePe / UPI";});
+    payNow.addEventListener("click",async(event)=>{
+      event.preventDefault();if(paymentClickBusy)return;if(!db||!currentBooking){showMessage("पहले Booking Number खोजें।");return;}
+      const amount=Number(paymentAmountInput.value);if(!Number.isFinite(amount)||amount<=0||amount>currentBooking.amount){showMessage("₹1 या उससे अधिक और बाकी बकाया से कम/बराबर राशि दर्ज करें।");paymentAmountInput.focus();return;}
+      paymentClickBusy=true;payNow.style.pointerEvents="none";payNow.textContent="Pending payment दर्ज हो रही है...";
+      try {const {error}=await db.from("payment_submissions").insert({booking_number:currentBooking.booking_number,amount:Number(amount.toFixed(2)),status:"pending",payment_reference:"UPI initiated - awaiting customer UTR",utr:null});if(error)throw new Error("Pending रिकॉर्ड नहीं बना। payment_submissions INSERT policy जाँचें: "+error.message);showMessage("₹"+amount.toFixed(2)+" का Pending रिकॉर्ड बन गया। अब UPI ऐप में भुगतान करें। वापस आकर UTR और Screenshot जमा करें।");window.location.href=makeUPILink(currentBooking.booking_number,amount);}
+      catch(error){console.error("Create Pending Payment Error:",error);showMessage(error.message||"Pending payment दर्ज नहीं हो सकी।");}
+      finally{paymentClickBusy=false;payNow.style.pointerEvents="";payNow.textContent="Pay with PhonePe / UPI";}
     });
-
-    payNow.addEventListener("click", async (event) => {
-      event.preventDefault();
-      if (paymentClickBusy) return;
-      if (!db || !currentBooking) {
-        showMessage("पहले Booking Number खोजें।");
-        return;
-      }
-      const amount = Number(paymentAmountInput.value);
-      if (!Number.isFinite(amount) || amount <= 0 || amount > currentBooking.amount) {
-        showMessage("₹1 या उससे अधिक और बाकी बकाया से कम/बराबर राशि दर्ज करें।");
-        paymentAmountInput.focus();
-        return;
-      }
-      paymentClickBusy = true;
-      payNow.style.pointerEvents = "none";
-      payNow.textContent = "Pending payment दर्ज हो रही है...";
+    document.getElementById("copyUPI").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(UPI_ID);showMessage("UPI ID कॉपी हो गई।");}catch{showMessage("UPI ID: "+UPI_ID);}});
+    paymentForm.addEventListener("submit",async(event)=>{
+      event.preventDefault();if(!db||!currentBooking){showMessage("पहले सही Booking Number खोजें।");return;}
+      const utr=utrInput.value.trim(),screenshot=screenshotInput.files[0],chosenAmount=Number(paymentAmountInput.value);
+      if(!Number.isFinite(chosenAmount)||chosenAmount<=0||chosenAmount>currentBooking.amount){showMessage("मान्य भुगतान राशि भरें। यह बाकी बकाया से अधिक नहीं हो सकती।");paymentAmountInput.focus();return;}
+      if(!utr){showMessage("कृपया UTR / Reference Number दर्ज करें।");utrInput.focus();return;}
+      if(!screenshot){showMessage("कृपया Payment Screenshot चुनें।");return;}
+      const allowedTypes=["image/jpeg","image/png","image/webp","application/pdf"],isPdf=screenshot.type==="application/pdf"||screenshot.name.toLowerCase().endsWith(".pdf");
+      if(!allowedTypes.includes(screenshot.type)&&!isPdf){showMessage("केवल JPG, PNG, WebP या PDF फाइल स्वीकार है।");return;}
+      if(screenshot.size===0||screenshot.size>5*1024*1024){showMessage("Screenshot/PDF का आकार 5 MB तक होना चाहिए।");return;}
+      submitButton.disabled=true;showMessage("UTR और Screenshot जमा हो रहे हैं...");
       try {
-        const { error } = await db.from("payment_submissions").insert({
-          booking_number: currentBooking.booking_number,
-          amount: Number(amount.toFixed(2)),
-          status: "pending",
-          payment_reference: "UPI initiated - awaiting customer UTR",
-          utr: null
-        });
-        if (error) throw new Error("Pending रिकॉर्ड नहीं बना। payment_submissions INSERT policy जाँचें: " + error.message);
-        showMessage("₹" + amount.toFixed(2) + " का Pending रिकॉर्ड बन गया। अब UPI ऐप में भुगतान करें। वापस आकर UTR और Screenshot जमा करें।");
-        window.location.href = makeUPILink(currentBooking.booking_number, amount);
-      } catch (error) {
-        console.error("Create Pending Payment Error:", error);
-        showMessage(error.message || "Pending payment दर्ज नहीं हो सकी।");
-      } finally {
-        paymentClickBusy = false;
-        payNow.style.pointerEvents = "";
-        payNow.textContent = "Pay with PhonePe / UPI";
-      }
+        const formData=new FormData();formData.append("booking_number",currentBooking.booking_number);formData.append("payment_token",currentBooking.payment_token);formData.append("utr",utr);formData.append("screenshot",screenshot);formData.append("amount",chosenAmount.toFixed(2));
+        const response=await fetch(PAYMENT_FUNCTION_URL,{method:"POST",headers:{apikey:SUPABASE_KEY},body:formData});let result;
+        try{result=await response.json();}catch{throw new Error("Server से सही जवाब नहीं मिला। Edge Function जाँचें।");}
+        if(!response.ok||!result.success)throw new Error(result.error||"Payment Details जमा नहीं हुए।");
+        showMessage("₹"+chosenAmount.toFixed(2)+" का UTR और Screenshot जमा हो गया। Admin Verification का इंतजार करें।");paymentForm.reset();document.getElementById("showStatus").textContent="Pending Verification";
+      }catch(error){console.error("Payment Submission Error:",error);showMessage("Error: "+(error.message||"Upload असफल हुआ।"));}
+      finally{submitButton.disabled=false;}
     });
-
-    document.getElementById("copyUPI").addEventListener(
-      "click",
-      async () => {
-        try {
-          await navigator.clipboard.writeText(UPI_ID);
-          showMessage("UPI ID कॉपी हो गई।");
-        } catch {
-          showMessage("UPI ID: " + UPI_ID);
-        }
-      }
-    );
-
-    paymentForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!db || !currentBooking) {
-        showMessage("पहले सही Booking Number खोजें।");
-        return;
-      }
-
-      const utr = utrInput.value.trim();
-      const screenshot = screenshotInput.files[0];
-      const chosenAmount = Number(paymentAmountInput.value);
-      if (!Number.isFinite(chosenAmount) || chosenAmount <= 0 || chosenAmount > currentBooking.amount) {
-        showMessage("मान्य भुगतान राशि भरें। यह बाकी बकाया से अधिक नहीं हो सकती।");
-        paymentAmountInput.focus();
-        return;
-      }
-
-      if (!utr) {
-        showMessage("कृपया UTR / Reference Number दर्ज करें।");
-        utrInput.focus();
-        return;
-      }
-
-      if (!screenshot) {
-        showMessage("कृपया Payment Screenshot चुनें।");
-        return;
-      }
-
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "application/pdf"
-      ];
-      const isPdf = screenshot.type === "application/pdf" ||
-        screenshot.name.toLowerCase().endsWith(".pdf");
-
-      if (!allowedTypes.includes(screenshot.type) && !isPdf) {
-        showMessage(
-          "केवल JPG, PNG, WebP या PDF फाइल स्वीकार है।"
-        );
-        return;
-      }
-
-      if (
-        screenshot.size === 0 ||
-        screenshot.size > 5 * 1024 * 1024
-      ) {
-        showMessage(
-          "Screenshot/PDF का आकार 5 MB तक होना चाहिए।"
-        );
-        return;
-      }
-
-      submitButton.disabled = true;
-      showMessage("UTR और Screenshot जमा हो रहे हैं...");
-
-      try {
-        const formData = new FormData();
-
-        formData.append(
-          "booking_number",
-          currentBooking.booking_number
-        );
-
-        formData.append(
-          "payment_token",
-          currentBooking.payment_token
-        );
-
-        formData.append("utr", utr);
-        formData.append("screenshot", screenshot);
-        formData.append("amount", chosenAmount.toFixed(2));
-
-        const response = await fetch(PAYMENT_FUNCTION_URL, {
-          method: "POST",
-          headers: {
-            "apikey": SUPABASE_KEY
-          },
-          body: formData
-        });
-
-        let result;
-
-        try {
-          result = await response.json();
-        } catch {
-          throw new Error(
-            "Server से सही जवाब नहीं मिला। Edge Function जाँचें।"
-          );
-        }
-
-        if (!response.ok || !result.success) {
-          throw new Error(
-            result.error || "Payment Details जमा नहीं हुए।"
-          );
-        }
-
-        showMessage(
-          "₹" + chosenAmount.toFixed(2) + " का UTR और Screenshot जमा हो गया। Admin Verification का इंतजार करें।"
-        );
-
-        paymentForm.reset();
-
-        document.getElementById("showStatus").textContent =
-          "Pending Verification";
-
-      } catch (error) {
-        console.error("Payment Submission Error:", error);
-
-        showMessage(
-          "Error: " +
-          (error.message || "Upload असफल हुआ।")
-        );
-      } finally {
-        submitButton.disabled = false;
-      }
-    });
-
-    const urlBooking =
-      new URLSearchParams(location.search).get("id");
-
-    if (urlBooking) {
-      document.getElementById("bookingNumber").value =
-        urlBooking;
-    }
+    const urlBooking=new URLSearchParams(location.search).get("id");if(urlBooking)document.getElementById("bookingNumber").value=urlBooking;
   </script>
 </body>
 </html>
