@@ -549,7 +549,7 @@ function renderBookings(bookings) {
     const amountLabel = makeElement("label", "", "Booking Amount (₹)");
     const amountInput = makeElement("input");
     amountInput.type = "number";
-    amountInput.min = "0";
+    amountInput.min = "1";
     amountInput.step = "0.01";
     amountInput.value = booking.amount ?? "";
     amountInput.placeholder = "Amount दर्ज करें";
@@ -664,8 +664,8 @@ async function saveAmount(bookingId) {
     }
 
     const amount = Number(raw);
-    if (!Number.isFinite(amount) || amount < 0) {
-      throw new Error("मान्य Amount दर्ज करें।");
+    if (!Number.isFinite(amount) || amount <= 0) {
+      throw new Error("राशि ₹1 से अधिक दर्ज करें।");
     }
 
     const { data, error } = await db
