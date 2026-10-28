@@ -57,9 +57,10 @@ const loginMessage = $("loginMessage");
 const logoutButton = $("logoutButton");
 
 const refreshButton = $("refreshButton");
-const bookingCategoryFilter = $("bookingCategoryFilter");
+const refreshCameraBookingsButton = $("refreshCameraBookingsButton");
 const message = $("message");
 const bookingsList = $("bookingsList");
+const cameraBookingsList = $("cameraBookingsList");
 
 const refreshPaymentsButton = $("refreshPaymentsButton");
 const paymentFilter = $("paymentFilter");
@@ -461,32 +462,28 @@ function isCameraBooking(booking) {
 }
 
 function renderBookings(bookings) {
-  if (!bookingsList) return;
-  bookingsList.replaceChildren();
+  renderBookingList(
+    bookings.filter((booking) => !isCameraBooking(booking)),
+    bookingsList,
+    "अभी कोई दूसरी Service Booking नहीं मिली।"
+  );
+  renderBookingList(
+    bookings.filter(isCameraBooking),
+    cameraBookingsList,
+    "अभी कोई Camera Booking नहीं मिली।"
+  );
+}
 
-  const category = bookingCategoryFilter?.value || "all";
-  const visibleBookings = bookings.filter((booking) => {
-    const camera = isCameraBooking(booking);
-    return category === "all" ||
-      (category === "camera" && camera) ||
-      (category === "other" && !camera);
-  });
-
-  if (!visibleBookings.length) {
-    bookingsList.textContent = category === "camera"
-      ? "अभी कोई Camera Booking नहीं मिली।"
-      : category === "other"
-        ? "अभी कोई दूसरी Service Booking नहीं मिली।"
-        : "अभी कोई Booking नहीं मिली।";
-    return;
-  }
+function renderBookingList(bookings, targetList, emptyMessage) {
+  if (!targetList) return;
+  targetList.replaceChildren();
 
   if (!bookings.length) {
-    bookingsList.textContent = "अभी कोई Booking नहीं मिली।";
+    targetList.textContent = emptyMessage;
     return;
   }
 
-  for (const booking of visibleBookings) {
+  for (const booking of bookings) {
     const article = makeElement("article", "record");
 
     article.appendChild(
@@ -634,7 +631,7 @@ function renderBookings(bookings) {
     fileOutput.style.marginTop = "12px";
     article.appendChild(fileOutput);
 
-    bookingsList.appendChild(article);
+    targetList.appendChild(article);
   }
 }
 
@@ -1431,18 +1428,11 @@ if (refreshButton) {
   refreshButton.addEventListener("click", loadBookings);
 }
 
-if (bookingCategoryFilter) {
-  bookingCategoryFilter.addEventListener("change", () => {
-    renderBookings(currentBookings);
-    const category = bookingCategoryFilter.value;
-    const label = category === "camera"
-      ? "Camera Bookings"
-      : category === "other"
-        ? "अन्य Service Bookings"
-        : "सभी Bookings";
-    showMessage(message, label + " दिखाए जा रहे हैं।");
-  });
+if (refreshCameraBookingsButton) {
+  refreshCameraBookingsButton.addEventListener("click", loadBookings);
 }
+
+
 
 if (refreshPaymentsButton) {
   refreshPaymentsButton.addEventListener("click", loadPayments);
