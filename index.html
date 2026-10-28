@@ -166,6 +166,21 @@ a.btn-secondary,.secondary-button{background:#eaf7ef!important;color:#168b52!imp
 input,select,textarea{background:#fff!important;color:#173b2d!important;border:1px solid #cfded4!important}
 input:focus,select:focus,textarea:focus{outline:2px solid #e91e7240!important;border-color:#e91e72!important}
 footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid #d5e5db!important}
+
+/* Camera booking cards and navigation */
+.camera-booking-section{padding:54px 0;background:linear-gradient(180deg,rgba(7,22,43,.92),rgba(4,14,30,.98));border-top:1px solid #183e60;border-bottom:1px solid #183e60}
+.camera-booking-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.camera-book-card{padding:24px;display:flex;flex-direction:column;align-items:flex-start;min-height:290px;border:1px solid #1aaee7;background:linear-gradient(145deg,#0a2340,#07162b);border-radius:18px}
+.camera-book-card h3{margin:10px 0;color:#f4f9ff}
+.camera-book-card p{color:#c8d8e8;line-height:1.65;flex:1}
+.camera-visual{font-size:42px;line-height:1.2;padding:12px 16px;border-radius:14px;background:#0a3454;box-shadow:0 0 25px #00bfff18}
+.photo-camera-card{border-color:#8655ff;background:linear-gradient(145deg,#211445,#0a1730)}
+.photo-camera-card .camera-visual{background:#30205a}
+.combo-camera-card{border-color:#08c982;background:linear-gradient(145deg,#06352f,#071b2a)}
+.combo-camera-card .camera-visual{background:#075344}
+.camera-book-card .btn{width:100%;text-align:center;margin-top:12px}
+@media(max-width:760px){.camera-booking-grid{grid-template-columns:1fr}.camera-book-card{min-height:0}.links{max-height:75vh;overflow-y:auto}}
+
 </style>
 </head>
 
@@ -184,6 +199,7 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
       <a href="index.html">Home</a>
       <a href="services.html">Our Services</a>
       <a href="auth.html">Book Now</a>
+      <a href="#camera-booking">📸 Camera Book Now</a>
       <a href="tracking.html">Track Your Booking</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -232,6 +248,7 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
         <div class="quick-links">
           <a class="btn" href="services.html">Our Services</a>
           <a class="btn" href="auth.html">Book Your Work</a>
+          <a class="btn" href="#camera-booking">📸 Camera Book Now</a>
           <a class="btn outline" href="tracking.html">Track Your Booking</a>
         </div>
       </div>
@@ -288,6 +305,38 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
           <a class="btn" href="auth.html">Book Now →</a>
         </article>
 
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CAMERA BOOKING -->
+  <section id="camera-booking" class="camera-booking-section">
+    <div class="container">
+      <div class="heading">
+        <div class="eyebrow">CAMERA BOOKING</div>
+        <h2>📸 Camera Book Now</h2>
+        <p>अपने इवेंट, शादी, पार्टी या खास मौके के लिए कैमरा बुक करें। नीचे अपनी जरूरत के अनुसार विकल्प चुनें।</p>
+      </div>
+      <div class="camera-booking-grid">
+        <article class="card camera-book-card video-camera-card">
+          <div class="camera-visual">🎥</div>
+          <h3>Video Camera</h3>
+          <p>शादी, इवेंट और वीडियो शूट के लिए वीडियो कैमरा बुक करें।</p>
+          <a class="btn" href="booking.html?service=Video%20Camera%20Book">🎬 Book Video Camera →</a>
+        </article>
+        <article class="card camera-book-card photo-camera-card">
+          <div class="camera-visual">📸</div>
+          <h3>Photo Camera</h3>
+          <p>पोर्ट्रेट, पार्टी और खास पलों की फोटोग्राफी के लिए कैमरा बुक करें।</p>
+          <a class="btn" href="booking.html?service=Photo%20Camera%20Book">📷 Book Photo Camera →</a>
+        </article>
+        <article class="card camera-book-card combo-camera-card">
+          <div class="camera-visual">📸🎥</div>
+          <h3>Photo &amp; Video Camera</h3>
+          <p>फोटो और वीडियो दोनों के लिए एक साथ बुकिंग का विकल्प चुनें।</p>
+          <a class="btn" href="booking.html?service=Photo%20%26%20Video%20Camera%20Book">🎬 Book Photo &amp; Video Camera →</a>
+        </article>
       </div>
     </div>
   </section>
