@@ -1029,7 +1029,7 @@ $("mediaFiles").addEventListener("change", function() {
           address: address,
           service: serviceElement.value,
           amount: null,
-          status: "Booking Submitted",
+          status: "Submitted",
           file_paths: uploadedPaths
         };
 
@@ -1048,8 +1048,13 @@ $("mediaFiles").addEventListener("change", function() {
           console.info("Session storage unavailable:", storageError);
         }
 
-        window.location.href =
-          "confirmation.html?id=" + encodeURIComponent(bookingNumber);
+        // Show a clear success state only after Supabase confirms the insert.
+        $("successBookingNumber").textContent = bookingNumber;
+        $("trackBookingLink").href = "tracking.html?id=" + encodeURIComponent(bookingNumber);
+        $("successCard").hidden = false;
+        $("bookingForm").hidden = true;
+        showMessage("✅ Booking successfully submit ho gayi hai!", "success");
+        $("successCard").scrollIntoView({ behavior: "smooth", block: "start" });
         return;
 
       } catch (error) {
