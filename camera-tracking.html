@@ -543,8 +543,8 @@
     */
     const stages = [
       { status: "Booking Submitted", title: "Submit Camera Book", description: "आपकी Camera Book request मिल गई है।" },
-      { status: "Payment Pending", title: "Payment Pending", description: "Admin द्वारा तय राशि का payment करें और verification का इंतज़ार करें।" },
       { status: "Booking Confirmed", title: "Camera Book Confirmed", description: "Admin ने आपकी camera booking confirm कर दी है।" },
+      { status: "Payment Pending", title: "Payment Pending", description: "Admin द्वारा तय राशि का payment करें और verification का इंतज़ार करें।" },
       { status: "Completed", title: "Complete", description: "आपकी camera booking पूरी हो गई है।" }
     ];
 
@@ -640,19 +640,43 @@
       const timeline = $("timeline");
       timeline.replaceChildren();
       const normalizedStatus = normalizeTrackingStatus(status);
-      const paid = ["paid","verified","confirmed","success","successful"].includes(String(paymentStatus || "").toLowerCase()) || normalizedStatus === "Payment Confirmed" || normalizedStatus === "Completed";
-      let currentIndex = 1;
-      if (normalizedStatus === "Completed") currentIndex = 3;
-      else if (paid) currentIndex = 2;
-      stages.forEach((stage,index) => {
-        const step=document.createElement("div");
-        step.className="timeline-step"+(index<currentIndex?" done":"")+(index===currentIndex?" current":"");
-        const dot=document.createElement("div");dot.className="timeline-dot";dot.textContent=index<currentIndex?"✓":index===currentIndex?"•":"";
-        const content=document.createElement("div");content.className="step-content";
-        const title=document.createElement("h3");title.textContent=stage.title;
-        const description=document.createElement("p");
-        description.textContent=index<currentIndex?"यह चरण पूरा हो चुका है।":stage.description;
-        content.append(title,description);step.append(dot,content);timeline.appendChild(step);
+      const paymentValue = String(paymentStatus || "Pending").trim().toLowerCase();
+      const paid = ["paid", "verified", "confirmed", "success", "successful"].includes(paymentValue) ||
+        normalizedStatus === "Payment Confirmed";
+      let currentIndex = 0;
+
+      if (normalizedStatus === "Completed") {
+        currentIndex = stages.length;
+      } else if (paid) {
+        currentIndex = 3;
+      } else if (normalizedStatus === "Booking Confirmed") {
+        currentIndex = 2;
+      } else if (normalizedStatus === "Payment Confirmed") {
+        currentIndex = 3;
+      }
+
+      stages.forEach((stage, index) => {
+        const step = document.createElement("div");
+        step.className = "timeline-step" +
+          (index < currentIndex ? " done" : "") +
+          (index === currentIndex ? " current" : "");
+
+        const dot = document.createElement("div");
+        dot.className = "timeline-dot";
+        dot.textContent = index < currentIndex ? "✓" : index === currentIndex ? "•" : "";
+
+        const content = document.createElement("div");
+        content.className = "step-content";
+        const title = document.createElement("h3");
+        title.textContent = stage.title;
+        const description = document.createElement("p");
+        description.textContent = index < currentIndex
+          ? "यह चरण पूरा हो चुका है।"
+          : stage.description;
+
+        content.append(title, description);
+        step.append(dot, content);
+        timeline.appendChild(step);
       });
     }
 
