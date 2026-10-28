@@ -664,7 +664,11 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     statusSelect.id = "status-" + booking.id;
     statusLabel.htmlFor = statusSelect.id;
 
-    for (const status of BOOKING_STATUSES) {
+    const availableBookingStatuses = isCameraBooking(booking)
+      ? ["Booking Submitted", "Booking Confirmed", "Payment Confirmed", "Completed"]
+      : BOOKING_STATUSES;
+
+    for (const status of availableBookingStatuses) {
       const option = makeElement("option", "", status);
       option.value = status;
       option.selected = status === normalizeStatus(booking.booking_status || booking.status);
@@ -831,7 +835,13 @@ async function saveStatus(bookingId) {
     await verifyAdmin();
 
     const status = $("status-" + bookingId)?.value;
-    if (!BOOKING_STATUSES.includes(status)) {
+    const booking = currentBookings.find(
+      (item) => String(item.id) === String(bookingId)
+    );
+    const allowedStatuses = booking && isCameraBooking(booking)
+      ? ["Booking Submitted", "Booking Confirmed", "Payment Confirmed", "Completed"]
+      : BOOKING_STATUSES;
+    if (!allowedStatuses.includes(status)) {
       throw new Error("मान्य Booking Status चुनें।");
     }
 
