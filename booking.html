@@ -505,6 +505,10 @@
     input:focus,select:focus,textarea:focus{border-color:#c62828!important;box-shadow:0 0 0 3px #c6282818}
     .success-card{background:#fff5f5!important;border-color:#f0caca!important}
     .success-card h2{color:#c62828!important}
+    .service-option[hidden], #mediaSection[hidden] { display:none!important; }
+    .camera-booking-mode .services { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .camera-booking-mode .service-card { min-height:180px; }
+    @media(max-width:600px){.camera-booking-mode .services{grid-template-columns:1fr;}}
 
   </style>
 </head>
@@ -553,7 +557,7 @@
     </section>
 
     <form id="bookingForm">
-      <section class="section-card">
+      <section class="section-card" id="serviceSection">
         <div class="section-heading">
           <span class="section-icon">ॐ</span>
           <div>
@@ -709,7 +713,7 @@
         </div>
       </section>
 
-      <section class="section-card">
+      <section class="section-card" id="mediaSection">
         <div class="section-heading">
           <span class="section-icon">📄</span>
           <div>
@@ -804,9 +808,23 @@
 
     $("year").textContent = new Date().getFullYear();
 
-    // Select the camera/service chosen on the Home Page.
-    const requestedService = new URLSearchParams(window.location.search).get("service");
-    if (requestedService) {
+    // Camera Book Now opens a clean camera-only booking form.
+    const requestedService = new URLSearchParams(window.location.search).get("service") || "";
+    const cameraServices = ["Photo Camera Book", "Video Camera Book", "Photo & Video Camera Book"];
+    const cameraMode = requestedService === "camera" || cameraServices.includes(requestedService);
+
+    if (cameraMode) {
+      document.body.classList.add("camera-booking-mode");
+      document.querySelectorAll('input[name="service"]').forEach(input => {
+        const isCamera = cameraServices.includes(input.value);
+        input.closest(".service-option").hidden = !isCamera;
+        input.required = isCamera;
+      });
+      $("mediaSection").hidden = true;
+      $("submitButton").textContent = "📸 Submit Camera Book Now";
+      document.querySelector("#serviceSection h2").textContent = "Camera Book Now";
+      document.querySelector("#serviceSection .section-heading p").textContent = "नीचे दिए गए तीन विकल्पों में से एक चुनें।";
+    } else if (requestedService) {
       const matchingService = Array.from(document.querySelectorAll('input[name="service"]'))
         .find(input => input.value === requestedService);
       if (matchingService) matchingService.checked = true;
@@ -982,11 +1000,8 @@ $("mediaFiles").addEventListener("change", function() {
         return;
       }
 
-      if (files.length < 1) {
-        showMessage(
-          "कृपया कम से कम एक फोटो या फाइल चुनें।",
-          "error"
-        );
+      if (!cameraMode && files.length < 1) {
+        showMessage("कृपया कम से कम एक फोटो या फाइल चुनें।", "error");
         return;
       }
 
@@ -1020,10 +1035,9 @@ $("mediaFiles").addEventListener("change", function() {
       try {
         const bookingNumber = createBookingNumber();
 
-        uploadedPaths = await uploadFiles(
-          files,
-          bookingNumber
-        );
+        if (!cameraMode) {
+          uploadedPaths = await uploadFiles(files, bookingNumber);
+        }
 
         const bookingData = {
           booking_number: bookingNumber,
@@ -1070,7 +1084,7 @@ $("mediaFiles").addEventListener("change", function() {
 
       } finally {
         button.disabled = false;
-        button.textContent = "➤ Submit Booking";
+        button.textContent = cameraMode ? "📸 Submit Camera Book Now" : "➤ Submit Booking";
       }
     });
   </script>
