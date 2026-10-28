@@ -618,6 +618,34 @@
             </div>
           </label>
 
+
+          <label class="service-option">
+            <input type="radio" name="service" value="Video Camera Book" required>
+            <div class="service-card">
+              <div class="service-emoji">🎥</div>
+              <strong>Video Camera Book</strong>
+              <p>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+          <label class="service-option">
+            <input type="radio" name="service" value="Photo Camera Book" required>
+            <div class="service-card">
+              <div class="service-emoji">📸</div>
+              <strong>Photo Camera Book</strong>
+              <p>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
+          <label class="service-option">
+            <input type="radio" name="service" value="Photo &amp; Video Camera Book" required>
+            <div class="service-card">
+              <div class="service-emoji">📸🎥</div>
+              <strong>Photo &amp; Video Camera Book</strong>
+              <p>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</p>
+              <span class="radio-circle"></span>
+            </div>
+          </label>
         </div>
       </section>
       <section class="section-card">
@@ -775,6 +803,14 @@
     const $ = id => document.getElementById(id);
 
     $("year").textContent = new Date().getFullYear();
+
+    // Select the camera/service chosen on the Home Page.
+    const requestedService = new URLSearchParams(window.location.search).get("service");
+    if (requestedService) {
+      const matchingService = Array.from(document.querySelectorAll('input[name="service"]'))
+        .find(input => input.value === requestedService);
+      if (matchingService) matchingService.checked = true;
+    }
 
     // Prefill booking details from the signed-in customer's account.
     async function fillCustomerDetailsFromAccount() {
