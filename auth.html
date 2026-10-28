@@ -138,6 +138,19 @@ body{background:#f7f8fa!important;color:#263238!important}
   color:#fff!important;
   transform:translateY(-1px);
 }
+
+/* Keep My Bookings & Invoices as a separate full-width column at the very bottom */
+.invoice-history{display:flex!important;flex-direction:column!important;width:100%!important;grid-column:1/-1!important;margin-top:24px!important;clear:both!important}
+.invoice-history .invoice-page-heading{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;width:100%!important;padding:18px!important;margin:0 0 12px!important;background:#fff7fb!important;border:1px solid #f3bfd9!important;border-left:5px solid #d81b70!important;border-radius:14px!important}
+.invoice-history .invoice-page-heading>div:first-child{width:100%!important}
+.invoice-history .invoice-page-heading .invoice-eyebrow{display:block!important;margin-bottom:8px!important;color:#d81b70!important;font-weight:800!important;letter-spacing:1px!important}
+.invoice-history .invoice-page-heading h3{margin:0 0 10px!important;color:#d81b70!important}
+.invoice-history .invoice-page-heading p{margin:0!important;color:#4b5f83!important;text-align:left!important;line-height:1.6!important}
+.invoice-history .invoice-shortcuts{display:flex!important;flex-wrap:wrap!important;gap:10px!important;width:100%!important;margin:0!important}
+.invoice-history .invoice-shortcuts a{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important;padding:10px 14px!important;border-radius:9px!important;background:#2563eb!important;color:#fff!important;text-decoration:none!important}
+.invoice-history .invoice-hint{padding:12px 14px!important;margin:0 0 10px!important;background:#eff6ff!important;border:1px solid #bfdbfe!important;border-radius:10px!important;color:#1d4ed8!important;line-height:1.6!important}
+@media(max-width:520px){.invoice-history .invoice-page-heading{padding:14px!important}.invoice-history .invoice-shortcuts{display:grid!important;grid-template-columns:1fr 1fr!important}.invoice-history .invoice-shortcuts a{width:100%!important;text-align:center!important}}
+
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
