@@ -57,6 +57,7 @@ const loginMessage = $("loginMessage");
 const logoutButton = $("logoutButton");
 
 const refreshButton = $("refreshButton");
+const bookingCategoryFilter = $("bookingCategoryFilter");
 const message = $("message");
 const bookingsList = $("bookingsList");
 
@@ -453,16 +454,39 @@ async function loadBookings() {
   }
 }
 
+function isCameraBooking(booking) {
+  const service = String(booking?.service || "").trim().toLowerCase();
+  return service.includes("camera") &&
+    (service.includes("book") || service.includes("camera"));
+}
+
 function renderBookings(bookings) {
   if (!bookingsList) return;
   bookingsList.replaceChildren();
+
+  const category = bookingCategoryFilter?.value || "all";
+  const visibleBookings = bookings.filter((booking) => {
+    const camera = isCameraBooking(booking);
+    return category === "all" ||
+      (category === "camera" && camera) ||
+      (category === "other" && !camera);
+  });
+
+  if (!visibleBookings.length) {
+    bookingsList.textContent = category === "camera"
+      ? "अभी कोई Camera Booking नहीं मिली।"
+      : category === "other"
+        ? "अभी कोई दूसरी Service Booking नहीं मिली।"
+        : "अभी कोई Booking नहीं मिली।";
+    return;
+  }
 
   if (!bookings.length) {
     bookingsList.textContent = "अभी कोई Booking नहीं मिली।";
     return;
   }
 
-  for (const booking of bookings) {
+  for (const booking of visibleBookings) {
     const article = makeElement("article", "record");
 
     article.appendChild(
@@ -480,7 +504,7 @@ function renderBookings(bookings) {
     addField(article, "Special Requirement / Message", booking.special_requirement || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
-    if (["photo camera book", "video camera book", "photo & video camera book"].includes(String(booking.service || "").trim().toLowerCase())) {
+    if (isCameraBooking(booking)) {
       const cameraNote = makeElement("p", "camera-status-note", "📸 CAMERA BOOKING: Status बदलने के लिए नीचे Booking Status चुनें: Booking Submitted → Booking Confirmed → Payment Confirmed → Completed. Payment की पुष्टि Payments section से करें।");
       cameraNote.style.cssText = "padding:12px;border:1px solid #c62828;border-radius:10px;background:#fff3f3;color:#a51d40;font-weight:700;line-height:1.5";
       article.appendChild(cameraNote);
@@ -1405,6 +1429,19 @@ if (logoutButton) {
 
 if (refreshButton) {
   refreshButton.addEventListener("click", loadBookings);
+}
+
+if (bookingCategoryFilter) {
+  bookingCategoryFilter.addEventListener("change", () => {
+    renderBookings(currentBookings);
+    const category = bookingCategoryFilter.value;
+    const label = category === "camera"
+      ? "Camera Bookings"
+      : category === "other"
+        ? "अन्य Service Bookings"
+        : "सभी Bookings";
+    showMessage(message, label + " दिखाए जा रहे हैं।");
+  });
 }
 
 if (refreshPaymentsButton) {
