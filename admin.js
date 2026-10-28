@@ -424,7 +424,7 @@ async function loadBookings() {
       (booking) => !hiddenBookingNumbers.has(String(booking.booking_number || ""))
     );
     const { data: paymentRows, error: paymentError } = await db.from("payment_submissions")
-      .select("id, booking_number, amount, status, utr, payment_reference, screenshot_path, created_at, verified_at, verified_by");
+      .select("id, booking_number, amount, status, payment_reference, screenshot_path, created_at, verified_at");
     if (paymentError) throw paymentError;
     const allPayments = paymentRows || [];
     currentBookings = currentBookings.map((booking) => {
@@ -438,17 +438,17 @@ async function loadBookings() {
     renderBookings(currentBookings);
     showMessage(message, `${currentBookings.length} Booking records मिले।`);
   } catch (error) {
+    const loadErrorText = "Bookings नहीं खुलीं: " + getErrorText(error);
     if (bookingsList) {
       bookingsList.replaceChildren();
-      bookingsList.textContent =
-        "Bookings नहीं खुलीं: " + getErrorText(error);
+      bookingsList.textContent = loadErrorText;
+    }
+    if (cameraBookingsList) {
+      cameraBookingsList.replaceChildren();
+      cameraBookingsList.textContent = loadErrorText;
     }
 
-    showMessage(
-      message,
-      "Bookings नहीं खुलीं: " + getErrorText(error),
-      true
-    );
+    showMessage(message, loadErrorText, true);
   } finally {
     bookingsBusy = false;
     setButtonBusy(refreshButton, false, "", "Refresh Bookings");
