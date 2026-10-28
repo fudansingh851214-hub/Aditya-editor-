@@ -425,10 +425,7 @@
     }
 
     .success-card h2 { color: var(--green); }
-
-    .service-price { color: #087f5b !important; font-weight: 800; font-size: 15px !important; margin-top: 8px; }
-    .booking-total { margin: 0 0 18px; padding: 15px; border-radius: 12px; background: #eaf5ec; color: #087f5b; font-weight: 800; font-size: 20px; text-align: center; }
-    .booking-number {
+.booking-number {
       display: inline-block;
       padding: 8px 12px;
       border-radius: 9px;
@@ -504,9 +501,7 @@
     .whatsapp{background:#c62828!important}
     .hero{border-color:#f0caca;background:radial-gradient(circle at 90% 10%,#ffe1e1 0,transparent 42%),linear-gradient(135deg,#fff,#fff5f5)}
     .submit-button{background:linear-gradient(100deg,#a51f1f,#e53935)!important}
-    .service-price{color:#c62828!important}
-    .booking-total{background:#fff0f0!important;color:#a51f1f!important;border:1px solid #f0caca}
-    .booking-number{color:#c62828!important;border-color:#efbcbc}
+.booking-number{color:#c62828!important;border-color:#efbcbc}
     input:focus,select:focus,textarea:focus{border-color:#c62828!important;box-shadow:0 0 0 3px #c6282818}
     .success-card{background:#fff5f5!important;border-color:#f0caca!important}
     .success-card h2{color:#c62828!important}
@@ -575,7 +570,6 @@
               <div class="service-emoji">🖼️</div>
               <strong>Photo Editing</strong>
               <p>Portrait, background, retouching, color correction</p>
-              <p class="service-price">Price: ₹200</p>
               <span class="radio-circle"></span>
             </div>
           </label>
@@ -587,7 +581,6 @@
               <div class="service-emoji">🎬</div>
               <strong>Video Editing</strong>
               <p>Reels, YouTube, cinematic editing, social media</p>
-              <p class="service-price">Price: ₹300</p>
               <span class="radio-circle"></span>
             </div>
           </label>
@@ -599,7 +592,6 @@
               <div class="service-emoji">💍</div>
               <strong>Wedding Projects</strong>
               <p>Wedding, anniversary, family video editing</p>
-              <p class="service-price">Price: ₹500</p>
               <span class="radio-circle"></span>
             </div>
           </label>
@@ -611,7 +603,6 @@
               <div class="service-emoji">🎨</div>
               <strong>Graphic Design</strong>
               <p>Poster, banner, logo, thumbnail, social media design</p>
-              <p class="service-price">Price: ₹500</p>
               <span class="radio-circle"></span>
             </div>
           </label>
@@ -623,16 +614,13 @@
               <div class="service-emoji">📱</div>
               <strong>Social Media Reels</strong>
               <p>Short videos और social media reels editing.</p>
-              <p class="service-price">Price: ₹300</p>
               <span class="radio-circle"></span>
             </div>
           </label>
 
         </div>
       </section>
-
       <section class="section-card">
-        <div class="booking-total" id="bookingTotal" aria-live="polite">अपनी सेवा चुनें — राशि यहाँ दिखाई जाएगी।</div>
 
         <div class="section-heading">
           <span class="section-icon">👤</span>
@@ -773,17 +761,7 @@
       "https://okzwtylpmcyurkxvaocy.supabase.co";
 
     const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
-
-    const SERVICE_PRICES = {
-  "Photo Editing": 200,
-  "Video Editing": 300,
-  "Graphic Design": 500,
-  "Social Media Reels": 300,
-  "Wedding Projects": 500
-};
-
-    const STORAGE_BUCKET = "customer-media";
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";const STORAGE_BUCKET = "customer-media";
     const MAX_FILE_SIZE = 100 * 1024 * 1024;
     const MAX_FILES = 10;
 
@@ -848,51 +826,7 @@
         .replace(/[^a-zA-Z0-9._-]/g, "_")
         .slice(-120);
     }
-
-    function calculateBookingAmount() {
-      const chosen = document.querySelector('input[name="service"]:checked');
-      if (!chosen) return { total: 0, quantity: 0, unitPrice: 0, label: "" };
-
-      const files = Array.from($("mediaFiles").files || []);
-      const service = chosen.value;
-      const unitPrice = SERVICE_PRICES[service] || 0;
-      const photos = files.filter(file => file.type.startsWith("image/")).length;
-      const videos = files.filter(file => file.type.startsWith("video/")).length;
-
-      let quantity = 0;
-      let label = "";
-      if (service === "Photo Editing" || service === "Graphic Design") {
-        quantity = photos;
-        label = "फोटो/डिजाइन";
-      } else {
-        quantity = videos;
-        label = "वीडियो";
-      }
-
-      return { total: unitPrice * quantity, quantity, unitPrice, label };
-    }
-
-    function updateBookingAmount() {
-      const chosen = document.querySelector('input[name="service"]:checked');
-      if (!chosen) {
-        $("bookingTotal").textContent = "अपनी सेवा चुनें — राशि यहाँ दिखाई जाएगी।";
-        return;
-      }
-      const amount = calculateBookingAmount();
-      if (amount.quantity === 0) {
-        $("bookingTotal").textContent = chosen.value + " — ₹" + amount.unitPrice +
-          " प्रति " + amount.label + "। राशि देखने के लिए संबंधित फाइल चुनें।";
-        return;
-      }
-      $("bookingTotal").textContent = amount.label + " Quantity: " + amount.quantity +
-        " × ₹" + amount.unitPrice + " = कुल राशि: ₹" + amount.total;
-    }
-
-    document.querySelectorAll('input[name="service"]').forEach(input => {
-      input.addEventListener("change", updateBookingAmount);
-    });
-
-    $("mediaFiles").addEventListener("change", function() {
+$("mediaFiles").addEventListener("change", function() {
       const files = Array.from(this.files || []);
       const list = $("fileList");
 
@@ -1064,7 +998,7 @@
           address: address,
           special_requirement: specialRequirement || null,
           service: serviceElement.value,
-          amount: calculateBookingAmount().total,
+          amount: null,
           status: "Booking Submitted",
           file_paths: uploadedPaths
         };
