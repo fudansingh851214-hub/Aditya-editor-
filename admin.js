@@ -526,6 +526,46 @@ function renderBookings(bookings) {
   );
 }
 
+function renderCameraBookingProgress(booking) {
+  const normalizedStatus = normalizeStatus(booking.booking_status || booking.status);
+  const paymentValue = String(booking.payment_status || "Pending").trim().toLowerCase();
+  const paid = ["paid", "verified", "confirmed", "success", "successful"].includes(paymentValue) ||
+    normalizedStatus === "Payment Confirmed";
+  let currentIndex = 0;
+
+  if (normalizedStatus === "Completed") currentIndex = 4;
+  else if (paid || normalizedStatus === "Payment Confirmed") currentIndex = 3;
+  else if (normalizedStatus === "Booking Confirmed") currentIndex = 2;
+
+  const stages = [
+    { title: "Submit Camera Book", description: "बुकिंग request मिल गई।" },
+    { title: "Camera Book Confirmed", description: "Admin ने booking confirm कर दी।" },
+    { title: "Payment Pending", description: paid ? "Payment verify हो चुका है।" : "तय राशि का payment बाकी है।" },
+    { title: "Complete", description: "Camera booking पूरी हो गई।" }
+  ];
+
+  const wrapper = makeElement("div", "camera-progress");
+  wrapper.appendChild(makeElement("h4", "", "Camera Booking Progress"));
+  const list = makeElement("div", "camera-progress-list");
+
+  stages.forEach((stage, index) => {
+    const item = makeElement("div", "camera-progress-step" +
+      (index < currentIndex ? " done" : "") +
+      (index === currentIndex ? " current" : ""));
+    const marker = makeElement("span", "camera-progress-dot",
+      index < currentIndex ? "✓" : index === currentIndex ? "•" : String(index + 1));
+    const textWrap = makeElement("div", "camera-progress-copy");
+    textWrap.appendChild(makeElement("strong", "", stage.title));
+    textWrap.appendChild(makeElement("small", "",
+      index < currentIndex ? "यह चरण पूरा हो चुका है।" : stage.description));
+    item.append(marker, textWrap);
+    list.appendChild(item);
+  });
+
+  wrapper.appendChild(list);
+  return wrapper;
+}
+
 function renderBookingList(bookings, targetList, emptyMessage) {
   if (!targetList) return;
   targetList.replaceChildren();
@@ -603,6 +643,9 @@ function renderBookingList(bookings, targetList, emptyMessage) {
 
     addField(article, "Booking Status", booking.booking_status || booking.status);
     addField(article, "Payment Status", booking.payment_status || "Pending");
+    if (isCameraBooking(booking)) {
+      article.appendChild(renderCameraBookingProgress(booking));
+    }
     addField(article, "Booking Created", formatDate(booking.created_at));
     addField(article, "Total Amount", formatAmount(booking.amount));
     addField(article, "Verified Payment Received", formatAmount(booking._paidAmount || 0));
