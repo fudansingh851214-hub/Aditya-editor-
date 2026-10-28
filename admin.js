@@ -456,9 +456,27 @@ async function loadBookings() {
 }
 
 function isCameraBooking(booking) {
-  const service = String(booking?.service || "").trim().toLowerCase();
-  return service.includes("camera") &&
-    (service.includes("book") || service.includes("camera"));
+  // Accept the current service values and older/alternate camera-booking labels.
+  // Normalize punctuation and spacing so "Photo & Video Camera Book",
+  // "Photo Camera Booking", and similar saved values all enter this section.
+  const service = String(booking?.service || "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/&amp;/g, "&")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+  const cameraLabels = [
+    "photo camera book",
+    "video camera book",
+    "photo video camera book",
+    "camera book",
+    "camera booking",
+    "camera"
+  ];
+
+  return cameraLabels.some((label) => service.includes(label)) ||
+    (service.includes("camera") && (service.includes("photo") || service.includes("video")));
 }
 
 function renderBookings(bookings) {
