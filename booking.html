@@ -793,6 +793,14 @@
         input.required = isCamera;
       });
       $("mediaSection").hidden = true;
+      // Show the camera booking submit button at the bottom of the customer details form.
+      const cameraSubmit = document.createElement("button");
+      cameraSubmit.type = "submit";
+      cameraSubmit.className = "submit-button";
+      cameraSubmit.id = "cameraSubmitButton";
+      cameraSubmit.textContent = "📸 Submit Camera Book Now";
+      $("bookingForm").appendChild(cameraSubmit);
+      $("submitButton").hidden = true;
       $("submitButton").textContent = "📸 Submit Camera Book Now";
       document.querySelector("#serviceSection h2").textContent = "Camera Book Now";
       document.querySelector("#serviceSection .section-heading p").textContent = "नीचे दिए गए तीन विकल्पों में से एक चुनें।";
