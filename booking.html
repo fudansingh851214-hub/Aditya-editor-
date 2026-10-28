@@ -793,6 +793,8 @@
         input.required = isCamera;
       });
       $("mediaSection").hidden = true;
+      // Hidden upload input must not block camera-only form submission.
+      $("mediaFiles").required = false;
       // Show the camera booking submit button at the bottom of the customer details form.
       const cameraSubmit = document.createElement("button");
       cameraSubmit.type = "submit";
