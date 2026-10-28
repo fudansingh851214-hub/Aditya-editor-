@@ -55,7 +55,8 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
       <div class="qr-box"><div id="qrcode"></div></div>
       <p class="hint" style="text-align:left">UPI ID: <strong>7544913754-3@ybl</strong></p>
       <button class="secondary" id="copyUPI" type="button">Copy UPI ID</button>
-      <a class="pay-link primary" id="payNow" href="#">Open UPI App</a>
+      <a class="pay-link primary" id="payNow" href="#">Open UPI App (PhonePe / Google Pay / Paytm / Navi)</a>
+      <p class="hint" style="text-align:center">अगर ऐप अपने-आप नहीं खुलता, तो ऊपर दिया QR Code स्कैन करें या UPI ID कॉपी करके PhonePe, Google Pay, Paytm या Navi ऐप में भुगतान करें।</p>
       <form id="paymentForm">
         <h2>Payment Details</h2>
         <label for="paymentAmount">Payment Amount (₹)</label>
@@ -149,7 +150,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
         }
         paymentAmountInput.value=amount.toFixed(2); paymentAmountInput.max=amount.toFixed(2);
         document.getElementById("showStatus").textContent=amount<=0?"Paid / Verified":(pendingAmount>0?"Pending Verification":(data.payment_status||"Pending"));
-        payNow.href=makeUPILink(data.booking_number,Math.min(amount,Number(paymentAmountInput.value)||amount)); payNow.textContent="Pay with PhonePe / UPI";
+        payNow.href=makeUPILink(data.booking_number,Math.min(amount,Number(paymentAmountInput.value)||amount)); payNow.textContent="Open UPI App (PhonePe / Google Pay / Paytm / Navi)";
         if (amount<=0) { document.getElementById("qrcode").textContent="पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display="none"; document.getElementById("copyUPI").style.display="none"; paymentForm.style.display="none"; }
         else { payNow.style.display="block"; document.getElementById("copyUPI").style.display="block"; paymentForm.style.display="block"; }
         if (amount>0 && window.QRCode) new QRCode(document.getElementById("qrcode"),{text:makeUPILink(data.booking_number,Number(paymentAmountInput.value)||amount),width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
@@ -157,14 +158,17 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
       } catch(error) { console.error("Booking Lookup Error:",error); showMessage("Booking नहीं खुली। Supabase permissions और table columns जाँचें।"); }
       finally { lookupButton.disabled=false; }
     });
-    paymentAmountInput.addEventListener("input",()=>{if(!currentBooking)return;const amount=Number(paymentAmountInput.value);payNow.textContent=Number.isFinite(amount)&&amount>0&&amount<=currentBooking.amount?"Pay ₹"+amount.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})+" with PhonePe / UPI":"Pay with PhonePe / UPI";});
-    payNow.addEventListener("click",async(event)=>{
-      event.preventDefault();if(paymentClickBusy)return;if(!db||!currentBooking){showMessage("पहले Booking Number खोजें।");return;}
-      const amount=Number(paymentAmountInput.value);if(!Number.isFinite(amount)||amount<=0||amount>currentBooking.amount){showMessage("₹1 या उससे अधिक और बाकी बकाया से कम/बराबर राशि दर्ज करें।");paymentAmountInput.focus();return;}
-      paymentClickBusy=true;payNow.style.pointerEvents="none";payNow.textContent="Pending payment दर्ज हो रही है...";
-      try {const {error}=await db.from("payment_submissions").insert({booking_number:currentBooking.booking_number,amount:Number(amount.toFixed(2)),status:"pending",payment_reference:"UPI initiated - awaiting customer UTR",utr:null});if(error)throw new Error("Pending रिकॉर्ड नहीं बना। payment_submissions INSERT policy जाँचें: "+error.message);showMessage("₹"+amount.toFixed(2)+" का Pending रिकॉर्ड बन गया। अब UPI ऐप में भुगतान करें। वापस आकर UTR और Screenshot जमा करें।");window.location.href=makeUPILink(currentBooking.booking_number,amount);}
-      catch(error){console.error("Create Pending Payment Error:",error);showMessage(error.message||"Pending payment दर्ज नहीं हो सकी।");}
-      finally{paymentClickBusy=false;payNow.style.pointerEvents="";payNow.textContent="Pay with PhonePe / UPI";}
+    paymentAmountInput.addEventListener("input",()=>{if(!currentBooking)return;const amount=Number(paymentAmountInput.value);const valid=Number.isFinite(amount)&&amount>0&&amount<=currentBooking.amount;payNow.textContent=valid?"Open UPI App · Pay ₹"+amount.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}):"Open UPI App (PhonePe / Google Pay / Paytm / Navi)";if(valid)payNow.href=makeUPILink(currentBooking.booking_number,amount);});
+    // Keep the UPI deep link as the anchor's direct default action. Preventing it
+    // and navigating after an awaited network request can lose Android app-launch permission.
+    payNow.addEventListener("click",(event)=>{
+      if(!db||!currentBooking){event.preventDefault();showMessage("पहले Booking Number खोजें।");return;}
+      const amount=Number(paymentAmountInput.value);
+      if(!Number.isFinite(amount)||amount<=0||amount>currentBooking.amount){
+        event.preventDefault();showMessage("₹1 या उससे अधिक और बाकी बकाया से कम/बराबर राशि दर्ज करें।");paymentAmountInput.focus();return;
+      }
+      payNow.href=makeUPILink(currentBooking.booking_number,amount);
+      showMessage("UPI ऐप खुलना चाहिए। अगर ऐप चुनने का विकल्प न आए, तो QR Code स्कैन करें या UPI ID कॉपी करके अपने UPI ऐप में भुगतान करें।");
     });
     document.getElementById("copyUPI").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(UPI_ID);showMessage("UPI ID कॉपी हो गई।");}catch{showMessage("UPI ID: "+UPI_ID);}});
     paymentForm.addEventListener("submit",async(event)=>{
