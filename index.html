@@ -186,9 +186,10 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
 @media(max-width:760px){.camera-booking-grid{grid-template-columns:1fr}.camera-book-card{min-height:0}.links{max-height:75vh;overflow-y:auto}}
 
 
-/* Sign In / Create Account should open only the login page, not a dropdown */
-#accountMenuAfterNav{display:none!important}
+/* Account dropdown with customer navigation options */
 #accountTriggerAfterNav{cursor:pointer}
+#accountMenuAfterNav{display:none}
+#accountMenuAfterNav.open{display:block}
 </style>
 </head>
 
@@ -218,10 +219,13 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
       </button>
       <div class="account-menu" id="accountMenuAfterNav">
         <div class="account-signed">Account <strong id="accountSignedAfterNav">Guest — Sign in to manage bookings</strong></div>
-        <a href="auth.html">👤 <span>My Account</span></a>
-        <a href="auth.html">📋 <span>My Bookings</span></a>
-        <a href="tracking.html">📍 <span>Track Editing Booking</span></a>
-        <a href="auth.html">🪪 <span>My Details</span></a>
+        <a href="auth.html">🔐 <span>Sign In / Create Account</span></a>
+        <a href="auth.html#dashboard">👤 <span>My Account</span></a>
+        <a href="auth.html#bookingHistory">📋 <span>My Bookings</span></a>
+        <a href="tracking.html">📍 <span>Track Your Editing Booking</span></a>
+        <a href="camera-tracking.html">📸 <span>Track Your Camera Booking</span></a>
+        <a href="auth.html#personalInformation">🪪 <span>My Details</span></a>
+        <a href="index.html">🏠 <span>Home Page</span></a>
         <button class="logout-item" id="accountLogoutAfterNav" type="button" style="display:none">🚪 <span>Logout</span></button>
       </div>
     </div>
@@ -441,7 +445,8 @@ const accountSigned = document.getElementById("accountSignedAfterNav");
 const accountLogout = document.getElementById("accountLogoutAfterNav");
 
 accountTrigger.addEventListener("click", function() {
-  window.location.href = "auth.html";
+  const open = accountMenu.classList.toggle("open");
+  accountTrigger.setAttribute("aria-expanded", String(open));
 });
 document.addEventListener("click", function(event) {
   if (!event.target.closest("#accountWrapAfterNav")) {
