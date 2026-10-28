@@ -553,49 +553,53 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     addField(article, "Special Requirement / Message", booking.special_requirement || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
-    const customerFiles = parseFilePaths(booking.file_paths);
-    const fileNames = customerFiles.map((file) => {
-      if (typeof file === "string") return file;
-      return file?.path || file?.file_path || file?.name || file?.url || "";
-    }).filter(Boolean);
-    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif", "bmp", "heic"];
-    const videoExtensions = ["mp4", "webm", "mov", "m4v", "ogv", "avi", "mkv"];
-    let photoCount = 0;
-    let videoCount = 0;
-    let otherCount = 0;
-    for (const fileName of fileNames) {
-      const cleanName = String(fileName).split("?")[0].split("#")[0];
-      const extension = cleanName.includes(".")
-        ? cleanName.split(".").pop().toLowerCase()
-        : "";
-      if (imageExtensions.includes(extension)) photoCount++;
-      else if (videoExtensions.includes(extension)) videoCount++;
-      else otherCount++;
-    }
-    addField(article, "Selected / Uploaded Files", fileNames.length);
-    addField(article, "Photos Quantity", photoCount);
-    addField(article, "Videos Quantity", videoCount);
+    // File and service quantity details are shown only for regular editing bookings.
+    // Keep the Camera Booking Management card limited to camera booking information.
+    if (!isCameraBooking(booking)) {
+      const customerFiles = parseFilePaths(booking.file_paths);
+      const fileNames = customerFiles.map((file) => {
+        if (typeof file === "string") return file;
+        return file?.path || file?.file_path || file?.name || file?.url || "";
+      }).filter(Boolean);
+      const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif", "bmp", "heic"];
+      const videoExtensions = ["mp4", "webm", "mov", "m4v", "ogv", "avi", "mkv"];
+      let photoCount = 0;
+      let videoCount = 0;
+      let otherCount = 0;
+      for (const fileName of fileNames) {
+        const cleanName = String(fileName).split("?")[0].split("#")[0];
+        const extension = cleanName.includes(".")
+          ? cleanName.split(".").pop().toLowerCase()
+          : "";
+        if (imageExtensions.includes(extension)) photoCount++;
+        else if (videoExtensions.includes(extension)) videoCount++;
+        else otherCount++;
+      }
+      addField(article, "Selected / Uploaded Files", fileNames.length);
+      addField(article, "Photos Quantity", photoCount);
+      addField(article, "Videos Quantity", videoCount);
 
-    // The booking form selects one service per booking, so show 1 for the
-    // selected category and 0 for the other categories.
-    const selectedService = String(booking.service || "").trim().toLowerCase();
-    const isService = (...names) => names.some((name) => selectedService === name);
-    addField(
-      article,
-      "Wedding Projects Quantity",
-      isService("wedding projects", "wedding project") ? 1 : 0
-    );
-    addField(
-      article,
-      "Graphic Design Quantity",
-      isService("graphic design", "graphics design") ? 1 : 0
-    );
-    addField(
-      article,
-      "Social Media Reels Quantity",
-      isService("social media reels", "social media reel") ? 1 : 0
-    );
-    if (otherCount) addField(article, "Other Files Quantity", otherCount);
+      // The booking form selects one service per booking, so show 1 for the
+      // selected category and 0 for the other categories.
+      const selectedService = String(booking.service || "").trim().toLowerCase();
+      const isService = (...names) => names.some((name) => selectedService === name);
+      addField(
+        article,
+        "Wedding Projects Quantity",
+        isService("wedding projects", "wedding project") ? 1 : 0
+      );
+      addField(
+        article,
+        "Graphic Design Quantity",
+        isService("graphic design", "graphics design") ? 1 : 0
+      );
+      addField(
+        article,
+        "Social Media Reels Quantity",
+        isService("social media reels", "social media reel") ? 1 : 0
+      );
+      if (otherCount) addField(article, "Other Files Quantity", otherCount);
+    }
 
     addField(article, "Booking Status", booking.booking_status || booking.status);
     addField(article, "Payment Status", booking.payment_status || "Pending");
