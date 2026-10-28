@@ -358,7 +358,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
 
         payNow.href = makeUPILink(data.booking_number, Math.min(amount, Number(paymentAmountInput.value) || amount));
         payNow.textContent = "Pay with PhonePe / UPI";
-        if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; }
+        if (amount <= 0) { document.getElementById("qrcode").textContent = "पूरी राशि Verified है। कोई भुगतान बाकी नहीं है।"; payNow.style.display = "none"; document.getElementById("copyUPI").style.display = "none"; paymentForm.style.display = "none"; document.getElementById("cardPaymentPanel").style.display = "none"; } else { payNow.style.display = "block"; document.getElementById("copyUPI").style.display = "block"; paymentForm.style.display = "block"; document.getElementById("cardPaymentPanel").style.display = "block"; }
 
         if (amount > 0 && window.QRCode) {
           new QRCode(document.getElementById("qrcode"), {
@@ -429,7 +429,7 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;paddin
           prefill: {},
           notes: { booking_number: currentBooking.booking_number },
           theme: { color: "#168b52" },
-          modal: { ondismiss: () => { cardPaymentHint.textContent = "Checkout बंद हुआ। अगर भुगतान किया है, तो कुछ देर बाद Booking दोबारा खोलकर Status जाँचें।"; } },
+          modal: { ondismiss: () => { cardPaymentHint.textContent = "Checkout बंद हुआ। अगर भुगतान किया है, तो कुछ देर बाद Booking दोबारा खोलकर Status जाँचें।"; cardPaymentBusy = false; payByCardButton.disabled = false; } },
           handler: async (response) => {
             cardPaymentHint.textContent = "Payment gateway से पुष्टि हो रही है...";
             try {
