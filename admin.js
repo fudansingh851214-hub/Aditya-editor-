@@ -608,18 +608,22 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     addField(article, "Verified Payment Received", formatAmount(booking._paidAmount || 0));
     addField(article, "Payment Awaiting Verification", formatAmount(booking._pendingAmount || 0));
     addField(article, "Remaining Balance", formatAmount(booking._remainingAmount ?? booking.amount));
-    if (booking.payment_reference) addField(article, "Latest Payment Reference", booking.payment_reference);
-    if (booking._payments?.length) {
-      const payHistory = makeElement("div", "notice");
-      payHistory.appendChild(makeElement("h4", "", "Payment History & UTR"));
-      for (const payment of booking._payments) {
-        addField(payHistory, "Payment", formatAmount(payment.amount) + " · " + (payment.status || "Pending"));
-        addField(payHistory, "UTR / Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
-        addField(payHistory, "Submitted", formatDate(payment.created_at));
-        if (payment.verified_at) addField(payHistory, "Verified At", formatDate(payment.verified_at));
-        if (payment.verified_by) addField(payHistory, "Verified By", payment.verified_by);
+    // UTR/reference and customer payment history are reviewed in Payment Verification,
+    // not inside Camera Booking Management.
+    if (!isCameraBooking(booking)) {
+      if (booking.payment_reference) addField(article, "Latest Payment Reference", booking.payment_reference);
+      if (booking._payments?.length) {
+        const payHistory = makeElement("div", "notice");
+        payHistory.appendChild(makeElement("h4", "", "Payment History & UTR"));
+        for (const payment of booking._payments) {
+          addField(payHistory, "Payment", formatAmount(payment.amount) + " · " + (payment.status || "Pending"));
+          addField(payHistory, "UTR / Reference", payment.utr || payment.payment_reference || "दर्ज नहीं");
+          addField(payHistory, "Submitted", formatDate(payment.created_at));
+          if (payment.verified_at) addField(payHistory, "Verified At", formatDate(payment.verified_at));
+          if (payment.verified_by) addField(payHistory, "Verified By", payment.verified_by);
+        }
+        article.appendChild(payHistory);
       }
-      article.appendChild(payHistory);
     }
 
     const amountLabel = makeElement("label", "", "Booking Amount (₹)");
