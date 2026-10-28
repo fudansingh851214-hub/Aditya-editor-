@@ -243,6 +243,73 @@
       line-height: 1.65;
     }
 
+    .camera-progress {
+      margin: 16px 0;
+      padding: 16px;
+      border: 1px solid #38516c;
+      border-radius: 13px;
+      background: #071522;
+    }
+
+    .camera-progress h4 {
+      margin: 0 0 14px;
+      color: var(--cyan);
+    }
+
+    .camera-progress-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .camera-progress-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      color: var(--muted);
+    }
+
+    .camera-progress-dot {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      border-radius: 50%;
+      background: #263a50;
+      color: #d7e5f5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .camera-progress-step.done .camera-progress-dot {
+      background: #10c98a;
+      color: #041b15;
+    }
+
+    .camera-progress-step.current .camera-progress-dot {
+      background: #ff657a;
+      color: #fff;
+    }
+
+    .camera-progress-copy {
+      display: grid;
+      gap: 3px;
+    }
+
+    .camera-progress-copy strong {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .camera-progress-step.current .camera-progress-copy strong {
+      color: #ff9aa8;
+    }
+
+    .camera-progress-copy small {
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
     .record-actions {
       display: flex;
       flex-wrap: wrap;
@@ -468,6 +535,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Load admin logic once -->
-  <script src="./admin.js?v=20261028-camera-payments-verification-10"></script>
+  <script src="./admin.js?v=20261028-simple-camera-progress-11"></script>
 </body>
 </html>
