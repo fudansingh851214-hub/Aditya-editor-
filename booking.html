@@ -621,37 +621,7 @@
               <span class="radio-circle"></span>
             </div>
           </label>
-
-
-          <label class="service-option">
-            <input type="radio" name="service" value="Video Camera Book" required>
-            <div class="service-card">
-              <div class="service-emoji">🎥</div>
-              <strong>Video Camera Book</strong>
-              <p>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</p>
-              <span class="radio-circle"></span>
-            </div>
-          </label>
-          <label class="service-option">
-            <input type="radio" name="service" value="Photo Camera Book" required>
-            <div class="service-card">
-              <div class="service-emoji">📸</div>
-              <strong>Photo Camera Book</strong>
-              <p>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</p>
-              <span class="radio-circle"></span>
-            </div>
-          </label>
-          <label class="service-option">
-            <input type="radio" name="service" value="Photo &amp; Video Camera Book" required>
-            <div class="service-card">
-              <div class="service-emoji">📸🎥</div>
-              <strong>Photo &amp; Video Camera Book</strong>
-              <p>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</p>
-              <span class="radio-circle"></span>
-            </div>
-          </label>
-        </div>
-      </section>
+</section>
       <section class="section-card">
 
         <div class="section-heading">
@@ -815,6 +785,8 @@
 
     if (cameraMode) {
       document.body.classList.add("camera-booking-mode");
+      const serviceGrid = document.querySelector("#serviceSection .services");
+      serviceGrid.insertAdjacentHTML("beforeend", "\n\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">🎥</div><strong>Video Camera Book</strong><p>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸</div><strong>Photo Camera Book</strong><p>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo &amp; Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸🎥</div><strong>Photo &amp; Video Camera Book</strong><p>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>");
       document.querySelectorAll('input[name="service"]').forEach(input => {
         const isCamera = cameraServices.includes(input.value);
         input.closest(".service-option").hidden = !isCamera;
