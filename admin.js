@@ -553,12 +553,6 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     addField(article, "Special Requirement / Message", booking.special_requirement || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
-    if (isCameraBooking(booking)) {
-      const cameraNote = makeElement("p", "camera-status-note", "📸 CAMERA BOOKING: Status बदलने के लिए नीचे Booking Status चुनें: Booking Submitted → Booking Confirmed → Payment Confirmed → Completed. Payment की पुष्टि Payments section से करें।");
-      cameraNote.style.cssText = "padding:12px;border:1px solid #c62828;border-radius:10px;background:#fff3f3;color:#a51d40;font-weight:700;line-height:1.5";
-      article.appendChild(cameraNote);
-    }
-
     const customerFiles = parseFilePaths(booking.file_paths);
     const fileNames = customerFiles.map((file) => {
       if (typeof file === "string") return file;
