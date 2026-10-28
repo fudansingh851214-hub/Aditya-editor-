@@ -540,7 +540,7 @@ async function loadCustomerHistory(user) {
             try { await navigator.clipboard.writeText(UPI_ID); copy.textContent = "UPI ID Copied"; }
             catch { copy.textContent = UPI_ID; }
           });
-          const openUPI = addText(actions, "a", "Pay ₹" + remaining.toLocaleString("en-IN", {maximumFractionDigits:2}) + " with PhonePe / UPI", "action");
+          const openUPI = addText(actions, "a", "Pay ₹" + remaining.toLocaleString("en-IN", {maximumFractionDigits:2}) + " with Open UPI App (PhonePe / Google Pay / Paytm / Navi)", "action");
           openUPI.href = upiUrl;
           const paymentForm = addText(payBox, "form", "", "payment-submit");
           addText(paymentForm, "label", "Payment amount (₹)");
@@ -566,7 +566,7 @@ async function loadCustomerHistory(user) {
             qr.innerHTML = "";
             if (window.QRCode) new QRCode(qr, {text: chosenUrl, width: 190, height: 190, correctLevel: QRCode.CorrectLevel.M});
             openUPI.href = chosenUrl;
-            openUPI.textContent = "Pay ₹" + chosen.toFixed(2) + " with PhonePe / UPI";
+            openUPI.textContent = "Pay ₹" + chosen.toLocaleString("en-IN", {maximumFractionDigits:2}) + " with Open UPI App (PhonePe / Google Pay / Paytm / Navi)";
           });
           addText(paymentForm, "label", "Transaction ID / UTR");
           const utrInput = addText(paymentForm, "input", "");
