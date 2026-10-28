@@ -47,6 +47,7 @@ let bookingsBusy = false;
 let paymentsBusy = false;
 let galleryBusy = false;
 let currentBookings = [];
+let currentPayments = [];
 
 const loginPanel = $("loginPanel");
 const adminDashboard = $("adminDashboard");
@@ -382,6 +383,29 @@ async function loadAllAdminData() {
   return results;
 }
 
+function updateDashboardSummary() {
+  const regularCount = currentBookings.filter(isRegularServiceBooking).length;
+  const cameraBookings = currentBookings.filter(isCameraBooking);
+  const verifiedStatuses = ["paid", "verified", "confirmed", "success", "successful"];
+  const verifiedTotal = currentPayments
+    .filter((payment) => verifiedStatuses.includes(String(payment.status || "").toLowerCase()))
+    .reduce((sum, payment) => sum + Math.max(0, Number(payment.amount) || 0), 0);
+  const cameraAmount = cameraBookings.reduce(
+    (sum, booking) => sum + Math.max(0, Number(booking.amount) || 0), 0
+  );
+
+  const setText = (id, value) => {
+    const element = $(id);
+    if (element) element.textContent = String(value);
+  };
+
+  setText("regularBookingCount", regularCount);
+  setText("cameraBookingCount", cameraBookings.length);
+  setText("paymentRecordCount", currentPayments.length);
+  setText("verifiedPaymentTotal", formatAmount(verifiedTotal));
+  setText("cameraBookingAmountTotal", formatAmount(cameraAmount));
+}
+
 /* ---------- BOOKINGS ---------- */
 
 async function loadBookings() {
@@ -436,6 +460,7 @@ async function loadBookings() {
       return { ...booking, _payments: payments, _paidAmount: paid, _pendingAmount: pending, _remainingAmount: Math.max(0, (Number(booking.amount) || 0) - paid) };
     });
     renderBookings(currentBookings);
+    updateDashboardSummary();
     showMessage(message, `${currentBookings.length} Booking records मिले।`);
   } catch (error) {
     const loadErrorText = "Bookings नहीं खुलीं: " + getErrorText(error);
@@ -1037,8 +1062,11 @@ async function loadPayments() {
 
     if (error) throw error;
 
+    currentPayments = data || [];
+    updateDashboardSummary();
+
     const selected = paymentFilter?.value || "all";
-    const filtered = (data || []).filter((payment) =>
+    const filtered = currentPayments.filter((payment) =>
       selected === "all" ||
       String(payment.status || "pending").toLowerCase() === selected.toLowerCase()
     );
