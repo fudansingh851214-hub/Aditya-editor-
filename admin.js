@@ -533,7 +533,7 @@ function renderCameraBookingProgress(booking) {
     normalizedStatus === "Payment Confirmed";
   let currentIndex = 0;
 
-  if (normalizedStatus === "Completed") currentIndex = 4;
+  if (normalizedStatus === "Completed") currentIndex = 5;
   else if (paid || normalizedStatus === "Payment Confirmed") currentIndex = 3;
   else if (normalizedStatus === "Booking Confirmed") currentIndex = 2;
 
@@ -541,6 +541,7 @@ function renderCameraBookingProgress(booking) {
     { title: "Submit Camera Book", description: "बुकिंग request मिल गई।" },
     { title: "Camera Book Confirmed", description: "Admin ने booking confirm कर दी।" },
     { title: "Payment Pending", description: paid ? "Payment verify हो चुका है।" : "तय राशि का payment बाकी है।" },
+    { title: "Payment Confirmed", description: "Payment Admin द्वारा verify हो चुका है।" },
     { title: "Complete", description: "Camera booking पूरी हो गई।" }
   ];
 
