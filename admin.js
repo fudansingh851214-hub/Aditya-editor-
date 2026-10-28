@@ -455,35 +455,44 @@ async function loadBookings() {
   }
 }
 
-function isCameraBooking(booking) {
-  // Accept the current service values and older/alternate camera-booking labels.
-  // Normalize punctuation and spacing so "Photo & Video Camera Book",
-  // "Photo Camera Booking", and similar saved values all enter this section.
-  const service = String(booking?.service || "")
+function normalizeServiceLabel(value) {
+  return String(value || "")
     .normalize("NFKD")
     .toLowerCase()
     .replace(/&amp;/g, "&")
     .replace(/[^a-z0-9]+/g, " ")
-    .trim();
+    .trim()
+    .replace(/\s+/g, " ");
+}
 
-  const cameraLabels = [
-    "photo camera book",
-    "video camera book",
-    "photo video camera book",
-    "camera book",
-    "camera booking",
-    "camera"
+function isCameraBooking(booking) {
+  const service = normalizeServiceLabel(booking?.service);
+  return service.includes("camera") ||
+    service.includes("photo camera") ||
+    service.includes("video camera");
+}
+
+function isRegularServiceBooking(booking) {
+  const service = normalizeServiceLabel(booking?.service);
+  const regularServices = [
+    "photo editing",
+    "video editing",
+    "wedding project",
+    "wedding projects",
+    "graphic design",
+    "graphics design",
+    "social media reel",
+    "social media reels"
   ];
-
-  return cameraLabels.some((label) => service.includes(label)) ||
-    (service.includes("camera") && (service.includes("photo") || service.includes("video")));
+  return regularServices.includes(service);
 }
 
 function renderBookings(bookings) {
+  // Camera rental bookings stay only in Camera Booking Management.
   renderBookingList(
-    bookings.filter((booking) => !isCameraBooking(booking)),
+    bookings.filter((booking) => !isCameraBooking(booking) && isRegularServiceBooking(booking)),
     bookingsList,
-    "अभी कोई दूसरी Service Booking नहीं मिली।"
+    "अभी Photo Editing, Video Editing, Wedding Projects, Graphic Design या Social Media Reels की कोई Booking नहीं मिली।"
   );
   renderBookingList(
     bookings.filter(isCameraBooking),
