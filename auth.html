@@ -225,8 +225,7 @@ function showDashboard(user) {
   document.getElementById("profileFullName").textContent = fullName;
   document.getElementById("profileEmail").textContent = customerEmail;
   document.getElementById("profileMobile").textContent = mobile || "बुकिंग से नंबर खोज रहे हैं...";
-  const bookingMobileInput = document.getElementById("bookingMobile");
-  if (bookingMobileInput && mobile) bookingMobileInput.value = mobile;
+  // The booking form saved phone number will be displayed in YOUR BOOKINGS.
   document.getElementById("profileStatus").textContent = user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending";
   if (!mobile && user && user.id && client) {
     document.getElementById("profileMobile").textContent = "बुकिंग से नंबर खोज रहे हैं...";
@@ -282,6 +281,19 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     if (mobileFilter) bookingQuery = bookingQuery.eq("phone", mobileFilter);
     const { data, error } = await bookingQuery.order("created_at", { ascending: false });
     if (error) throw error;
+    // Prefer the phone number actually entered on the customer's latest linked booking.
+    if (!mobileFilter && data && data.length) {
+      let latestBookingPhone = "";
+      for (const row of data) {
+        if (row.phone && String(row.phone).trim()) { latestBookingPhone = String(row.phone).trim(); break; }
+      }
+      if (latestBookingPhone) {
+        document.getElementById("bookingMobile").value = latestBookingPhone;
+        if (mobileMessage) mobileMessage.textContent = "आपकी latest booking में दर्ज मोबाइल नंबर दिख रहा है। इसी नंबर से अपनी बुकिंग खोजें।";
+      } else if (mobileMessage) {
+        mobileMessage.textContent = "आपकी बुकिंग में मोबाइल नंबर दर्ज नहीं मिला।";
+      }
+    }
     const { data: cancellationRows, error: cancellationError } = await client
       .from("cancellation_requests").select("booking_number,status,created_at")
       .eq("user_id", user.id).order("created_at", { ascending: false });
@@ -297,6 +309,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       return;
     }
     box.textContent = "";
+    if (mobileMessage && mobileFilter) mobileMessage.textContent = "इस मोबाइल नंबर से जुड़ी बुकिंग नीचे दिखाई गई हैं।";
     for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
       const bookingNumber = booking.booking_number || ("Booking #" + (booking.id ?? ""));
