@@ -661,6 +661,12 @@
                    autocomplete="tel" required>
           </div>
 
+          <div class="field full" id="cameraBookingDateField" hidden>
+            <label for="cameraBookingDate">📅 Camera Book Date <span class="required">*</span></label>
+            <input type="date" id="cameraBookingDate" name="camera_booking_date">
+            <p class="hint">जिस तारीख को कैमरा चाहिए, वह तारीख चुनें। यह तारीख Admin को भी दिखाई देगी।</p>
+          </div>
+
           <div class="field full">
             <label for="address">
               पता (Address) <span class="required">*</span>
@@ -785,6 +791,14 @@
 
     if (cameraMode) {
       document.body.classList.add("camera-booking-mode");
+      const cameraDateField = $("cameraBookingDateField");
+      const cameraDateInput = $("cameraBookingDate");
+      cameraDateField.hidden = false;
+      cameraDateInput.required = true;
+      const today = new Date();
+      const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+        .toISOString().slice(0, 10);
+      cameraDateInput.min = localToday;
       const serviceGrid = document.querySelector("#serviceSection .services");
       serviceGrid.insertAdjacentHTML("beforeend", "\n\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">🎥</div><strong>Video Camera Book</strong><p>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸</div><strong>Photo Camera Book</strong><p>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo &amp; Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸🎥</div><strong>Photo &amp; Video Camera Book</strong><p>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>");
       document.querySelectorAll('input[name="service"]').forEach(input => {
@@ -959,6 +973,7 @@ $("mediaFiles").addEventListener("change", function() {
       const phone = $("phone").value.trim();
       const address = $("address").value.trim();
       const specialRequirement = $("specialRequirement").value.trim();
+      const cameraBookingDate = cameraMode ? $("cameraBookingDate").value : "";
       const files = Array.from($("mediaFiles").files || []);
 
       if (!serviceElement) {
@@ -979,6 +994,12 @@ $("mediaFiles").addEventListener("change", function() {
           "कृपया नाम और पूरा पता भरें।",
           "error"
         );
+        return;
+      }
+
+      if (cameraMode && !cameraBookingDate) {
+        showMessage("कृपया Camera Book Date चुनें।", "error");
+        $("cameraBookingDate").focus();
         return;
       }
 
@@ -1028,6 +1049,10 @@ $("mediaFiles").addEventListener("change", function() {
           phone: phone,
           address: address,
           service: serviceElement.value,
+          special_requirement: [
+            cameraMode && cameraBookingDate ? "Camera Booking Date: " + cameraBookingDate : "",
+            specialRequirement
+          ].filter(Boolean).join("\n") || null,
           amount: null,
           status: "Submitted",
           file_paths: uploadedPaths
