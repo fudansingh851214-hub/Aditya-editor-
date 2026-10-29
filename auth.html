@@ -523,6 +523,20 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       addText(statusBox, "div", "📌 YOUR BOOKING STATUS", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#a85b00;margin-bottom:8px";
       const statusValue = addText(statusBox, "div", booking.booking_status || booking.status || "Submitted", "");
       statusValue.style.cssText = "display:inline-block;padding:7px 13px;border-radius:999px;background:#fff0d9;border:1px solid #efc27c;color:#8a4b00;font-size:16px;font-weight:900;overflow-wrap:anywhere";
+      // Camera booking date chosen by the customer is displayed directly under booking status.
+      if (isCameraBooking) {
+        const specialRequirement = String(booking.special_requirement || "");
+        const cameraDateMatch = specialRequirement.match(/(?:^|\\n)Camera Booking Date:\\s*(\\d{4}-\\d{2}-\\d{2})/i);
+        const cameraDateBox = addText(statusBox, "div", "", "camera-book-date-column");
+        cameraDateBox.style.cssText = "display:flex;flex-direction:column;gap:5px;margin-top:14px;padding:12px 14px;background:#fff;border:1px solid #efc27c;border-radius:10px;max-width:100%";
+        addText(cameraDateBox, "div", "📅 CAMERA BOOK DATE", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:.7px;color:#a85b00";
+        let cameraDateLabel = "तारीख उपलब्ध नहीं है";
+        if (cameraDateMatch) {
+          const parts = cameraDateMatch[1].split("-");
+          cameraDateLabel = parts[2] + "/" + parts[1] + "/" + parts[0];
+        }
+        addText(cameraDateBox, "div", cameraDateLabel, "").style.cssText = "font-size:18px;font-weight:900;color:#c62828;overflow-wrap:anywhere";
+      }
       const bookingStatus = booking.booking_status || booking.status || "Submitted";
       const cancellationRequest = cancellationByBooking.get(booking.booking_number);
       if (cancellationRequest) {
