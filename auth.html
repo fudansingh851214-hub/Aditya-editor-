@@ -599,23 +599,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const invoiceWindow = window.open("", "_blank");
         if (!invoiceWindow) { alert("Invoice खोलने के लिए browser pop-up अनुमति दें।"); return; }
         invoiceWindow.document.open();
-        invoiceWindow.document.write("<!DOCTYPE html><html lang='hi'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width'><title>Booking Invoice</title></head><body style='font:15px Arial,sans-serif;padding:24px;color:#172033'>Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।<script>
-(function(){
-  const dateInput=document.getElementById("dashboardCameraBookDate");
-  const cameraLinks=[document.getElementById("cameraBookNowDashboardLink")];
-  if(!dateInput)return;
-  const now=new Date(); const today=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
-  dateInput.min=today;
-  cameraLinks.filter(Boolean).forEach(link=>{
-    link.addEventListener("click",function(event){
-      const chosen=dateInput.value;
-      if(!chosen){event.preventDefault();dateInput.required=true;dateInput.reportValidity();dateInput.focus();return;}
-      this.href="booking.html?service=camera&date="+encodeURIComponent(chosen);
-    });
-  });
-})();
-</script>
-</body></html>");
+        invoiceWindow.document.write("<!DOCTYPE html><html lang='hi'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width'><title>Booking Invoice</title></head><body style='font:15px Arial,sans-serif;padding:24px;color:#172033'>Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।</body></html>");
         invoiceWindow.document.close();
         const esc = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
         const total = Math.max(0, Number(booking.amount) || 0);
@@ -1005,4 +989,23 @@ function initSupabase() {
   }
 }
 initSupabase();
+
+const dashboardCameraDate = document.getElementById("dashboardCameraBookDate");
+if (dashboardCameraDate) {
+  const current = new Date();
+  const localToday = new Date(current.getTime() - current.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  dashboardCameraDate.min = localToday;
+  const cameraLink = document.getElementById("cameraBookNowDashboardLink");
+  if (cameraLink) cameraLink.addEventListener("click", function(event) {
+    const chosenDate = dashboardCameraDate.value;
+    if (!chosenDate) {
+      event.preventDefault();
+      dashboardCameraDate.required = true;
+      dashboardCameraDate.reportValidity();
+      dashboardCameraDate.focus();
+      return;
+    }
+    this.href = "booking.html?service=camera&date=" + encodeURIComponent(chosenDate);
+  });
+}
 </script></body></html>
