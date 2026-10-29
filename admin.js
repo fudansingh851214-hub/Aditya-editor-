@@ -591,7 +591,15 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     addField(article, "Email", booking.email);
     addField(article, "Mobile", booking.phone);
     addField(article, "Address", booking.address);
-    addField(article, "Special Requirement / Message", booking.special_requirement || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
+    const specialText = String(booking.special_requirement || "");
+    const cameraDateMatch = specialText.match(/(?:^|\n)Camera Booking Date:\s*(\d{4}-\d{2}-\d{2})/i);
+    if (isCameraBooking(booking)) {
+      addField(article, "📅 Camera Book Date", cameraDateMatch ? cameraDateMatch[1] : "पुरानी booking में तारीख दर्ज नहीं है");
+    }
+    const customerMessage = specialText
+      .replace(/(?:^|\n)Camera Booking Date:\s*\d{4}-\d{2}-\d{2}/i, "")
+      .trim();
+    addField(article, "Special Requirement / Message", customerMessage || "ग्राहक ने अतिरिक्त जानकारी नहीं दी।");
     addField(article, "Customer Account ID", booking.user_id);
     addField(article, "Service / Category", booking.service);
     // File and service quantity details are shown only for regular editing bookings.
