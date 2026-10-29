@@ -837,6 +837,10 @@
       const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
         .toISOString().slice(0, 10);
       cameraDateInput.min = localToday;
+      const requestedCameraDate = new URLSearchParams(window.location.search).get("date") || "";
+      if (requestedCameraDate && /^\\d{4}-\\d{2}-\\d{2}$/.test(requestedCameraDate) && requestedCameraDate >= localToday) {
+        cameraDateInput.value = requestedCameraDate;
+      }
       const serviceGrid = document.querySelector("#serviceSection .services");
       serviceGrid.insertAdjacentHTML("beforeend", "\n\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">🎥</div><strong>Video Camera Book</strong><p>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸</div><strong>Photo Camera Book</strong><p>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>\n          <label class=\"service-option\">\n            <input type=\"radio\" name=\"service\" value=\"Photo &amp; Video Camera Book\" required>\n            <div class=\"service-card\"><div class=\"service-emoji\">📸🎥</div><strong>Photo &amp; Video Camera Book</strong><p>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</p><span class=\"radio-circle\"></span></div>\n          </label>");
       document.querySelectorAll('input[name="service"]').forEach(input => {
