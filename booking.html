@@ -820,7 +820,60 @@
       $("submitButton").textContent = "📸 Submit Camera Book Now";
       document.querySelector("#serviceSection h2").textContent = "Camera Book Now";
       document.querySelector("#serviceSection .section-heading p").textContent = "नीचे दिए गए तीन विकल्पों में से एक चुनें।";
-    } else if (requestedService) {
+      const preselectedCamera = Array.from(document.querySelectorAll('input[name="service"]'))
+        .find(input => input.value === requestedService);
+      if (preselectedCamera) preselectedCamera.checked = true;
+    } else {
+      const cameraBookingPanel = document.createElement("div");
+      cameraBookingPanel.className = "camera-service-promo";
+      cameraBookingPanel.innerHTML = `
+        <div class="camera-service-promo-heading">
+          <span aria-hidden="true">📸🎥</span>
+          <div>
+            <h3>Camera Book Now</h3>
+            <p>Photo shoot, video shoot या दोनों के लिए अपना camera booking option चुनें।</p>
+          </div>
+        </div>
+        <div class="camera-service-promo-grid">
+          <a class="camera-service-promo-card" href="booking.html?service=Video%20Camera%20Book">
+            <span class="camera-service-promo-icon">🎥</span>
+            <strong>Video Camera Book</strong>
+            <span>शादी, इवेंट और वीडियो शूट के लिए कैमरा बुक करें।</span>
+            <b>यह विकल्प चुनें →</b>
+          </a>
+          <a class="camera-service-promo-card" href="booking.html?service=Photo%20Camera%20Book">
+            <span class="camera-service-promo-icon">📸</span>
+            <strong>Photo Camera Book</strong>
+            <span>फोटो शूट और खास पलों के लिए कैमरा बुक करें।</span>
+            <b>यह विकल्प चुनें →</b>
+          </a>
+          <a class="camera-service-promo-card" href="booking.html?service=Photo%20%26%20Video%20Camera%20Book">
+            <span class="camera-service-promo-icon">📸🎥</span>
+            <strong>Photo &amp; Video Camera Book</strong>
+            <span>फोटो और वीडियो दोनों के लिए कैमरा बुक करें।</span>
+            <b>यह विकल्प चुनें →</b>
+          </a>
+        </div>`;
+      const promoStyle = document.createElement("style");
+      promoStyle.textContent = `
+        .camera-service-promo{margin-top:26px;padding:20px;border:1px solid #f3a6c8;border-radius:20px;background:linear-gradient(135deg,#fff5fa,#f2fbff);box-shadow:0 12px 30px rgba(20,30,60,.08)}
+        .camera-service-promo-heading{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+        .camera-service-promo-heading>span{font-size:34px}
+        .camera-service-promo-heading h3{margin:0;color:#c2185b;font-size:21px}
+        .camera-service-promo-heading p{margin:5px 0 0;color:#405064;font-size:14px}
+        .camera-service-promo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+        .camera-service-promo-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:17px 15px;border:1px solid #f2c0d7;border-radius:16px;background:#fff;color:#243047;text-decoration:none;transition:transform .2s,box-shadow .2s}
+        .camera-service-promo-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(194,24,91,.13)}
+        .camera-service-promo-icon{font-size:30px}
+        .camera-service-promo-card strong{font-size:16px;color:#c2185b}
+        .camera-service-promo-card span:not(.camera-service-promo-icon){font-size:13px;line-height:1.5}
+        .camera-service-promo-card b{margin-top:auto;color:#087eaa;font-size:13px}
+        @media(max-width:700px){.camera-service-promo{padding:14px}.camera-service-promo-grid{grid-template-columns:1fr}.camera-service-promo-card{padding:15px}}
+      `;
+      document.head.appendChild(promoStyle);
+      document.querySelector("#serviceSection").appendChild(cameraBookingPanel);
+    }
+    if (!cameraMode && requestedService) {
       const matchingService = Array.from(document.querySelectorAll('input[name="service"]'))
         .find(input => input.value === requestedService);
       if (matchingService) matchingService.checked = true;
