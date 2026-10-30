@@ -104,7 +104,7 @@
     if (dashboard) { dashboard.style.setProperty("display", "block", "important"); dashboard.classList.remove("bookings-focus-mode"); }
     var meta = user.user_metadata || {};
     var fullName = meta.full_name || meta.name || (user.email ? user.email.split("@")[0] : "Customer");
-    var mobile = meta.phone || meta.mobile || user.phone || "अभी दर्ज नहीं";
+    var mobile = meta.phone || meta.mobile || meta.mobile_number || meta.mobileNumber || meta.phone_number || meta.contact_number || user.phone || "";
     var values = {
       welcome: "Customer Dashboard",
       signedInName: fullName,
@@ -119,6 +119,20 @@
       var el = byId(id);
       if (el) el.textContent = values[id];
     });
+    if (mobile) {
+      var mobileEl = byId("profileMobile");
+      if (mobileEl) mobileEl.textContent = mobile;
+    } else {
+      var mobileEl = byId("profileMobile");
+      if (mobileEl) mobileEl.textContent = "Account का मोबाइल नंबर लोड हो रहा है...";
+      getClient().auth.getUser().then(function(result) {
+        var freshMeta = result && result.data && result.data.user && result.data.user.user_metadata || {};
+        var freshMobile = freshMeta.phone || freshMeta.mobile || freshMeta.mobile_number || freshMeta.mobileNumber || freshMeta.phone_number || freshMeta.contact_number || (result && result.data && result.data.user && result.data.user.phone) || "";
+        if (mobileEl) mobileEl.textContent = freshMobile || "Create Account में मोबाइल नंबर सेव नहीं मिला";
+      }).catch(function() {
+        if (mobileEl) mobileEl.textContent = "मोबाइल नंबर लोड नहीं हुआ — Refresh करें";
+      });
+    }
     renderHeader(user);
     loadBookings(user);
     // Match the requested mobile layout: show the full dashboard from its top,
