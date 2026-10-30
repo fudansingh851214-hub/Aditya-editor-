@@ -387,6 +387,42 @@ a.btn:hover{
   box-shadow:0 8px 20px rgba(220,38,38,.28)!important;
 }
 
+
+/* Unified button style: pink-to-green gradient, red hover */
+.btn,
+button:not(.account-menu button),
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.links a,
+.account-trigger,
+.camera-book-card a,
+a.camera-book-btn {
+  background:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:16px!important;
+  font-weight:800!important;
+  transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease!important;
+}
+.btn:hover,
+button:not(.account-menu button):hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+.links a:hover,
+.account-trigger:hover,
+.camera-book-card a:hover,
+a.camera-book-btn:hover {
+  background:#dc2626!important;
+  background-image:none!important;
+  color:#fff!important;
+  border-color:#b91c1c!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 20px rgba(220,38,38,.28)!important;
+  filter:none!important;
+}
+
 </style>
 </head>
 
