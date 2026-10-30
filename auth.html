@@ -579,13 +579,7 @@ function showDashboard(user) {
       } else put("profileMobile", "Create Account में मोबाइल नंबर सेव नहीं मिला");
     }).catch(() => put("profileMobile", "मोबाइल नंबर लोड नहीं हुआ — Refresh करें"));
   }
-  if (user && client) {
-    try { loadCustomerHistory(user); }
-    catch (error) {
-      const history = document.getElementById("bookingHistory");
-      if (history) history.textContent = "बुकिंग लोड नहीं हो सकीं। कृपया Refresh करें।";
-    }
-  }
+  // Booking list is loaded once by auth-tabs.js after the active session is confirmed.
   if (dashboard) {
     requestAnimationFrame(() => {
       dashboard.scrollIntoView({ behavior: "auto", block: "start" });
@@ -622,14 +616,18 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     // Load bookings linked to this account, plus older guest bookings made
     // before the customer created an account. Legacy bookings are matched by
     // the exact mobile number saved in the customer's verified account profile.
+    const { data: authResult, error: authError } = await client.auth.getUser();
+    if (authError) throw authError;
+    const activeUser = authResult && authResult.user ? authResult.user : user;
+    if (!activeUser || !activeUser.id) throw new Error("Customer login session नहीं मिला। कृपया दोबारा Login करें।");
     const { data: accountRows, error: accountError } = await client
-      .from("bookings").select("*").eq("user_id", user.id)
+      .from("bookings").select("*").eq("user_id", activeUser.id)
       .order("created_at", { ascending: false });
     if (accountError) throw accountError;
 
-    const metadata = user.user_metadata || {};
+    const metadata = activeUser.user_metadata || {};
     let accountMobile = String(
-      metadata.phone || metadata.mobile || metadata.phone_number || user.phone || ""
+      metadata.phone || metadata.mobile || metadata.mobile_number || metadata.mobileNumber || metadata.phone_number || metadata.contact_number || activeUser.phone || ""
     ).replace(/[^0-9]/g, "");
     if (accountMobile.length > 10 && accountMobile.endsWith(accountMobile.slice(-10))) {
       accountMobile = accountMobile.slice(-10);
