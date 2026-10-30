@@ -649,8 +649,8 @@ header .logo{font-size:27px!important;font-weight:900!important;letter-spacing:.
 <script>
 "use strict";
 
-document.getElementById("year").textContent =
-  new Date().getFullYear();
+const yearElement = document.getElementById("year");
+if (yearElement) yearElement.textContent = new Date().getFullYear();
 
 const menu = document.getElementById("menu");
 const links = document.getElementById("links");
