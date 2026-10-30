@@ -509,7 +509,7 @@ function showDashboard(user) {
   const customerEmail = user && user.email ? user.email : "Email उपलब्ध नहीं";
   const fullName = meta.full_name || meta.name || meta.fullName ||
     (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
-  const mobile = meta.phone || meta.mobile || meta.phone_number || (user && user.phone) || "";
+  const mobile = meta.phone || meta.mobile || meta.mobile_number || meta.mobileNumber || meta.phone_number || meta.contact_number || (user && user.phone) || "";
   put("welcome", "Customer Dashboard");
   put("signedInName", fullName);
   put("signedInEmail", customerEmail);
@@ -519,13 +519,21 @@ function showDashboard(user) {
   put("profileStatus", user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending");
   put("customerEmail", customerEmail);
 
-  if (!mobile && user && user.id && client) {
-    client.from("bookings").select("phone,created_at")
-      .eq("user_id", user.id).not("phone","is",null)
-      .order("created_at",{ascending:false}).limit(1).maybeSingle()
-      .then(({data,error}) => {
-        if (!error && data && data.phone) put("profileMobile", data.phone);
-      }).catch(() => put("profileMobile", "नंबर लोड नहीं हुआ — Refresh करें"));
+  if (!mobile && user && client) {
+    client.auth.getUser().then(({data,error}) => {
+      const freshMeta = data && data.user && data.user.user_metadata ? data.user.user_metadata : {};
+      const freshMobile = freshMeta.phone || freshMeta.mobile || freshMeta.mobile_number || freshMeta.mobileNumber || freshMeta.phone_number || freshMeta.contact_number || (data && data.user && data.user.phone) || "";
+      if (freshMobile) put("profileMobile", freshMobile);
+      else if (user.id) {
+        return client.from("bookings").select("phone,created_at")
+          .eq("user_id", user.id).not("phone","is",null)
+          .order("created_at",{ascending:false}).limit(1).maybeSingle()
+          .then(({data:booking,error:bookingError}) => {
+            if (!bookingError && booking && booking.phone) put("profileMobile", booking.phone);
+            else put("profileMobile", "Create Account में मोबाइल नंबर सेव नहीं मिला");
+          });
+      } else put("profileMobile", "Create Account में मोबाइल नंबर सेव नहीं मिला");
+    }).catch(() => put("profileMobile", "मोबाइल नंबर लोड नहीं हुआ — Refresh करें"));
   }
   if (user && client) {
     try { loadCustomerHistory(user); }
