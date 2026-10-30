@@ -1,540 +1,109 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07111f">
-  <title>EDIT CONCEPT | Admin Panel</title>
-
-  <style>
-    :root {
-      --bg: #07111f;
-      --panel: #101f32;
-      --panel2: #0b1728;
-      --border: #263a50;
-      --cyan: #42dfff;
-      --green: #10c98a;
-      --red: #ff657a;
-      --text: #f0f6ff;
-      --muted: #9eb0c6;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at top right, #123650 0, transparent 45%),
-        var(--bg);
-    }
-
-    button, input, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .container {
-      width: min(1100px, 100%);
-      margin: auto;
-      padding: 22px 16px 45px;
-    }
-
-    header {
-      padding: 12px 0 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 26px;
-    }
-
-    .brand {
-      margin: 0;
-      color: var(--cyan);
-      font-size: clamp(27px, 5vw, 38px);
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .subtitle {
-      margin-top: 10px;
-      color: var(--muted);
-      letter-spacing: 3px;
-      font-size: 13px;
-    }
-
-    .card {
-      padding: 24px;
-      margin-bottom: 22px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: rgba(16, 31, 50, 0.96);
-      box-shadow: 0 15px 35px #0002;
-    }
-
-    h2 {
-      margin: 0 0 18px;
-      color: var(--cyan);
-      font-size: 25px;
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-
-    .description {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: 600;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 14px;
-      color: var(--text);
-      background: var(--panel2);
-      border: 1px solid #38516c;
-      border-radius: 11px;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--cyan);
-    }
-
-    .btn {
-      padding: 13px 17px;
-      border: 0;
-      border-radius: 10px;
-      background: var(--cyan);
-      color: #04111d;
-      font-weight: 700;
-    }
-
-    .btn:hover {
-      filter: brightness(1.08);
-    }
-
-    .btn-secondary {
-      color: var(--text);
-      background: #263a50;
-      border: 1px solid #3b536d;
-    }
-
-    .btn-danger {
-      color: #ffdbe1;
-      background: #512532;
-      border: 1px solid #873b4b;
-    }
-
-    .full {
-      width: 100%;
-      margin-top: 22px;
-    }
-
-    /* Login is visible by default. Dashboard stays hidden until authorized. */
-    #loginPanel {
-      display: block;
-    }
-
-    #adminDashboard.hidden {
-      display: none !important;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .message {
-      margin-top: 15px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
-
-    .notice {
-      margin: 16px 0;
-      padding: 14px;
-      color: #b9efff;
-      background: #0a2635;
-      border: 1px solid #15516a;
-      border-radius: 12px;
-      line-height: 1.6;
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .toolbar h2 {
-      margin: 0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .stat {
-      display: block;
-      padding: 20px;
-      color: inherit;
-      text-decoration: none;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      transition: border-color .2s, transform .2s;
-    }
-
-    .stat:hover, .stat:focus-visible {
-      border-color: var(--cyan);
-      transform: translateY(-2px);
-      outline: none;
-    }
-
-    .stat-link-hint {
-      display: inline-block;
-      margin-top: 10px;
-      color: var(--cyan);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .stat-title {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .stat-value {
-      margin-top: 10px;
-      color: var(--cyan);
-      font-size: 24px;
-      font-weight: 800;
-      overflow-wrap: anywhere;
-    }
-
-    .record {
-      margin: 14px 0;
-      padding: 18px;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .record p {
-      margin: 9px 0;
-      line-height: 1.65;
-    }
-
-    .camera-progress {
-      margin: 16px 0;
-      padding: 16px;
-      border: 1px solid #38516c;
-      border-radius: 13px;
-      background: #071522;
-    }
-
-    .camera-progress h4 {
-      margin: 0 0 14px;
-      color: var(--cyan);
-    }
-
-    .camera-progress-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .camera-progress-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      color: var(--muted);
-    }
-
-    .camera-progress-dot {
-      display: grid;
-      place-items: center;
-      width: 25px;
-      height: 25px;
-      flex: 0 0 25px;
-      border-radius: 50%;
-      background: #263a50;
-      color: #d7e5f5;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .camera-progress-step.done .camera-progress-dot {
-      background: #10c98a;
-      color: #041b15;
-    }
-
-    .camera-progress-step.current .camera-progress-dot {
-      background: #ff657a;
-      color: #fff;
-    }
-
-    .camera-progress-copy {
-      display: grid;
-      gap: 3px;
-    }
-
-    .camera-progress-copy strong {
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .camera-progress-step.current .camera-progress-copy strong {
-      color: #ff9aa8;
-    }
-
-    .camera-progress-copy small {
-      line-height: 1.5;
-      color: var(--muted);
-    }
-
-    .record-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 14px;
-    }
-
-    .record-actions button {
-      flex: 1 1 130px;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    footer {
-      margin-top: 30px;
-      padding: 28px 10px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      text-align: center;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 16px 12px 30px;
-      }
-
-      .card {
-        padding: 19px;
-        border-radius: 16px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .toolbar .btn {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06152b">
+<title>EDIT CONCEPT | Admin Panel</title>
+<style>
+:root{--bg:#061329;--panel:#0b203d;--panel2:#09203d;--line:#17436b;--blue:#087cf0;--cyan:#36cfff;--text:#eff7ff;--muted:#9bb4d0;--green:#10c99a;--red:#ff647b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:82px}body{margin:0;background:radial-gradient(ellipse at 70% 0,#10365b 0,transparent 42%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.app-shell{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:248px;padding:18px 14px;background:linear-gradient(180deg,#061b38,#041329);border-right:1px solid #17416a;display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:7px 5px 22px;border-bottom:1px solid #15395d}.brand-icon{font-size:34px}.brand strong{display:block;color:#39d4ff;font-size:20px;letter-spacing:.4px}.brand small{display:block;color:#a8bfd8;font-size:10px;margin-top:3px}
+.admin-user{display:flex;align-items:center;gap:11px;padding:18px 5px}.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#164a80;font-size:25px}.admin-user strong{display:block}.admin-user small{color:#18d99e;font-size:11px}
+.side-nav{display:grid;gap:7px}.side-nav a,.side-nav button{display:flex;align-items:center;gap:12px;padding:12px 13px;border:0;border-radius:9px;background:transparent;color:#d9eaff;text-align:left;font-weight:600;font-size:14px}.side-nav a:hover,.side-nav a.active,.side-nav button:hover{background:linear-gradient(90deg,#087cf0,#075bc0);color:#fff}.side-nav .nav-icon{width:22px;text-align:center;font-size:18px}.side-bottom{margin-top:auto;border:1px solid #17436b;border-radius:12px;padding:13px;background:#08213e;color:#b9d4f0;font-size:12px;line-height:1.6}
+.main-area{margin-left:248px;min-height:100vh}.topbar{height:62px;position:sticky;top:0;z-index:15;display:flex;align-items:center;justify-content:space-between;padding:0 25px;background:#061a35ed;border-bottom:1px solid #17436b;backdrop-filter:blur(12px)}.topbar-title{font-size:19px;font-weight:800}.topbar-right{display:flex;align-items:center;gap:12px;color:#c5d9ef;font-size:13px}.menu-toggle{display:none;border:1px solid #23517a;background:#0b2a4c;color:#fff;border-radius:8px;padding:8px 11px}
+.content{max-width:1600px;margin:auto;padding:24px}.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:20px}.page-heading h1{font-size:25px;margin:0 0 6px}.muted,.description{color:var(--muted);line-height:1.6}.page-heading p{margin:0;font-size:13px}
+.card{padding:19px;margin:18px 0;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#0b2342,#081a33);box-shadow:0 12px 30px #0003;scroll-margin-top:80px}h2{margin:0;color:#eaf6ff;font-size:19px}h3{margin:0 0 12px;color:#eaf6ff}.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:15px}.toolbar h2{display:flex;align-items:center;gap:9px}.section-icon{font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat{display:block;padding:17px;border:1px solid #1b5684;border-radius:12px;background:linear-gradient(135deg,#0c2d53,#09203b);transition:.2s}.stat:hover{transform:translateY(-2px);border-color:#39cfff}.stat-title{font-size:12px;color:#b6cce4}.stat-value{font-size:27px;font-weight:800;color:#fff;margin:8px 0}.stat-link-hint{color:#3bd1ff;font-size:12px;font-weight:700}.stat p{font-size:11px;margin:6px 0;color:#9bb4d0}
+.btn{padding:10px 14px;border:0;border-radius:8px;background:linear-gradient(90deg,#087cf0,#075dc8);color:white;font-weight:700}.btn:hover{filter:brightness(1.12)}.btn-secondary{background:#153b60;border:1px solid #28618c;color:#e5f4ff}.btn-danger{background:#7c263c;color:#fff}.full{width:100%;margin-top:20px}
+input,select{width:100%;padding:11px 12px;border:1px solid #285579;border-radius:8px;background:#061a32;color:#eff7ff;outline:none}input:focus,select:focus{border-color:#39cfff}label{display:block;margin:13px 0 7px;font-weight:700;color:#dcecff}
+.notice{padding:13px;border-radius:10px;background:#092b45;border:1px solid #1d5b7c;color:#bceeff;line-height:1.6;margin:15px 0}.message{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;margin:12px 0}
+.record{margin:13px 0;padding:17px;background:#071a32;border:1px solid #19466c;border-radius:11px;overflow-wrap:anywhere}.record h3{font-size:16px;color:#43d4ff}.record p{margin:8px 0;line-height:1.55;font-size:13px}.record p strong{color:#b9d6f2}.record button{margin:5px 6px 3px 0}.record label{margin-top:14px}.record select,.record input{max-width:420px}
+.camera-progress{margin:15px 0;padding:14px;border:1px solid #285579;border-radius:10px;background:#06152a}.camera-progress h4{margin:0 0 12px;color:#42dfff}.camera-progress-list{display:grid;gap:10px}.camera-progress-step{display:flex;gap:10px;color:#9bb4d0}.camera-progress-dot{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:grid;place-items:center;background:#28435e}.camera-progress-step.done .camera-progress-dot{background:#10c99a;color:#04251b}.camera-progress-step.current .camera-progress-dot{background:#087cf0;color:#fff}.camera-progress-copy{display:grid;gap:3px}.camera-progress-copy strong{color:#eef7ff}.camera-progress-copy small{line-height:1.4}
+#loginPanel{display:block;max-width:520px;margin:8vh auto;padding:26px}#adminDashboard.hidden,.hidden{display:none!important}#loginPanel h2{color:#39d4ff;font-size:24px}#loginPanel .description{font-size:14px}
+footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #17436b;margin-top:25px;font-size:12px;line-height:1.8}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar{width:220px}.main-area{margin-left:220px}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:transform .25s;width:260px}.sidebar.open{transform:translateX(0)}.main-area{margin-left:0}.menu-toggle{display:block}.topbar{padding:0 13px}.content{padding:15px 12px}.grid{grid-template-columns:1fr 1fr}.page-heading h1{font-size:21px}.card{padding:14px}.toolbar .btn{width:auto}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.topbar-title{font-size:16px}.topbar-right{font-size:11px}.record{padding:13px}}
+</style>
 </head>
-
 <body>
-  <main class="container">
-
-    <header>
-      <h1 class="brand">EDIT CONCEPT</h1>
-      <div class="subtitle">PRIVATE ADMIN CONTROL PANEL</div>
-    </header>
-
-    <!-- ADMIN LOGIN: visible when not logged in -->
+<div class="app-shell">
+<aside class="sidebar" id="adminSidebar">
+  <div class="brand"><span class="brand-icon">📸</span><div><strong>EDIT CONCEPT</strong><small>Photo &amp; Video Editing Service</small></div></div>
+  <div class="admin-user"><div class="avatar">👤</div><div><strong>Admin</strong><small>● Online</small></div></div>
+  <nav class="side-nav" aria-label="Admin navigation">
+    <a class="active" href="#dashboardSection"><span class="nav-icon">⌂</span>Dashboard</a>
+    <a href="#bookingsSection"><span class="nav-icon">▣</span>Booking Management</a>
+    <a href="#cameraBookingsSection"><span class="nav-icon">📷</span>Camera Booking Management</a>
+    <a href="#paymentsSection"><span class="nav-icon">▤</span>Payment Management</a>
+    <a href="#cancellationsSection"><span class="nav-icon">↩</span>Cancellation Requests</a>
+    <button id="sidebarLogoutButton" type="button"><span class="nav-icon">⏻</span>Logout</button>
+  </nav>
+  <div class="side-bottom">✦ EDIT CONCEPT<br><span>Manage customer bookings, uploaded files and payments securely.</span></div>
+</aside>
+<div class="main-area">
+  <div class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">☰</button><div class="topbar-title">🛡 Admin Panel</div></div><div class="topbar-right"><span>🔔</span><span>👤 Admin</span></div></div>
+  <main class="content">
     <section id="loginPanel" class="card">
-      <h2>Admin Login</h2>
-
-      <p class="description">
-        अपने registered Admin account से Login करें।
-      </p>
-
+      <h2>Admin Login</h2><p class="description">अपने registered Admin account से Login करें।</p>
       <form id="loginForm">
-        <label for="adminEmail">Admin Email</label>
-        <input
-          id="adminEmail"
-          name="email"
-          type="email"
-          placeholder="Enter admin email"
-          autocomplete="username"
-          required
-        >
-
-        <label for="adminPassword">Password</label>
-        <input
-          id="adminPassword"
-          name="password"
-          type="password"
-          placeholder="Enter password"
-          autocomplete="current-password"
-          required
-        >
-
-        <button class="btn full" type="submit">
-          LOGIN
-        </button>
+        <label for="adminEmail">Admin Email</label><input id="adminEmail" name="email" type="email" placeholder="Enter admin email" autocomplete="username" required>
+        <label for="adminPassword">Password</label><input id="adminPassword" name="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+        <button class="btn full" type="submit">LOGIN</button>
       </form>
-
-      <p id="loginMessage" class="message" role="status"
-         aria-live="polite"></p>
-
-      <p class="muted">
-        केवल अधिकृत Admin ही इस पैनल का उपयोग कर सकता है।
-      </p>
+      <p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+      <p class="muted">केवल अधिकृत Admin ही इस पैनल का उपयोग कर सकता है।</p>
     </section>
-
-    <!-- ADMIN DASHBOARD: hidden until admin authorization -->
     <section id="adminDashboard" class="hidden">
-
-      <div class="toolbar">
-        <div>
-          <h2>Admin Dashboard</h2>
-          <p class="muted">Booking और payment management</p>
-        </div>
-
-        <button id="logoutButton" class="btn btn-danger" type="button">
-          Logout
-        </button>
-      </div>
-
-      <div class="notice">
-        <strong>Security:</strong>
-        ग्राहक की booking और payment details केवल अधिकृत Admin access से देखें।
-      </div>
-
-      <div class="grid" id="adminQuickLinks">
-        <a class="stat" href="#bookingsSection">
-          <div class="stat-title">Booking Management</div>
-          <div class="stat-value" id="regularBookingCount">0</div>
-          <p class="muted">Photo Editing, Video Editing, Wedding Projects, Graphic Design और Social Media Reels</p>
-          <span class="stat-link-hint">बुकिंग खोलें →</span>
-        </a>
-
-        <a class="stat" href="#cameraBookingsSection">
-          <div class="stat-title">Camera Booking Management</div>
-          <div class="stat-value" id="cameraBookingCount">0</div>
-          <p class="muted">कितने ग्राहकों ने Camera Book Now किया</p>
-          <span class="stat-link-hint">Camera bookings खोलें →</span>
-        </a>
-
-        <a class="stat" href="#paymentsSection">
-          <div class="stat-title">Payment Management</div>
-          <div class="stat-value" id="paymentRecordCount">0</div>
-          <p class="muted">कुल payment records · सत्यापित भुगतान <strong id="verifiedPaymentTotal">₹0</strong></p>
-          <span class="stat-link-hint">Payments खोलें →</span>
-        </a>
-
-      </div>
-
-      <!-- BOOKINGS -->
-      <section class="card" id="bookingsSection" style="margin-top:22px">
-        <div class="toolbar">
-          <h2>Booking Management</h2>
-          <button id="refreshButton" class="btn btn-secondary"
-                  type="button">
-            Refresh Bookings
-          </button>
-        </div>
-
-        <p id="message" class="message" role="status"
-           aria-live="polite"></p>
-
-        <div id="bookingsList">
-          <p class="muted">Bookings लोड होने की प्रतीक्षा करें...</p>
+      <section id="dashboardSection">
+        <div class="page-heading"><div><h1>Dashboard</h1><p class="muted">Welcome to EDIT CONCEPT — Manage bookings, camera reservations and payments.</p></div><button id="logoutButton" class="btn btn-danger" type="button">Logout</button></div>
+        <div class="notice"><strong>🔒 Secure Admin Area:</strong> ग्राहक की booking, uploaded photos/videos और payment details केवल अधिकृत Admin को दिखाई देंगी।</div>
+        <div class="grid" id="adminQuickLinks">
+          <a class="stat" href="#bookingsSection"><div class="stat-title">📁 Booking Management</div><div class="stat-value" id="regularBookingCount">0</div><p>Photo &amp; Video Editing सहित सभी services</p><span class="stat-link-hint">Bookings खोलें →</span></a>
+          <a class="stat" href="#cameraBookingsSection"><div class="stat-title">📷 Camera Bookings</div><div class="stat-value" id="cameraBookingCount">0</div><p>Photo Camera और Video Camera reservations</p><span class="stat-link-hint">Camera bookings खोलें →</span></a>
+          <a class="stat" href="#paymentsSection"><div class="stat-title">💳 Payment Records</div><div class="stat-value" id="paymentRecordCount">0</div><p>Verified payments: <strong id="verifiedPaymentTotal">₹0</strong></p><span class="stat-link-hint">Payments खोलें →</span></a>
+          <a class="stat" href="#cancellationsSection"><div class="stat-title">↩ Cancellation Requests</div><div class="stat-value" id="cancellationCount">—</div><p>Customer cancellation requests</p><span class="stat-link-hint">Requests खोलें →</span></a>
         </div>
       </section>
-
-      <!-- SEPARATE CAMERA BOOKING MANAGEMENT -->
+      <section class="card" id="bookingsSection">
+        <div class="toolbar"><h2><span class="section-icon">📁</span>Booking Management</h2><button id="refreshButton" class="btn btn-secondary" type="button">↻ Refresh Bookings</button></div>
+        <p class="muted">Customer details, uploaded Photos/Videos, amount और Booking Status यहीं manage करें।</p>
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+        <div id="bookingsList"><p class="muted">Bookings लोड होने की प्रतीक्षा करें...</p></div>
+      </section>
       <section class="card" id="cameraBookingsSection">
-        <div class="toolbar">
-          <h2>📸 Camera Booking Management</h2>
-          <button id="refreshCameraBookingsButton" class="btn btn-secondary" type="button">
-            Refresh Camera Bookings
-          </button>
-        </div>
-        <p class="muted">यहाँ केवल Photo Camera Book, Video Camera Book और Photo &amp; Video Camera Book दिखाई देंगे। Booking Status, Payment Status, Amount और अपडेट के विकल्प इसी अलग सेक्शन में मिलेंगे।</p>
-        <div id="cameraBookingsList">
-          <p class="muted">Camera Bookings लोड होने की प्रतीक्षा करें...</p>
-        </div>
+        <div class="toolbar"><h2><span class="section-icon">📷</span>Camera Booking Management</h2><button id="refreshCameraBookingsButton" class="btn btn-secondary" type="button">↻ Refresh Camera Bookings</button></div>
+        <p class="muted">Camera type, customer details, Camera Booking Date, amount और Booking/Payment Status अपडेट करें।</p>
+        <div id="cameraBookingsList"><p class="muted">Camera Bookings लोड होने की प्रतीक्षा करें...</p></div>
       </section>
-
-      <!-- CANCELLATION REQUESTS -->
-      <section class="card">
-        <div class="toolbar">
-          <h2>Cancellation Requests</h2>
-          <button id="refreshCancellationsButton" class="btn btn-secondary" type="button">Refresh Requests</button>
-        </div>
+      <section class="card" id="paymentsSection">
+        <div class="toolbar"><h2><span class="section-icon">💳</span>Payment Management</h2><button id="refreshPaymentsButton" class="btn btn-secondary" type="button">↻ Refresh Payments</button></div>
+        <label for="paymentFilter">Payment Status Filter</label>
+        <select id="paymentFilter"><option value="all">All Payments</option><option value="Pending">Pending</option><option value="Paid">Paid</option><option value="Rejected">Rejected</option></select>
+        <p class="muted">UTR, customer payment screenshot, submitted amount और verification status जाँचें।</p>
+        <p id="paymentMessage" class="message" role="status" aria-live="polite"></p>
+        <div id="paymentsList"><p class="muted">Payment records लोड होने की प्रतीक्षा करें...</p></div>
+      </section>
+      <section class="card" id="cancellationsSection">
+        <div class="toolbar"><h2><span class="section-icon">↩</span>Cancellation Requests</h2><button id="refreshCancellationsButton" class="btn btn-secondary" type="button">↻ Refresh Requests</button></div>
         <p id="cancellationMessage" class="message" role="status" aria-live="polite"></p>
         <div id="cancellationsList"><p class="muted">Cancellation requests लोड होने की प्रतीक्षा करें...</p></div>
       </section>
-
-      <!-- PAYMENTS -->
-      <section class="card" id="paymentsSection">
-        <div class="toolbar">
-          <h2>Payment Verification</h2>
-          <button id="refreshPaymentsButton"
-                  class="btn btn-secondary" type="button">
-            Refresh Payments
-          </button>
-        </div>
-
-        <label for="paymentFilter">Payment Status Filter</label>
-        <select id="paymentFilter">
-          <option value="all">All Payments</option>
-          <option value="Pending">Pending</option>
-          <option value="Paid">Paid</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-
-        <p id="paymentMessage" class="message" role="status"
-           aria-live="polite"></p>
-
-        <div id="paymentsList">
-          <p class="muted">Payment records लोड होने की प्रतीक्षा करें...</p>
-        </div>
-      </section>
-      
-      
-    <footer>
-      Aditya Kumar Project Edit Concept © <span id="currentYear">2026</span>
-      <br>
-      Photo &amp; Video Editing Service
-      <br>
-      Private Admin Area
-    </footer>
+      <footer>EDIT CONCEPT © <span id="currentYear">2026</span><br>Photo &amp; Video Editing Service · Private Admin Area</footer>
+    </section>
   </main>
-
-  <script>
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
-  </script>
-
-  <!-- Load Supabase once -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Load admin logic once -->
-  <script src="./admin.js?v=20261029-camera-book-date-step-1"></script>
+</div>
+</div>
+<script>
+document.getElementById("currentYear").textContent=new Date().getFullYear();
+const sidebar=document.getElementById("adminSidebar");
+document.getElementById("menuToggle").addEventListener("click",()=>sidebar.classList.toggle("open"));
+document.querySelectorAll(".side-nav a").forEach(link=>link.addEventListener("click",()=>{document.querySelectorAll(".side-nav a").forEach(a=>a.classList.remove("active"));link.classList.add("active");sidebar.classList.remove("open")}));
+document.getElementById("sidebarLogoutButton").addEventListener("click",()=>document.getElementById("logoutButton")?.click());
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./admin.js?v=20261030-admin-dashboard-redesign"></script>
 </body>
 </html>
