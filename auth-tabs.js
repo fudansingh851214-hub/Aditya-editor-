@@ -150,7 +150,9 @@
       if (typeof window.loadCustomerHistory !== "function") {
         throw new Error("पूरा Booking Renderer उपलब्ध नहीं है। पेज Refresh करें।");
       }
-      await window.loadCustomerHistory(user);
+      var authResult = await getClient().auth.getUser();
+      var activeUser = authResult && authResult.data && authResult.data.user ? authResult.data.user : user;
+      await window.loadCustomerHistory(activeUser);
     } catch (error) {
       box.textContent = "आपकी पूरी बुकिंग लोड नहीं हो सकी। कृपया Refresh करें। (" + (error.message || "Database error") + ")";
     }
