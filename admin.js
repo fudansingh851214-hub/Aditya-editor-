@@ -36,9 +36,19 @@ const GALLERY_SERVICES = [
   "Social Media Reels"
 ];
 
+// Admin authentication uses a separate browser storage key so an Admin
+// login never becomes a customer-side login on auth.html / index.html.
 const db = window.supabase?.createClient(
   SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      storageKey: "edit-concept-admin-auth",
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
 );
 
 const $ = (id) => document.getElementById(id);
