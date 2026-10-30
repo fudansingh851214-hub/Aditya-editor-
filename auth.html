@@ -192,6 +192,34 @@ h1{color:#ef4444!important}
 
 /* Keep the Edit Concept brand banner visible at the top while scrolling the customer dashboard */
 .brand-banner{position:sticky!important;top:0!important;z-index:1000!important;}
+
+/* Customer dashboard shortcut cards: same pink-green gradient and red hover */
+#dashboard .dashgrid a,
+#dashboard .dashgrid a:visited{
+  background:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
+  background-image:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:16px!important;
+  text-decoration:none!important;
+  font-weight:900!important;
+  transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease!important;
+}
+#dashboard .dashgrid a:hover,
+#dashboard .dashgrid a:focus-visible{
+  background:#dc2626!important;
+  background-image:none!important;
+  color:#fff!important;
+  border-color:#b91c1c!important;
+  text-decoration:none!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 20px rgba(220,38,38,.28)!important;
+  outline:none;
+}
+#dashboard .dashgrid a:active{
+  transform:translateY(0) scale(.98)!important;
+}
+
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
