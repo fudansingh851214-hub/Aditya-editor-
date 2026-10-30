@@ -437,7 +437,7 @@
 </div>
 <div class="site-account" id="siteAccount"><button id="siteAccountTrigger" type="button" aria-expanded="false">👤 <span id="siteAccountName">Sign In / Create Account</span> ▾</button>
 <div class="site-account-menu" id="siteAccountMenu"><div class="site-account-info"><span id="siteAccountSigned">Guest — Sign in to manage bookings</span></div>
-<a href="auth.html">Sign In / Create Account</a><a href="auth.html">My Account</a><a href="auth.html#bookingHistory">My Bookings</a><a href="tracking.html">Track Editing Booking</a><a href="camera-tracking.html">Track Camera Booking</a><a href="auth.html">My Details</a><a href="index.html">Home Page</a><button id="siteAccountLogout" type="button" hidden>Logout</button></div></div>
+<a id="siteAccountMainLink" href="auth.html">Sign In / Create Account</a><a href="auth.html#dashboard">My Account</a><a href="auth.html#bookingHistory">My Bookings</a><a href="tracking.html">Track Editing Booking</a><a href="camera-tracking.html">Track Camera Booking</a><a href="auth.html#personalInformation">My Details</a><a href="index.html">Home Page</a><button id="siteAccountLogout" type="button" hidden>Logout</button></div></div>
 </nav></header>
   <main class="container">
     <div class="intro">
@@ -539,7 +539,8 @@
     const client = window.supabase
       ? window.supabase.createClient(
           SUPABASE_URL,
-          SUPABASE_PUBLISHABLE_KEY
+          SUPABASE_PUBLISHABLE_KEY,
+          { auth: { storageKey: "edit-concept-customer-auth", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
         )
       : null;
 
@@ -887,7 +888,7 @@
       nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nav.classList.remove("open");menuBtn.setAttribute("aria-expanded","false");}));
       trigger.addEventListener("click",()=>{const open=menu.classList.toggle("open");trigger.setAttribute("aria-expanded",String(open));});
       document.addEventListener("click",e=>{if(!e.target.closest("#siteAccount")){menu.classList.remove("open");trigger.setAttribute("aria-expanded","false");}});
-      function updateHeader(user){if(user){const label=user.user_metadata?.full_name||user.user_metadata?.name||user.user_metadata?.fullName||(user.email?user.email.split("@")[0]:"My Account");name.textContent=label;signed.textContent="Signed in as "+label;logout.hidden=false;}else{name.textContent="Sign In / Create Account";signed.textContent="Guest — Sign in to manage bookings";logout.hidden=true;}}
+      function updateHeader(user){const mainLink=$("siteAccountMainLink");if(user){const label=user.user_metadata?.full_name||user.user_metadata?.name||user.user_metadata?.fullName||(user.email?user.email.split("@")[0]:"My Account");name.textContent=label;signed.textContent="Signed in as "+label;mainLink.textContent="My Account";logout.hidden=false;}else{name.textContent="Sign In / Create Account";signed.textContent="Guest — Sign in to manage bookings";mainLink.textContent="Sign In / Create Account";logout.hidden=true;}}
       logout.addEventListener("click",async()=>{if(!client)return;const {error}=await client.auth.signOut();if(error){signed.textContent="Logout नहीं हुआ: "+error.message;return;}menu.classList.remove("open");updateHeader(null);});
       if(client){client.auth.getUser().then(({data})=>updateHeader(data?.user||null));client.auth.onAuthStateChange((event,session)=>updateHeader(session?.user||null));}
     })();
