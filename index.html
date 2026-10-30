@@ -194,6 +194,31 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
 /* Home navigation links: bold pink */
 .links a.pink-bold-nav{color:#e91e72!important;font-weight:800!important}
 .links a.pink-bold-nav:hover{color:#bd1458!important}
+
+/* Navigation buttons styled to match the requested pink-to-green design */
+.links{gap:10px;flex-wrap:wrap}
+.links a,
+.links a.pink-bold-nav{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:48px;padding:12px 20px;border:1px solid #e84b91;
+  border-radius:18px;
+  background:linear-gradient(110deg,#e91e72 0%,#a64b68 48%,#168a56 100%);
+  color:#fff!important;font-size:15px;font-weight:800!important;
+  line-height:1.25;text-align:center;
+  box-shadow:0 5px 16px rgba(233,30,114,.22),0 3px 12px rgba(22,138,86,.18);
+  transition:transform .2s ease,filter .2s ease;
+}
+.links a:hover,.links a.pink-bold-nav:hover{
+  color:#fff!important;filter:brightness(1.12);transform:translateY(-2px);
+}
+@media(min-width:851px){
+  .links{justify-content:center;gap:9px}
+  .links a,.links a.pink-bold-nav{padding:11px 14px;font-size:13px}
+}
+@media(max-width:850px){
+  .links{background:#06101f;padding:18px;gap:12px}
+  .links a,.links a.pink-bold-nav{width:100%;min-height:54px;font-size:16px}
+}
 </style>
 </head>
 
