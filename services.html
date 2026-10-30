@@ -37,6 +37,76 @@ footer{border-top-color:#f0ccd5;color:#795d65}
 .photo-side.after span{background:#c51e47;color:#fff}
 .service-preview{border-color:#f0ccd5}
 
+
+/* Match the Home page's light mint, pink-green and red-hover design */
+:root{
+  --bg:#f1f8f4;--panel:#ffffff;--cyan:#168b52;--purple:#e91e72;
+  --green:#168b52;--white:#174c35;--muted:#71877c;--border:#dce9e1;
+}
+html{scroll-behavior:smooth}
+body{
+  color:#174c35!important;
+  background:linear-gradient(180deg,#f1f8f4 0%,#f7faf8 100%)!important;
+}
+header{
+  background:#ffffffed!important;
+  border-bottom:1px solid #dce9e1!important;
+  box-shadow:0 4px 16px rgba(23,76,53,.05);
+}
+.nav{min-height:72px;flex-wrap:wrap}
+.logo{
+  background:linear-gradient(90deg,#e91e72,#168b52);
+  -webkit-background-clip:text;background-clip:text;color:transparent!important;
+}
+.logo small{color:#71877c!important}
+nav{align-items:center;gap:8px!important}
+nav a{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 14px;border-radius:14px;
+  background:linear-gradient(110deg,#e91e72 0%,#168b52 100%);
+  color:#fff!important;font-weight:800;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease!important;
+}
+nav a:hover{
+  background:#dc2626!important;background-image:none!important;
+  color:#fff!important;transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(220,38,38,.25);
+}
+.hero{padding:48px 0 24px;border-bottom:1px solid #dce9e1}
+.eyebrow{color:#168b52!important}
+h1{color:#174c35!important}
+p{color:#71877c!important}
+.grid{gap:18px}
+.card{
+  background:#fff!important;border:1px solid #dce9e1!important;
+  border-radius:20px!important;padding:22px!important;
+  box-shadow:0 10px 28px rgba(23,76,53,.07)!important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
+}
+.card:hover{
+  transform:translateY(-4px);border-color:#168b52!important;
+  box-shadow:0 14px 30px rgba(22,139,82,.14)!important;
+}
+.card h2{color:#174c35!important}
+.icon{color:#168b52}
+.btn,.btn.outline{
+  background:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
+  color:#fff!important;border:0!important;border-radius:12px!important;
+  box-shadow:0 5px 14px rgba(22,139,82,.15)!important;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease!important;
+}
+.btn:hover,.btn.outline:hover{
+  background:#dc2626!important;background-image:none!important;
+  color:#fff!important;transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(220,38,38,.28)!important;
+}
+footer{border-top-color:#dce9e1!important;color:#174c35!important}
+@media(max-width:760px){
+  .nav{align-items:flex-start;flex-direction:column;padding:12px 0}
+  nav{gap:7px!important}
+  nav a{padding:8px 11px;font-size:13px}
+}
+
 </style>
 </head>
 <body>
