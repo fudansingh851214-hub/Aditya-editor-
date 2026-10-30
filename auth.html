@@ -372,7 +372,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
   </div>
 </header><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
-<div id="authArea"><div class="auth-heading"><span class="auth-kicker">CUSTOMER PORTAL</span><h2>Welcome to Edit Concept</h2><p>Login करें या नया अकाउंट बनाएँ और अपनी बुकिंग, पेमेंट और सर्विस अपडेट देखें।</p></div><div class="tabs" role="group" aria-label="Choose account action"><button id="loginTab" class="active" type="button" aria-pressed="true" onclick="window.setMode(&quot;login&quot;)">Login</button><button id="signupTab" type="button" aria-pressed="false" onclick="window.setMode(&quot;signup&quot;)">Create Account</button></div>
+<div id="authArea"><div class="auth-heading"><span class="auth-kicker">CUSTOMER PORTAL</span><h2>Welcome to Edit Concept</h2><p>Login करें या नया अकाउंट बनाएँ और अपनी बुकिंग, पेमेंट और सर्विस अपडेट देखें।</p></div><div class="tabs" role="group" aria-label="Choose account action"><button id="loginTab" class="active" type="button" aria-pressed="true" onclick="window.switchAuthMode('login')">Login</button><button id="signupTab" type="button" aria-pressed="false" onclick="window.switchAuthMode('signup')">Create Account</button></div>
 <form id="authForm">
 <div id="signupFields" style="display:none">
 <label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Enter your full name">
@@ -383,6 +383,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
 <div id="confirmPasswordField" style="display:none"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter your password"></div>
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
+<script src="auth-tabs.js"></script>
 <div id="forgotArea" style="text-align:center;margin:14px 0"><a href="#" id="forgotLink" style="color:#42dfff">Forgot Password? / पासवर्ड भूल गए?</a></div>
 
 <p id="message" role="status" aria-live="polite"></p></div>
