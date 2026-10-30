@@ -736,7 +736,19 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       serviceBox.style.cssText = "margin:12px 0;padding:16px;background:#fff7fb;border:1px solid #f0bfd5;border-left:5px solid #d81b70;border-radius:14px;box-shadow:0 4px 12px #d81b7010";
       addText(serviceBox, "div", "✂️ YOUR SERVICE", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#ad1457;margin-bottom:8px";
       addText(serviceBox, "div", booking.service || "—", "").style.cssText = "font-size:20px;font-weight:800;color:#263238;overflow-wrap:anywhere";
-       const workDetails = String(booking.special_requirement || "").trim();
+       const workRaw = booking.special_requirement || booking.editing_details || booking.requirements || booking.description || "";
+       let workDetails = "";
+       if (typeof workRaw === "string") {
+         workDetails = workRaw.trim();
+         try {
+           const parsedWork = JSON.parse(workDetails);
+           if (parsedWork && typeof parsedWork === "object") {
+             workDetails = Object.entries(parsedWork).map(([key,value]) => key + ": " + (Array.isArray(value) ? value.join(", ") : String(value ?? ""))).join("\\n");
+           }
+         } catch (_) {}
+       } else if (workRaw && typeof workRaw === "object") {
+         workDetails = Object.entries(workRaw).map(([key,value]) => key + ": " + (Array.isArray(value) ? value.join(", ") : String(value ?? ""))).join("\\n");
+       }
        const workBox = addText(card, "div", "", "booking-info-box work-details-box");
        workBox.style.cssText = "margin:12px 0;padding:14px;background:#f2f8ff;border:1px solid #cfe0f5;border-left:5px solid #3478bd;border-radius:12px";
        addText(workBox, "div", "📝 EDITING REQUIREMENTS / CUSTOMER NOTES", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:.6px;color:#245b9a;margin-bottom:7px";
@@ -789,7 +801,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const filesList = addText(filesSection, "div", "", "customer-file-list");
         filesList.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px";
         for (const item of uploadedFiles) {
-          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name)) || "";
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.storage_path || item.fullPath || item.url || item.name)) || "";
           if (!filePath) continue;
           const fileCard = addText(filesList, "div", "", "customer-file-item");
           fileCard.style.cssText = "min-width:0;padding:8px;border:1px solid #29415d;border-radius:9px;background:#102139";
