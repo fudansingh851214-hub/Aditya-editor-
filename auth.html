@@ -860,7 +860,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const mediaPaths = Array.isArray(booking.file_paths) ? booking.file_paths : (typeof booking.file_paths === "string" ? (() => { try { const parsed = JSON.parse(booking.file_paths); return Array.isArray(parsed) ? parsed : []; } catch { return []; } })() : []);
         const mediaItems = [];
         for (const item of mediaPaths) {
-          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name || item.url)) || "";
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.storage_path || item.fullPath || item.url || item.name)) || "";
           if (!filePath) continue;
           // Existing uploads are stored in the private customer-media bucket.
           try {
