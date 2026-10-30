@@ -551,22 +551,11 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    // Use only columns present in the bookings table: user_id and phone.
-    // The customer email is held by Supabase Auth and is not assumed to be a bookings column.
-    const accountMobile = String(
-      user.user_metadata?.phone || user.user_metadata?.mobile ||
-      user.user_metadata?.phone_number || user.phone || ""
-    ).trim();
-    const effectiveMobile = String(mobileFilter || accountMobile).trim();
-    let bookingQuery = client.from("bookings").select("*");
-    if (effectiveMobile) {
-      bookingQuery = bookingQuery.or(
-        "user_id.eq." + user.id + ",phone.eq." + effectiveMobile
-      );
-    } else {
-      bookingQuery = bookingQuery.eq("user_id", user.id);
-    }
-    const { data, error } = await bookingQuery.order("created_at", { ascending: false });
+    // Strict account isolation: show ONLY bookings owned by this authenticated user.
+    // Never use phone-number OR matching here; two customers can share a family phone.
+    const { data, error } = await client.from("bookings").select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
     if (error) throw error;
     // Show only the relevant tracking shortcut(s) for the services this customer booked.
     const cameraServices = ["photo camera book", "video camera book", "photo & video camera book"];
@@ -577,17 +566,17 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     if (editingTrackLink) editingTrackLink.style.display = hasEditingBooking ? "flex" : "none";
     if (cameraTrackLink) cameraTrackLink.style.display = hasCameraBooking ? "flex" : "none";
 
-    // Prefer the phone number actually entered on the customer's latest linked booking.
-    if (!effectiveMobile && data && data.length) {
+    // Use only the mobile number from this customer's own linked booking.
+    if (!accountMobile && data && data.length) {
       let latestBookingPhone = "";
       for (const row of data) {
         if (row.phone && String(row.phone).trim()) { latestBookingPhone = String(row.phone).trim(); break; }
       }
       if (latestBookingPhone) {
         document.getElementById("bookingMobile").value = latestBookingPhone;
-        if (mobileMessage) mobileMessage.textContent = "यह नंबर आपकी latest booking से अपने-आप लिया गया है। इस नंबर से की गई सभी उपलब्ध बुकिंग नीचे दिखाई जाएँगी।";
+        if (mobileMessage) mobileMessage.textContent = "यह नंबर आपके अपने account की latest booking से लिया गया है।";
         // Automatically include guest and older bookings with the same booking phone.
-        return await loadCustomerHistory(user, latestBookingPhone);
+        return;
       } else if (mobileMessage) {
         mobileMessage.textContent = "आपकी बुकिंग में मोबाइल नंबर दर्ज नहीं मिला।";
       }
