@@ -1059,7 +1059,7 @@ document.getElementById("forgotLink").addEventListener("click", async (event) =>
   link.style.pointerEvents = "none";
   setMessage("Password reset email भेज रहे हैं...");
   try {
-    const { error } = await client.auth.resetPasswordForEmail(address, { redirectTo: "https://fudansingh851214-hub.github.io/Aditya-editor-/auth.html" });
+    const { error } = await client.auth.resetPasswordForEmail(address, { redirectTo: "https://edit-concept.vercel.app/auth.html" });
     if (error) throw error;
     setMessage("यदि इस Email से account मौजूद है, तो password reset link भेज दिया गया है। Inbox/Spam खोलें और link पर click करके नया password बनाएँ।");
   } catch (error) { setMessage("Reset email नहीं भेजा जा सका: " + (error.message || "दोबारा कोशिश करें।")); }
@@ -1099,9 +1099,12 @@ form.addEventListener("submit", async (event) => {
       if (password.value.length < 8) throw new Error("Password कम से कम 8 characters का होना चाहिए।");
       if (password.value !== confirmValue) throw new Error("Password और Confirm Password एक जैसे नहीं हैं।");
       result = await client.auth.signUp({
-        email: email.value.trim(),
+        email: email.value.trim().toLowerCase(),
         password: password.value,
-        options: { data: { full_name: fullNameValue, phone: mobileValue } }
+        options: {
+          data: { full_name: fullNameValue, phone: mobileValue },
+          emailRedirectTo: "https://edit-concept.vercel.app/auth.html"
+        }
       });
       if (result.error) throw result.error;
       if (result.data.session) {
@@ -1111,14 +1114,21 @@ form.addEventListener("submit", async (event) => {
       }
     } else {
       result = await client.auth.signInWithPassword({
-        email: email.value.trim(),
+        email: email.value.trim().toLowerCase(),
         password: password.value
       });
       if (result.error) throw result.error;
       showDashboard(result.data.user);
     }
   } catch (error) {
-    setMessage("समस्या: " + (error.message || "दोबारा कोशिश करें।"));
+    const raw = String(error.message || "");
+    let friendly = raw || "दोबारा कोशिश करें।";
+    if (/invalid login credentials/i.test(raw)) friendly = "Email या Password सही नहीं है। यदि नया account बनाया है, तो पहले Email में आया confirmation link खोलें।";
+    else if (/email not confirmed/i.test(raw)) friendly = "आपका Email अभी verify नहीं हुआ है। Inbox/Spam में Supabase confirmation email खोलकर Verify करें, फिर Login करें।";
+    else if (/user already registered/i.test(raw)) friendly = "इस Email से account पहले से बना हुआ है। Create Account के बजाय Login करें या Forgot Password इस्तेमाल करें।";
+    else if (/password should be at least/i.test(raw)) friendly = "Password कम से कम 8 characters का रखें।";
+    else if (/redirect.*not allowed|invalid.*redirect/i.test(raw)) friendly = "Email confirmation redirect URL Supabase में allow नहीं है। Admin को Supabase Auth URL Configuration में edit-concept.vercel.app/auth.html जोड़ना होगा।";
+    setMessage("समस्या: " + friendly);
   } finally {
     submitButton.disabled = false;
   }
