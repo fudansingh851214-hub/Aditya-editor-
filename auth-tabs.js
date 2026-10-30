@@ -121,7 +121,9 @@
     });
     renderHeader(user);
     loadBookings(user);
-    if (dashboard) dashboard.scrollIntoView({ behavior: "auto", block: "start" });
+    var bookingsSection = document.querySelector(".history-section");
+    if (bookingsSection) bookingsSection.scrollIntoView({ behavior: "auto", block: "start" });
+    else if (dashboard) dashboard.scrollIntoView({ behavior: "auto", block: "start" });
   }
 
   async function loadBookings(user) {
