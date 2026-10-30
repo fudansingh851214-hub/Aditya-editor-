@@ -314,6 +314,58 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
   .account-trigger .account-name{max-width:125px!important}
 }
 
+
+/* Consistent hover feedback for every interactive control on the homepage */
+.btn,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.links a,
+.account-menu a,
+.account-menu button,
+.camera-book-card a,
+a.btn{
+  transition:background .22s ease,color .22s ease,filter .22s ease,
+             transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
+}
+.btn:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+.links a:hover,
+.account-menu a:hover,
+.account-menu button:hover,
+.camera-book-card a:hover,
+a.btn:hover{
+  filter:brightness(1.16) saturate(1.12)!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 20px rgba(22,138,86,.22)!important;
+}
+.btn:active,
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+.links a:active,
+a.btn:active{
+  transform:translateY(0) scale(.98)!important;
+  filter:brightness(.96)!important;
+}
+.card,
+.camera-book-card,
+.feature-card{
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
+}
+.card:hover,
+.camera-book-card:hover,
+.feature-card:hover{
+  transform:translateY(-4px);
+  border-color:#168a56!important;
+  box-shadow:0 12px 26px rgba(22,138,86,.14)!important;
+}
+
 </style>
 </head>
 
