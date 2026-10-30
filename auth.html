@@ -949,6 +949,38 @@ async function loadCustomerHistory(user, mobileFilter = "") {
 .invoice-history #bookingHistory .paybox .payment-submit input{width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:10px!important;background:#fff!important;border:1px solid #ddd!important;border-radius:8px!important;color:#333!important}
 @media(max-width:520px){.invoice-history #bookingHistory .money-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.invoice-history #bookingHistory>.history-card{padding:12px!important}.invoice-history #bookingHistory .paybox{padding:12px!important}}
 
+
+/* Customer YOUR BOOKINGS: match the approved booking-summary and payment example */
+.invoice-history #bookingHistory{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
+.invoice-history #bookingHistory>.history-card{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:clamp(12px,3vw,20px)!important;background:#fff!important;border:1px solid #f0d6e2!important;border-left:5px solid #c62828!important;border-radius:16px!important;box-shadow:0 5px 18px rgba(30,40,50,.07)!important;color:#263238!important;overflow:hidden!important}
+.invoice-history #bookingHistory .customer-booking-number{background:#fff0f6!important;border:1px solid #f1c7da!important;border-bottom:2px solid #d81b70!important;border-radius:9px!important;text-align:left!important;padding:12px!important}
+.invoice-history #bookingHistory .booking-phone-box{background:#eff6ff!important;border:1px solid #cfe0f8!important;border-left:4px solid #3478bd!important;border-radius:9px!important;padding:10px 12px!important}
+.invoice-history #bookingHistory .booking-info-box{background:#fff8fc!important;border:1px solid #f0d6e2!important;border-left:4px solid #c21868!important;border-radius:10px!important;padding:12px!important;box-shadow:none!important}
+.invoice-history #bookingHistory .customer-detail-box{background:#fff8fc!important;border-left-color:#168b52!important}
+.invoice-history #bookingHistory .work-details-box{background:#f2f8ff!important;border-color:#cfe0f5!important;border-left-color:#3478bd!important}
+.invoice-history #bookingHistory .booking-date-time{background:#eff6ff!important;border-color:#d4e4fa!important;border-radius:10px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding:7px!important}
+.invoice-history #bookingHistory .booking-date-item{min-width:0!important;padding:7px!important}
+.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:12px!important;color:#245b9a!important}
+.invoice-history #bookingHistory .customer-files{background:#f1f7ff!important;border:1px solid #d3e4fa!important;border-radius:10px!important;padding:11px!important}
+.invoice-history #bookingHistory .customer-files h4{color:#245b9a!important}
+.invoice-history #bookingHistory .customer-file-item{background:#fff!important;border:1px solid #dce7f5!important;border-radius:9px!important}
+.invoice-history #bookingHistory .customer-file-item img,.invoice-history #bookingHistory .customer-file-item video{width:100%!important;max-height:200px!important;object-fit:contain!important;background:#f7f9fc!important}
+.invoice-history #bookingHistory .money-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin:10px 0!important}
+.invoice-history #bookingHistory .money-item{min-width:0!important;padding:10px!important;background:#fff!important;border:1px solid #dce7f5!important;border-radius:9px!important}
+.invoice-history #bookingHistory .money-item small{color:#667085!important}
+.invoice-history #bookingHistory .money-item strong{color:#245b9a!important;font-size:16px!important}
+.invoice-history #bookingHistory .customer-payment-history{background:#fff!important;border:1px solid #edc9dc!important;border-radius:13px!important;padding:13px!important}
+.invoice-history #bookingHistory .customer-payment-history h3{color:#a94444!important}
+.invoice-history #bookingHistory .customer-payment-history .history-card{background:#fff!important;border:1px solid #eee!important;border-left:4px solid #c62828!important;border-radius:9px!important;padding:11px!important}
+.invoice-history #bookingHistory .paybox{background:#fff!important;border:1px solid #ead6df!important;border-radius:13px!important;padding:13px!important;color:#344054!important}
+.invoice-history #bookingHistory .paybox h3{color:#a94444!important;font-size:17px!important}
+.invoice-history #bookingHistory .paybox .qr{width:max-content!important;height:auto!important;max-width:100%!important;margin:12px auto!important;padding:8px!important;background:#fff!important;border:3px solid #3995d8!important;border-radius:11px!important}
+.invoice-history #bookingHistory .paybox .payment-submit{background:#fff!important;border:1px solid #e5e5e5!important;border-radius:11px!important;padding:11px!important}
+.invoice-history #bookingHistory .paybox input{max-width:100%!important;box-sizing:border-box!important;background:#fff!important;color:#344054!important}
+.invoice-history #bookingHistory .upi-actions{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:8px!important}
+.invoice-history #bookingHistory .upi-actions button,.invoice-history #bookingHistory a.action{background:#d7193f!important;color:#fff!important;border:1px solid #c51639!important;border-radius:8px!important}
+@media(max-width:480px){.invoice-history #bookingHistory>.history-card{padding:10px!important}.invoice-history #bookingHistory .booking-date-time{gap:5px!important}.invoice-history #bookingHistory .booking-date-item{padding:5px!important}.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:11px!important}.invoice-history #bookingHistory .money-item{padding:8px!important}}
+
 </style></head><body><header><h1>ADITYA KUMAR · PROJECT EDIT CONCEPT</h1><div>Photo &amp; Video Editing Service</div><div>Invoice: ${esc(booking.booking_number || booking.id)}</div></header><h2>🧾 Booking Invoice</h2><div class="row"><span>Booking Number</span><strong>${esc(booking.booking_number || booking.id)}</strong></div><div class="row"><span>Booking Date</span><strong>${esc(invoiceDate)}</strong></div><div class="row"><span>Customer</span><strong>${esc(booking.customer_name || "Customer")}</strong></div><div class="row"><span>Phone</span><strong>${esc(booking.phone)}</strong></div><div class="row"><span>Address</span><strong>${esc(booking.address || "इस बुकिंग में पता दर्ज नहीं है")}</strong></div><div class="row"><span>Service</span><strong>${esc(booking.service)}</strong></div><div class="row"><span>Status</span><strong>${esc(bookingStatus)}</strong></div><div class="row total"><span>Total Amount</span><span>${booking.amount == null ? "Admin से राशि की पुष्टि बाकी" : "₹" + total.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div><h2>Customer Photos &amp; Videos</h2><div class="media-grid">${mediaHtml}</div><div class="note">यह बिल वेबसाइट में उपलब्ध booking record पर आधारित है। भुगतान केवल Admin द्वारा सत्यापित होने पर प्राप्त माना जाएगा। फोटो/वीडियो print में तभी आएँगे जब browser उन्हें लोड कर पाए।</div><p><button class="print" onclick="window.print()">Print / Save as PDF</button></p></body></html>`;
         invoiceWindow.document.open(); invoiceWindow.document.write(invoiceHtml); invoiceWindow.document.close();
       });
