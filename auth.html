@@ -449,6 +449,8 @@ function setMode(next) {
   signupTab.classList.toggle("active", mode === "signup");
   submitButton.textContent = mode === "login" ? "Login" : mode === "signup" ? "Create Account" : "Set New Password";
   password.autocomplete = mode === "login" ? "current-password" : "new-password";
+  // Existing customer passwords may be shorter; enforce 8 characters only for signup/reset.
+  password.minLength = mode === "login" ? 0 : 8;
   password.placeholder = mode === "reset" ? "नया password (कम से कम 8 characters)" : mode === "signup" ? "Enter your password (at least 8 characters)" : "Enter your password";
   const signingUp = mode === "signup";
   document.getElementById("signupFields").style.display = signingUp ? "block" : "none";
@@ -1043,6 +1045,13 @@ document.getElementById("forgotLink").addEventListener("click", async (event) =>
   } catch (error) { setMessage("Reset email नहीं भेजा जा सका: " + (error.message || "दोबारा कोशिश करें।")); }
   finally { link.style.pointerEvents = "auto"; }
 });
+
+// Surface browser validation failures instead of leaving the Login button appearing unresponsive.
+form.addEventListener("invalid", (event) => {
+  const field = event.target;
+  if (field && field.id === "email") setMessage("कृपया सही Email Address भरें।");
+  else if (field && field.id === "password") setMessage("कृपया Password भरें।");
+}, true);
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
