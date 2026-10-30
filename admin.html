@@ -63,10 +63,16 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
         <div class="page-heading"><div><h1>Dashboard</h1><p class="muted">Welcome to EDIT CONCEPT — Manage bookings, camera reservations and payments.</p></div><button id="logoutButton" class="btn btn-danger" type="button">Logout</button></div>
         <div class="notice"><strong>🔒 Secure Admin Area:</strong> ग्राहक की booking, uploaded photos/videos और payment details केवल अधिकृत Admin को दिखाई देंगी।</div>
         <div class="grid" id="adminQuickLinks">
-          <a class="stat" href="#bookingsSection"><div class="stat-title">📁 Booking Management</div><div class="stat-value" id="regularBookingCount">0</div><p>Photo &amp; Video Editing सहित सभी services</p><span class="stat-link-hint">Bookings खोलें →</span></a>
-          <a class="stat" href="#cameraBookingsSection"><div class="stat-title">📷 Camera Bookings</div><div class="stat-value" id="cameraBookingCount">0</div><p>Photo Camera और Video Camera reservations</p><span class="stat-link-hint">Camera bookings खोलें →</span></a>
-          <a class="stat" href="#paymentsSection"><div class="stat-title">💳 Payment Records</div><div class="stat-value" id="paymentRecordCount">0</div><p>Verified payments: <strong id="verifiedPaymentTotal">₹0</strong></p><span class="stat-link-hint">Payments खोलें →</span></a>
-          <a class="stat" href="#cancellationsSection"><div class="stat-title">↩ Cancellation Requests</div><div class="stat-value" id="cancellationCount">—</div><p>Customer cancellation requests</p><span class="stat-link-hint">Requests खोलें →</span></a>
+          <a class="stat" href="#bookingsSection"><div class="stat-title">📅 Total Bookings</div><div class="stat-value" id="totalBookingCount">0</div><p>All editing and camera bookings</p><span class="stat-link-hint">View bookings →</span></a>
+          <a class="stat" href="#paymentsSection"><div class="stat-title">₹ Total Revenue</div><div class="stat-value" id="totalRevenue">₹0</div><p>Verified payment collection</p><span class="stat-link-hint">View payments →</span></a>
+          <a class="stat" href="#paymentsSection"><div class="stat-title">💳 Pending Payments</div><div class="stat-value" id="pendingPaymentCount">0</div><p>Waiting for admin verification</p><span class="stat-link-hint">Verify payments →</span></a>
+          <a class="stat" href="#bookingsSection"><div class="stat-title">✓ Completed Bookings</div><div class="stat-value" id="completedBookingCount">0</div><p>Successfully completed work</p><span class="stat-link-hint">View completed →</span></a>
+        </div>
+        <div class="grid secondary-stats">
+          <a class="stat" href="#bookingsSection"><div class="stat-title">📁 Editing Bookings</div><div class="stat-value" id="regularBookingCount">0</div><p>Photo, Video, Wedding, Design &amp; Reels</p></a>
+          <a class="stat" href="#cameraBookingsSection"><div class="stat-title">📷 Camera Bookings</div><div class="stat-value" id="cameraBookingCount">0</div><p>Camera reservations</p></a>
+          <a class="stat" href="#paymentsSection"><div class="stat-title">💳 Payment Records</div><div class="stat-value" id="paymentRecordCount">0</div><p>Verified: <strong id="verifiedPaymentTotal">₹0</strong></p></a>
+          <a class="stat" href="#cancellationsSection"><div class="stat-title">↩ Cancellation Requests</div><div class="stat-value" id="cancellationCount">—</div><p>Customer cancellation requests</p></a>
         </div>
       </section>
       <section class="card" id="bookingsSection">
