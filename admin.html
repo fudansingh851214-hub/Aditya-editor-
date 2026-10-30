@@ -20,12 +20,12 @@
 input,select{width:100%;padding:11px 12px;border:1px solid #285579;border-radius:8px;background:#061a32;color:#eff7ff;outline:none}input:focus,select:focus{border-color:#39cfff}label{display:block;margin:13px 0 7px;font-weight:700;color:#dcecff}
 .notice{padding:13px;border-radius:10px;background:#092b45;border:1px solid #1d5b7c;color:#bceeff;line-height:1.6;margin:15px 0}.message{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;margin:12px 0}
 .record{margin:13px 0;padding:17px;background:#071a32;border:1px solid #19466c;border-radius:11px;overflow-wrap:anywhere}.record h3{font-size:16px;color:#43d4ff}.record p{margin:8px 0;line-height:1.55;font-size:13px}.record p strong{color:#b9d6f2}.record button{margin:5px 6px 3px 0}.record label{margin-top:14px}.record select,.record input{max-width:420px}
-.camera-progress{margin:15px 0;padding:14px;border:1px solid #285579;border-radius:10px;background:#06152a}.camera-progress h4{margin:0 0 12px;color:#42dfff}.camera-progress-list{display:grid;gap:10px}.camera-progress-step{display:flex;gap:10px;color:#9bb4d0}.camera-progress-dot{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:grid;place-items:center;background:#28435e}.camera-progress-step.done .camera-progress-dot{background:#10c99a;color:#04251b}.camera-progress-step.current .camera-progress-dot{background:#087cf0;color:#fff}.camera-progress-copy{display:grid;gap:3px}.camera-progress-copy strong{color:#eef7ff}.camera-progress-copy small{line-height:1.4}
+.gallery-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;max-width:760px}.gallery-form label,.gallery-form input,.gallery-form select{grid-column:auto}.gallery-form button{grid-column:1/-1;justify-self:start;margin-top:15px}.profile-panel{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #19466c;border-radius:12px;background:#071a32;margin:12px 0}.profile-panel p{margin:5px 0}.camera-progress{margin:15px 0;padding:14px;border:1px solid #285579;border-radius:10px;background:#06152a}.camera-progress h4{margin:0 0 12px;color:#42dfff}.camera-progress-list{display:grid;gap:10px}.camera-progress-step{display:flex;gap:10px;color:#9bb4d0}.camera-progress-dot{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:grid;place-items:center;background:#28435e}.camera-progress-step.done .camera-progress-dot{background:#10c99a;color:#04251b}.camera-progress-step.current .camera-progress-dot{background:#087cf0;color:#fff}.camera-progress-copy{display:grid;gap:3px}.camera-progress-copy strong{color:#eef7ff}.camera-progress-copy small{line-height:1.4}
 #loginPanel{display:block;max-width:520px;margin:8vh auto;padding:26px}#adminDashboard.hidden,.hidden{display:none!important}#loginPanel h2{color:#39d4ff;font-size:24px}#loginPanel .description{font-size:14px}
 footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #17436b;margin-top:25px;font-size:12px;line-height:1.8}
 @media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar{width:220px}.main-area{margin-left:220px}}
 @media(max-width:760px){.sidebar{transform:translateX(-100%);transition:transform .25s;width:260px}.sidebar.open{transform:translateX(0)}.main-area{margin-left:0}.menu-toggle{display:block}.topbar{padding:0 13px}.content{padding:15px 12px}.grid{grid-template-columns:1fr 1fr}.page-heading h1{font-size:21px}.card{padding:14px}.toolbar .btn{width:auto}}
-@media(max-width:430px){.grid{grid-template-columns:1fr}.topbar-title{font-size:16px}.topbar-right{font-size:11px}.record{padding:13px}}
+@media(max-width:430px){.gallery-form{grid-template-columns:1fr}.gallery-form label,.gallery-form input,.gallery-form select{grid-column:1}.grid{grid-template-columns:1fr}.topbar-title{font-size:16px}.topbar-right{font-size:11px}.record{padding:13px}}
 </style>
 </head>
 <body>
@@ -38,6 +38,8 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
     <a href="#bookingsSection"><span class="nav-icon">▣</span>Booking Management</a>
     <a href="#cameraBookingsSection"><span class="nav-icon">📷</span>Camera Booking Management</a>
     <a href="#paymentsSection"><span class="nav-icon">▤</span>Payment Management</a>
+    <a href="#serviceGallerySection"><span class="nav-icon">▧</span>Service Gallery</a>
+    <a href="#profileSection"><span class="nav-icon">♙</span>Profile</a>
     <a href="#cancellationsSection"><span class="nav-icon">↩</span>Cancellation Requests</a>
     <button id="sidebarLogoutButton" type="button"><span class="nav-icon">⏻</span>Logout</button>
   </nav>
@@ -86,6 +88,23 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
         <p id="paymentMessage" class="message" role="status" aria-live="polite"></p>
         <div id="paymentsList"><p class="muted">Payment records लोड होने की प्रतीक्षा करें...</p></div>
       </section>
+      <section class="card" id="serviceGallerySection">
+        <div class="toolbar"><h2><span class="section-icon">🖼️</span>Service Gallery</h2><button id="refreshGalleryButton" class="btn btn-secondary" type="button">↻ Refresh Gallery</button></div>
+        <p class="muted">Website की service gallery में photo/video जोड़ें और manage करें।</p>
+        <form id="galleryUploadForm" class="gallery-form">
+          <label for="galleryTitle">Title</label><input id="galleryTitle" type="text" maxlength="120" placeholder="Gallery title" required>
+          <label for="galleryService">Service</label><select id="galleryService" required><option value="">Select Service</option><option>Photo Editing</option><option>Video Editing</option><option>Wedding Projects</option><option>Graphic Design</option><option>Social Media Reels</option></select>
+          <label for="galleryFile">Photo / Video</label><input id="galleryFile" type="file" accept="image/*,video/*" required>
+          <button id="galleryUploadButton" class="btn" type="submit">Upload to Gallery</button>
+        </form>
+        <p id="galleryMessage" class="message" role="status" aria-live="polite"></p>
+        <div id="galleryAdminList"></div>
+      </section>
+      <section class="card" id="profileSection">
+        <div class="toolbar"><h2><span class="section-icon">👤</span>Admin Profile</h2></div>
+        <div class="profile-panel"><div class="avatar">👤</div><div><strong>EDIT CONCEPT Administrator</strong><p class="muted">Signed-in administrator account</p><p id="adminProfileEmail" class="muted">Login के बाद account email यहाँ दिखाई देगा।</p></div></div>
+        <button id="profileLogoutButton" class="btn btn-danger" type="button">Logout</button>
+      </section>
       <section class="card" id="cancellationsSection">
         <div class="toolbar"><h2><span class="section-icon">↩</span>Cancellation Requests</h2><button id="refreshCancellationsButton" class="btn btn-secondary" type="button">↻ Refresh Requests</button></div>
         <p id="cancellationMessage" class="message" role="status" aria-live="polite"></p>
@@ -102,6 +121,7 @@ const sidebar=document.getElementById("adminSidebar");
 document.getElementById("menuToggle").addEventListener("click",()=>sidebar.classList.toggle("open"));
 document.querySelectorAll(".side-nav a").forEach(link=>link.addEventListener("click",()=>{document.querySelectorAll(".side-nav a").forEach(a=>a.classList.remove("active"));link.classList.add("active");sidebar.classList.remove("open")}));
 document.getElementById("sidebarLogoutButton").addEventListener("click",()=>document.getElementById("logoutButton")?.click());
+document.getElementById("profileLogoutButton").addEventListener("click",()=>document.getElementById("logoutButton")?.click());
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./admin.js?v=20261030-admin-dashboard-redesign"></script>
