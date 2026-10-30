@@ -4,11 +4,11 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EDIT CONCEPT | Sign In / Create Account</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:block;padding:18px;background:#07111f;color:#eef7ff;font-family:Arial,sans-serif}.wrap{margin:76px auto 30px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;background:#07111f;color:#eef7ff;font-family:Arial,sans-serif}
 .wrap{width:min(1100px,100%);background:#102139;border:1px solid #29415d;border-radius:22px;padding:25px;box-shadow:0 18px 45px #0005}
 #authArea{width:min(460px,100%);margin:0 auto}.home-top{position:absolute;top:14px;right:18px;z-index:5}.home-top a{display:inline-block;padding:9px 13px;border:1px solid #34516e;border-radius:10px;color:#42dfff;text-decoration:none;font-weight:bold}.or-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:#9db1c7;font-size:13px}.or-divider:before,.or-divider:after{content:"";height:1px;background:#34516e;flex:1}.guest-link{display:block;width:100%;padding:13px;border:1px solid #42dfff;border-radius:10px;text-align:center;color:#42dfff;text-decoration:none;font-weight:bold;background:#0a1728}.guest-link:hover{background:#153a4b}
 h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;text-align:center}
-.tabs{display:flex;gap:8px;margin:20px 0;position:relative;z-index:10}.tabs button{flex:1;padding:12px;border-radius:10px;border:1px solid #34516e;background:#0a1728;color:#eaf6ff;font-weight:bold;cursor:pointer;pointer-events:auto;touch-action:manipulation}
+.tabs{display:flex;gap:8px;margin:20px 0}.tabs button{flex:1;padding:12px;border-radius:10px;border:1px solid #34516e;background:#0a1728;color:#eaf6ff;font-weight:bold}
 .tabs button.active{background:#42dfff;color:#06101f}
 label{display:block;margin:14px 0 6px;font-weight:bold}input{width:100%;padding:13px;border-radius:10px;border:1px solid #36536d;background:#071522;color:white;font-size:16px}
 .submit{width:100%;margin-top:18px;padding:14px;border:0;border-radius:10px;background:linear-gradient(100deg,#8555ff,#42dfff);color:#06101f;font-weight:bold;font-size:16px}
@@ -26,13 +26,8 @@ body{display:block;min-height:100vh;padding:24px;background:#f5f4ed;color:#18392
 body>.wrap>h1,body>.wrap>p{text-align:left}
 body>.wrap>h1{display:none}
 body>.wrap>p{display:none}
-#authArea{width:min(680px,100%);margin:5vh auto;background:#fff;color:#203d32;border:1px solid #e1e6df;border-radius:26px;padding:clamp(30px,5vw,48px);box-shadow:0 18px 48px #203d3218}#authArea h2{font-size:clamp(27px,3.5vw,34px);margin-bottom:12px}#authArea>p{font-size:17px}#authArea label{font-size:17px;margin:18px 0 8px}#authArea input{min-height:54px;padding:16px;font-size:17px}#authArea .tabs button{min-height:52px;padding:15px;font-size:16px}#authArea .submit{min-height:56px;padding:17px;font-size:18px}#authArea .guest-link{padding:16px;font-size:16px}
+#authArea{width:min(500px,100%);margin:7vh auto;background:#fff;color:#203d32;border:1px solid #e1e6df;border-radius:22px;padding:28px;box-shadow:0 15px 40px #203d3210}
 #authArea h2{color:#1c4d3b}
-.auth-heading{text-align:center;margin:0 0 24px}.auth-kicker{display:inline-block;padding:7px 12px;border-radius:99px;background:#edf5ed;color:#1e5b43;font-size:11px;font-weight:900;letter-spacing:1.5px}.auth-heading h2{margin:14px 0 8px;font-size:clamp(25px,4vw,34px)}.auth-heading p{margin:0 auto;max-width:520px;color:#64766b;line-height:1.6}.tabs button{cursor:pointer;touch-action:manipulation}
-#authArea input:focus{outline:3px solid #c6282825;border-color:#c62828!important}
-#authArea .submit{cursor:pointer;box-shadow:0 8px 18px #c6282824}
-#authArea .submit:disabled{opacity:.65;cursor:wait}
-#message:empty{display:none}#message:not(:empty){padding:12px 14px;margin-top:14px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:600}
 #authArea p{text-align:center;color:#65766c}
 #authArea input{background:#fbfcfa;color:#203d32;border-color:#d9e1da}
 #authArea .tabs button{background:#f4f7f2;color:#28513f;border-color:#dce5dc}
@@ -170,8 +165,8 @@ body{background:#f7f8fa!important;color:#263238!important}
 
 /* Login page blue accents changed to red */
 .home-top a{color:#ef4444!important;border-color:#ef4444!important}
-.guest-link{display:block!important;width:100%!important;margin:14px 0 0!important;padding:15px 18px!important;border:0!important;border-radius:12px!important;background:linear-gradient(100deg,#dc2626,#168b52)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-align:center!important;font-size:16px!important;font-weight:800!important;box-shadow:0 6px 16px #168b5230!important}
-.guest-link:hover{background:linear-gradient(100deg,#b91c1c,#116b40)!important;filter:brightness(1.06)}
+.guest-link{border-color:#dc2626!important;color:#ef4444!important}
+.guest-link:hover{background:#3b1018!important}
 h1,#authArea h1,.tabs button.active{color:#fff!important}
 h1{color:#ef4444!important}
 .tabs button.active{background:#dc2626!important;color:#fff!important}
@@ -193,132 +188,6 @@ h1{color:#ef4444!important}
   color:#e91e72!important;
   font-weight:900!important;
 }
-
-
-/* Keep the Edit Concept brand banner visible at the top while scrolling the customer dashboard */
-.brand-banner{position:sticky!important;top:0!important;z-index:1000!important;}
-
-/* Customer dashboard shortcut cards: same pink-green gradient and red hover */
-#dashboard .dashgrid a,
-#dashboard .dashgrid a:visited{
-  background:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
-  background-image:linear-gradient(110deg,#e91e72 0%,#168b52 100%)!important;
-  color:#fff!important;
-  border:0!important;
-  border-radius:16px!important;
-  text-decoration:none!important;
-  font-weight:900!important;
-  transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease!important;
-}
-#dashboard .dashgrid a:hover,
-#dashboard .dashgrid a:focus-visible{
-  background:#dc2626!important;
-  background-image:none!important;
-  color:#fff!important;
-  border-color:#b91c1c!important;
-  text-decoration:none!important;
-  transform:translateY(-2px)!important;
-  box-shadow:0 8px 20px rgba(220,38,38,.28)!important;
-  outline:none;
-}
-#dashboard .dashgrid a:active{
-  transform:translateY(0) scale(.98)!important;
-}
-
-
-/* Shared navigation for Editing Book / customer portal */
-.site-header{position:sticky;top:0;z-index:50;margin:-24px -24px 22px;padding:0 18px;background:#ffffffed;border-bottom:1px solid #dce9e1;box-shadow:0 4px 16px rgba(23,76,53,.05)}
-.site-nav{width:min(1180px,100%);min-height:72px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:9px}
-.site-logo{font-size:20px;font-weight:900;white-space:nowrap;text-decoration:none;background:linear-gradient(90deg,#e91e72,#168b52);-webkit-background-clip:text;background-clip:text;color:transparent}
-.site-logo small{display:block;font-size:11px;font-weight:400;color:#71877c}
-.site-links{display:flex;align-items:center;justify-content:center;gap:6px}
-.site-links a{padding:9px 9px;border-radius:12px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff!important;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}
-.site-links a:hover,.site-links a.current{background:#dc2626!important;color:#fff!important}
-#siteMenuButton{display:none;padding:9px 13px;border:0;border-radius:10px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800}
-.site-account{position:relative;flex-shrink:0}
-#siteAccountTrigger{display:flex;align-items:center;gap:7px;max-width:210px;padding:9px 10px;border:0;border-radius:13px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800;cursor:pointer}
-#siteAccountName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.site-account-menu{display:none;position:absolute;right:0;top:calc(100% + 9px);width:min(320px,calc(100vw - 28px));background:#fff;border:1px solid #dce9e1;border-radius:15px;box-shadow:0 16px 42px #0003;overflow:hidden;z-index:80}
-.site-account-menu.open{display:block}
-.site-account-info{padding:16px;color:#66736b;border-bottom:1px solid #eee}.site-account-info strong{display:block;margin-top:5px;color:#174c35;overflow-wrap:anywhere}
-.site-account-menu a,.site-account-menu button{display:block;width:100%;padding:12px 16px;border:0;background:#fff;color:#263238;text-align:left;text-decoration:none;font:inherit;cursor:pointer}
-.site-account-menu a:hover,.site-account-menu button:hover{background:#dc2626;color:#fff}
-.site-account-menu button[hidden]{display:none}
-@media(min-width:1100px){.site-nav{flex-wrap:nowrap}.site-links{gap:4px}.site-links a{padding:8px 7px;font-size:10px}}
-@media(max-width:850px){.site-nav{flex-wrap:wrap;padding:10px 0}#siteMenuButton{display:inline-flex}.site-account{margin-left:auto}.site-links{display:none;order:5;flex-basis:100%;flex-direction:column;align-items:stretch;padding-bottom:10px}.site-links.open{display:flex}.site-links a{text-align:center;font-size:13px}}
-@media(max-width:700px){.site-header{margin:-14px -14px 18px;padding:0 14px}}
-
-
-/* Larger top header and navigation on the login page */
-.site-header{padding:0 22px!important}
-.site-nav{min-height:62px!important;gap:14px!important}
-.site-logo{font-size:22px!important}
-.site-links{gap:6px!important}
-.site-links a{font-size:11px!important;padding:10px 9px!important}
-#siteAccountTrigger{font-size:12px!important;padding:10px 12px!important;max-width:230px!important}
-#siteMenuButton{font-size:18px!important;padding:12px 16px!important}
-@media(max-width:900px){.site-nav{min-height:62px!important}.site-links a{font-size:12px!important;padding:11px 9px!important}}
-@media(max-width:700px){.site-header{padding:0 12px!important}.site-nav{min-height:62px!important;gap:8px!important}.site-logo{font-size:24px!important}#siteAccountTrigger{font-size:12px!important;padding:10px!important;max-width:175px!important}}
-
-
-/* After login, focus the customer page on the large booking center */
-#dashboard.bookings-focus-mode .brand-banner,
-#dashboard.bookings-focus-mode #welcome,
-#dashboard.bookings-focus-mode #personalInformation,
-#dashboard.bookings-focus-mode .dashgrid,
-#dashboard.bookings-focus-mode > .note,
-#dashboard.bookings-focus-mode > .profile:not(#signedInCustomer){display:none!important}
-#dashboard.bookings-focus-mode{display:flex!important;flex-direction:column!important;gap:12px!important}
-#dashboard.bookings-focus-mode #signedInCustomer{order:0!important;min-height:0!important;margin:0 0 8px!important;padding:12px 16px!important;display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:wrap!important;gap:10px!important}
-#dashboard.bookings-focus-mode #signedInCustomer .pill{font-size:10px!important}
-#dashboard.bookings-focus-mode #signedInCustomer #signedInName{font-size:clamp(19px,3vw,25px)!important}
-#dashboard.bookings-focus-mode #signedInCustomer #logoutButton{margin:0 0 0 auto!important;padding:9px 14px!important}
-#dashboard.bookings-focus-mode .invoice-history{order:1!important;width:100%!important;margin:0!important;padding:clamp(14px,3vw,26px)!important}
-#dashboard.bookings-focus-mode .invoice-history .invoice-page-heading h3{font-size:clamp(25px,4vw,34px)!important}
-
-
-/* Final mobile-first Customer Booking card design */
-.invoice-history{background:#fff!important;border:1px solid #f1d5e2!important;border-radius:20px!important;padding:clamp(12px,3vw,22px)!important;box-shadow:0 8px 28px rgba(190,35,91,.08)!important}
-.invoice-page-heading{border:0!important;padding:0 0 12px!important}
-.invoice-page-heading h3{color:#c21868!important;font-size:clamp(23px,5vw,30px)!important}
-.invoice-eyebrow{color:#a83267!important}
-.invoice-history #bookingHistory{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:15px!important;margin-top:10px!important}
-.invoice-history #bookingHistory>.history-card{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:12px!important;background:#fff!important;border:1px solid #f0d6e2!important;border-left:5px solid #c62828!important;border-radius:15px!important;box-shadow:0 4px 15px rgba(30,40,50,.06)!important;overflow:hidden!important;color:#263238!important}
-.invoice-history #bookingHistory .customer-booking-number{margin:0 0 9px!important;padding:10px!important;background:#fff0f6!important;border:0!important;border-bottom:1px solid #f3c5da!important;border-radius:8px!important;text-align:left!important}
-.invoice-history #bookingHistory .customer-booking-number [class*="booking-number-label"]{font-size:10px!important;color:#a83267!important;letter-spacing:1px!important}
-.invoice-history #bookingHistory .customer-booking-number [class*="booking-number-value"]{font-size:clamp(19px,4.8vw,26px)!important;color:#c2185b!important;letter-spacing:.3px!important;overflow-wrap:anywhere!important}
-.invoice-history #bookingHistory .booking-phone-box{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;margin:8px 0!important;padding:10px!important;background:#eff6ff!important;border:1px solid #cfe0f8!important;border-left:3px solid #3478bd!important;border-radius:8px!important}
-.invoice-history #bookingHistory .booking-phone-box div{color:#29465f!important;font-size:12px!important}
-.invoice-history #bookingHistory .booking-phone-box div:last-child{font-size:15px!important;font-weight:900!important}
-.invoice-history #bookingHistory .booking-info-box{margin:9px 0!important;padding:11px!important;background:#fff7fb!important;border:1px solid #f1d2e1!important;border-left:3px solid #c21868!important;border-radius:9px!important;box-shadow:none!important}
-.invoice-history #bookingHistory .booking-info-box div{color:#344054!important}
-.invoice-history #bookingHistory .booking-info-box div:first-child{font-size:10px!important;color:#a83267!important;letter-spacing:.7px!important}
-.invoice-history #bookingHistory .booking-info-box div:nth-child(2){font-size:15px!important;font-weight:800!important}
-.invoice-history #bookingHistory .booking-date-time{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:9px 0!important;padding:7px!important;background:#eff6ff!important;border:1px solid #d4e4fa!important;border-radius:9px!important}
-.invoice-history #bookingHistory .booking-date-item{min-width:0!important;padding:7px!important;background:#fff!important;border-radius:7px!important}
-.invoice-history #bookingHistory .booking-date-item div:first-child{font-size:9px!important;color:#64748b!important}
-.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:12px!important;color:#245b9a!important;font-weight:800!important}
-.invoice-history #bookingHistory .booking-info-box:has(+.booking-info-box){margin-top:8px!important}
-.invoice-history #bookingHistory .customer-files{margin:9px 0!important;padding:10px!important;background:#f1f7ff!important;border:1px solid #d3e4fa!important;border-radius:9px!important}
-.invoice-history #bookingHistory .customer-files h4{margin:0 0 8px!important;color:#245b9a!important;font-size:14px!important}
-.invoice-history #bookingHistory .customer-file-list{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;gap:8px!important}
-.invoice-history #bookingHistory .customer-file-item{min-width:0!important;padding:7px!important;background:#fff!important;border:1px solid #dce7f5!important;border-radius:8px!important}
-.invoice-history #bookingHistory .customer-file-item img,.invoice-history #bookingHistory .customer-file-item video{width:100%!important;max-height:190px!important;object-fit:contain!important;border-radius:6px!important}
-.invoice-history #bookingHistory .customer-file-item a,.invoice-history #bookingHistory .action,.invoice-history #bookingHistory button{background:#d7193f!important;border:1px solid #c51639!important;color:#fff!important;border-radius:8px!important;font-weight:800!important;text-decoration:none!important}
-.invoice-history #bookingHistory .upi-actions{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:8px!important;margin:10px 0!important}
-.invoice-history #bookingHistory .upi-actions>*{max-width:100%!important;box-sizing:border-box!important;padding:9px 12px!important;font-size:12px!important}
-.invoice-history #bookingHistory .money-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin:10px 0!important}
-.invoice-history #bookingHistory .money-item{min-width:0!important;padding:9px!important;background:#fff!important;border:1px solid #dce7f5!important;border-radius:8px!important}
-.invoice-history #bookingHistory .money-item small{display:block!important;color:#667085!important;font-size:10px!important}
-.invoice-history #bookingHistory .money-item strong{color:#245b9a!important;font-size:15px!important;overflow-wrap:anywhere!important}
-.invoice-history #bookingHistory .paybox{display:block!important;width:100%!important;box-sizing:border-box!important;margin:10px 0 0!important;padding:12px!important;background:#fff!important;border:1px solid #f0d6e2!important;border-radius:12px!important;color:#344054!important}
-.invoice-history #bookingHistory .paybox h3{color:#a94444!important;font-size:16px!important}
-.invoice-history #bookingHistory .paybox .history-section{margin:8px 0 12px!important;padding:11px!important;background:#fff!important;border:1px solid #edc9dc!important;border-radius:12px!important}
-.invoice-history #bookingHistory .paybox .history-card{margin:7px 0!important;padding:10px!important;background:#fff!important;border:1px solid #eee!important;border-left:4px solid #c62828!important;border-radius:9px!important}
-.invoice-history #bookingHistory .paybox .qr{display:flex!important;justify-content:center!important;align-items:center!important;width:max-content!important;max-width:100%!important;margin:12px auto!important;padding:7px!important;background:#fff!important;border:3px solid #3995d8!important;border-radius:10px!important}
-.invoice-history #bookingHistory .paybox .payment-submit{display:grid!important;gap:7px!important;margin-top:10px!important;padding:10px!important;background:#fff!important;border:1px solid #e5e5e5!important;border-radius:10px!important}
-.invoice-history #bookingHistory .paybox .payment-submit input{width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:10px!important;background:#fff!important;border:1px solid #ddd!important;border-radius:7px!important;color:#333!important}
-@media(max-width:420px){.invoice-history #bookingHistory .booking-date-time{grid-template-columns:repeat(3,minmax(0,1fr))!important}.invoice-history #bookingHistory .booking-date-item{padding:5px!important}.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:11px!important}.invoice-history #bookingHistory>.history-card{padding:9px!important}.invoice-history #bookingHistory .money-item{padding:8px!important}}
 
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
@@ -385,67 +254,21 @@ body:has(.invoice-history){background:#f5f3ff!important}
 .invoice-history #bookingHistory .money-item{background:#eff6ff!important;border-color:#bfdbfe!important}
 .invoice-history #bookingHistory .money-item strong{color:#1d4ed8!important}
 </style>
-<style>.site-logo,.logo{font-size:27px!important;font-weight:900!important;letter-spacing:.2px!important;line-height:1.2!important}</style><style>
-/* Matching colorful Edit Concept footer branding */
-.site-footer-branding{
-  padding:28px 16px;
-  margin-top:36px;
-  text-align:center;
-  background:#eaf3ed;
-  border-top:1px solid #d5e5db;
-}
-.site-footer-branding strong{
-  display:inline-block;
-  font-size:clamp(32px,6vw,52px);
-  line-height:1.15;
-  font-weight:1000;
-  letter-spacing:1.5px;
-  background:linear-gradient(90deg,#e91e72 0%,#ff8a00 25%,#168b52 50%,#168bdb 75%,#8555ff 100%);
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
-  -webkit-text-fill-color:transparent;
-}
-</style>
 </head>
-<body><header class="site-header">
-  <div class="site-nav">
-    <a class="site-logo" href="index.html">✦ Edit Concept</a>
-    <button id="siteMenuButton" type="button" aria-expanded="false" aria-label="Menu खोलें">☰</button>
-    <nav class="site-links" id="siteLinks">
-      <a href="index.html">Home</a><a href="services.html">Our Services</a>
-      <a class="current" href="auth.html">🎨 🎬 Editing Book</a>
-      <a href="booking.html?service=camera">📸 Camera Book</a>
-      <a href="tracking.html">🎨 🎬 Track Editing</a><a href="camera-tracking.html">📸 Track Camera</a>
-    </nav>
-    <div class="site-account" id="siteAccount">
-      <button id="siteAccountTrigger" type="button" aria-expanded="false">👤 <span id="siteAccountName">Sign In / Create Account</span> ▾</button>
-      <div class="site-account-menu" id="siteAccountMenu">
-        <div class="site-account-info">Account<strong id="siteAccountSigned">Guest — Sign in to manage bookings</strong></div>
-        <a href="auth.html#authArea">🔐 Sign In / Create Account</a>
-        <a href="auth.html#dashboard">👤 My Account</a><a href="auth.html#bookingHistory">📋 My Bookings</a>
-        <a href="tracking.html">📍 Track Editing Booking</a><a href="camera-tracking.html">📸 Track Camera Booking</a>
-        <a href="auth.html#personalInformation">🪪 My Details</a><a href="index.html">🏠 Home Page</a>
-        <button id="siteAccountLogout" type="button" hidden>🚪 Logout</button>
-      </div>
-    </div>
-  </div>
-</header><main class="wrap">
+<body><div class="home-top"><a href="index.html" style="display:inline-block;padding:10px 16px;border:1px solid #e5b8c5;border-radius:10px;background:#fff;color:#c62828;text-decoration:none;font-weight:800">🏠 Home Page पर जाएँ</a></div><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
-<div id="authArea"><div class="auth-heading"><span class="auth-kicker">CUSTOMER PORTAL</span><h2>Welcome to Edit Concept</h2><p>Login करें या नया अकाउंट बनाएँ और अपनी बुकिंग, पेमेंट और सर्विस अपडेट देखें।</p></div><div class="tabs" role="group" aria-label="Choose account action"><button id="loginTab" class="active" type="button" aria-pressed="true" onclick="window.switchAuthMode('login')">Login</button><button id="signupTab" type="button" aria-pressed="false" onclick="window.switchAuthMode('signup')">Create Account</button></div>
-<form id="authForm" novalidate>
+<div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button" onclick="setMode('login')">Login</button><button id="signupTab" type="button" onclick="setMode('signup')">Create Account</button></div>
+<form id="authForm">
 <div id="signupFields" style="display:none">
 <label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Enter your full name">
 <label for="mobileNumber">Mobile Number</label><input id="mobileNumber" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number"><p class="note" style="text-align:left;margin:5px 0">Enter your 10-digit Indian mobile number.</p>
 </div>
 <label for="email">Email Address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
-<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Enter your password">
 <div id="confirmPasswordField" style="display:none"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter your password"></div>
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
-<script src="auth-tabs.js"></script>
 <div id="forgotArea" style="text-align:center;margin:14px 0"><a href="#" id="forgotLink" style="color:#42dfff">Forgot Password? / पासवर्ड भूल गए?</a></div>
-
 <p id="message" role="status" aria-live="polite"></p></div>
 <section class="dashboard" id="dashboard" aria-label="Customer Dashboard">
 <div class="brand-banner" aria-label="EDIT CONCEPT">
@@ -453,7 +276,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
 <div class="brand-slogan"><span>Create</span> · <span>Edit</span> · <span>Deliver</span></div><div class="brand-stripes" aria-hidden="true"></div>
 </div>
 
-<div class="profile" id="signedInCustomer" style="display:flex;flex-direction:column;gap:8px"><span class="pill">WELCOME TO EDIT CONCEPT</span><strong id="signedInName" style="font-size:28px">लोड हो रहा है...</strong><span id="signedInEmail">Email लोड हो रहा है...</span><button class="logout" id="logoutButton" type="button">Log out</button></div><h2 id="welcome">Welcome to Edit Concept</h2><p>आपका Edit Concept · Aditya Kumar Customer Portal</p>
+<div class="profile" id="signedInCustomer" style="display:flex;flex-direction:column;gap:8px"><span class="pill">WELCOME TO EDIT CONCEPT</span><strong id="signedInName" style="font-size:28px">लोड हो रहा है...</strong><span id="signedInEmail">Email लोड हो रहा है...</span><button class="logout" id="logoutButton" type="button">Log out</button></div><h2 id="welcome">Welcome to Edit Concept</h2><p>आपका Aditya Kumar Project Edit Concept Customer Portal</p>
 <div class="profile" id="personalInformation"><span class="pill">🔒 Private account</span><h3 style="color:#42dfff;margin:12px 0 6px">PERSONAL INFORMATION</h3><p style="font-weight:bold">My Details</p><p><strong>Full name</strong><br><span id="profileFullName">लोड हो रहा है...</span></p><p><strong>Email address</strong><br><span id="profileEmail">लोड हो रहा है...</span></p><p><strong>Mobile number</strong><br><span id="profileMobile">अभी दर्ज नहीं</span></p><p><strong>Account status</strong><br><span id="profileStatus">जाँच हो रही है...</span></p><p class="note">यह जानकारी आपके Login अकाउंट से ली जाती है। यदि मोबाइल नंबर अकाउंट में सेव नहीं है, तो यहाँ “अभी दर्ज नहीं” दिखेगा।</p></div>
 <div class="profile"><span class="pill">ACCOUNT ACTIVE</span><p><strong>Login Email</strong></p><p id="customerEmail">आपका Email यहाँ दिखेगा</p><p class="note">यह Email आपके Login अकाउंट से लिया गया है।</p></div>
 <div class="dashgrid">
@@ -464,10 +287,10 @@ body:has(.invoice-history){background:#f5f3ff!important}
 <a id="cameraBookNowDashboardLink" href="booking.html?service=camera">📷 Camera Book Now</a>
 <a href="#personalInformation">🪪 My Details</a>
 <a href="index.html">🏠 Home Page</a>
-<a href="booking.html" id="bookEditingNewServiceLink">🎨 🎬Editing Book Now</a>
+<a href="booking.html" id="bookEditingNewServiceLink" style="background:#ffffff!important;color:#e91e72!important;border:1px solid #e5e8e0!important;font-weight:900!important">🎨 🎬Editing Book Now</a>
 <a href="payment.html">💳 Secure Payment / QR</a>
 <a href="services.html">🎨 Our Services</a>
-
+<a href="index.html#contact">☎ Contact Us</a>
 </div>
 
 
@@ -484,7 +307,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
 
 
 
-<section class="history-section invoice-history"><div class="invoice-page-heading"><div><span class="invoice-eyebrow">CUSTOMER BOOKING CENTER</span><h3>YOUR BOOKINGS</h3><p>आपकी सभी उपलब्ध बुकिंग, स्टेटस, अपलोड की गई फाइलें और बिल की जानकारी यहाँ दिखाई जाएगी।</p></div></div><div style="display:none;margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 BOOKING MOBILE NUMBER (FIXED)</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" readonly aria-readonly="true" placeholder="बुकिंग में दर्ज मोबाइल नंबर" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#f1f3f5;color:#263238;font-size:16px;cursor:not-allowed"><button id="findMyBookings" type="button" style="display:none" disabled>Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">यह नंबर आपकी बुकिंग से अपने-आप लिया जाएगा। इसी नंबर की सभी बुकिंग नीचे दिखाई जाएँगी।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div><div class="invoice-stats" id="invoiceStats" aria-live="polite"><div class="invoice-stat"><span>Total Bookings</span><strong id="invoiceBookingCount">—</strong></div><div class="invoice-stat"><span>Pending Bookings</span><strong id="invoicePendingCount">—</strong></div><div class="invoice-stat"><span>Total Amount</span><strong id="invoiceTotalAmount">Admin confirmation pending</strong></div></div></section>
+<section class="history-section invoice-history"><div class="invoice-page-heading"><div><h3>YOUR BOOKING</h3></div></div><div style="display:none;margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 BOOKING MOBILE NUMBER (FIXED)</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" readonly aria-readonly="true" placeholder="बुकिंग में दर्ज मोबाइल नंबर" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#f1f3f5;color:#263238;font-size:16px;cursor:not-allowed"><button id="findMyBookings" type="button" style="display:none" disabled>Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">यह नंबर आपकी बुकिंग से अपने-आप लिया जाएगा। इसी नंबर की सभी बुकिंग नीचे दिखाई जाएँगी।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div><div class="invoice-stats" id="invoiceStats" aria-live="polite"><div class="invoice-stat"><span>Total Bookings</span><strong id="invoiceBookingCount">—</strong></div><div class="invoice-stat"><span>Pending Bookings</span><strong id="invoicePendingCount">—</strong></div><div class="invoice-stat"><span>Total Amount</span><strong id="invoiceTotalAmount">Admin confirmation pending</strong></div></div></section>
 </section>
 
 </main>
@@ -493,7 +316,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
 <script>
 "use strict";
 const UPI_ID = "7544913754-3@ybl";
-const PAYEE_NAME = "Edit Concept · Aditya Kumar";
+const PAYEE_NAME = "Aditya Kumar Project Edit Concept";
 const PAYMENT_FUNCTION_URL = "https://okzwtylpmcyurkxvaocy.supabase.co/functions/v1/submit-payment-screenshot";
 const message = document.getElementById("message");
 const form = document.getElementById("authForm");
@@ -513,20 +336,12 @@ function setMode(next) {
   mode = next;
   loginTab.classList.toggle("active", mode === "login");
   signupTab.classList.toggle("active", mode === "signup");
-  loginTab.setAttribute("aria-pressed", String(mode === "login"));
-  signupTab.setAttribute("aria-pressed", String(mode === "signup"));
   submitButton.textContent = mode === "login" ? "Login" : mode === "signup" ? "Create Account" : "Set New Password";
   password.autocomplete = mode === "login" ? "current-password" : "new-password";
-  // Existing customer passwords may be shorter; enforce 8 characters only for signup/reset.
-  password.minLength = mode === "login" ? 0 : 8;
   password.placeholder = mode === "reset" ? "नया password (कम से कम 8 characters)" : mode === "signup" ? "Enter your password (at least 8 characters)" : "Enter your password";
   const signingUp = mode === "signup";
-  const signupFields = document.getElementById("signupFields");
-  const confirmField = document.getElementById("confirmPasswordField");
-  signupFields.hidden = !signingUp;
-  confirmField.hidden = !signingUp;
-  signupFields.style.setProperty("display", signingUp ? "block" : "none", "important");
-  confirmField.style.setProperty("display", signingUp ? "block" : "none", "important");
+  document.getElementById("signupFields").style.display = signingUp ? "block" : "none";
+  document.getElementById("confirmPasswordField").style.display = signingUp ? "block" : "none";
   document.getElementById("fullName").required = signingUp;
   document.getElementById("mobileNumber").required = signingUp;
   document.getElementById("confirmPassword").required = signingUp;
@@ -536,56 +351,43 @@ function setMode(next) {
 }
 window.setMode = setMode;
 function showDashboard(user) {
-  // Show the customer area first so a secondary profile/history error cannot
-  // leave a successfully signed-in customer stuck on the login form.
-  const authArea = document.getElementById("authArea");
-  const dashboard = document.getElementById("dashboard");
-  if (authArea) authArea.style.setProperty("display", "none", "important");
-  if (dashboard) {
-    dashboard.style.setProperty("display", "block", "important");
-    dashboard.setAttribute("tabindex", "-1");
-  }
-  const put = (id, value) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value == null ? "" : String(value);
-  };
+  document.getElementById("authArea").style.setProperty("display", "none", "important");
+  document.getElementById("dashboard").style.setProperty("display", "block", "important");
+  document.getElementById("welcome").textContent = "Customer Dashboard";
   const meta = user && user.user_metadata ? user.user_metadata : {};
   const customerEmail = user && user.email ? user.email : "Email उपलब्ध नहीं";
-  const fullName = meta.full_name || meta.name || meta.fullName ||
-    (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
-  const mobile = meta.phone || meta.mobile || meta.mobile_number || meta.mobileNumber || meta.phone_number || meta.contact_number || (user && user.phone) || "";
-  put("welcome", "Customer Dashboard");
-  put("signedInName", fullName);
-  put("signedInEmail", customerEmail);
-  put("profileFullName", fullName);
-  put("profileEmail", customerEmail);
-  put("profileMobile", mobile || "बुकिंग से नंबर खोज रहे हैं...");
-  put("profileStatus", user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending");
-  put("customerEmail", customerEmail);
-
-  if (!mobile && user && client) {
-    client.auth.getUser().then(({data,error}) => {
-      const freshMeta = data && data.user && data.user.user_metadata ? data.user.user_metadata : {};
-      const freshMobile = freshMeta.phone || freshMeta.mobile || freshMeta.mobile_number || freshMeta.mobileNumber || freshMeta.phone_number || freshMeta.contact_number || (data && data.user && data.user.phone) || "";
-      if (freshMobile) put("profileMobile", freshMobile);
-      else if (user.id) {
+  const fullName = meta.full_name || meta.name || meta.fullName || (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
+  const mobile = meta.phone || meta.mobile || meta.phone_number || user.phone || "";
+  document.getElementById("signedInName").textContent = fullName;
+  document.getElementById("signedInEmail").textContent = customerEmail;
+  document.getElementById("profileFullName").textContent = fullName;
+  document.getElementById("profileEmail").textContent = customerEmail;
+  document.getElementById("profileMobile").textContent = mobile || "बुकिंग से नंबर खोज रहे हैं...";
+  // The booking form saved phone number will be displayed in YOUR BOOKINGS.
+  document.getElementById("profileStatus").textContent = user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending";
+  if (!mobile && user && user.id && client) {
+    document.getElementById("profileMobile").textContent = "बुकिंग से नंबर खोज रहे हैं...";
+    client.from("bookings").select("phone,created_at")
+      .eq("user_id", user.id).not("phone","is",null)
+      .order("created_at",{ascending:false}).limit(1).maybeSingle()
+      .then(({data,error}) => {
+        if (!error && data && data.phone) {
+          document.getElementById("profileMobile").textContent = data.phone;
+          return;
+        }
+        // Fallback: some older bookings may not have been linked to the signed-in user.
         return client.from("bookings").select("phone,created_at")
-          .eq("user_id", user.id).not("phone","is",null)
+          .eq("phone", user.phone || meta.phone || meta.mobile || "")
           .order("created_at",{ascending:false}).limit(1).maybeSingle()
-          .then(({data:booking,error:bookingError}) => {
-            if (!bookingError && booking && booking.phone) put("profileMobile", booking.phone);
-            else put("profileMobile", "Create Account में मोबाइल नंबर सेव नहीं मिला");
+          .then(({data:phoneData}) => {
+            document.getElementById("profileMobile").textContent =
+              (phoneData && phoneData.phone) ? phoneData.phone : "नंबर नहीं मिला — बुकिंग मोबाइल से लिंक नहीं है";
           });
-      } else put("profileMobile", "Create Account में मोबाइल नंबर सेव नहीं मिला");
-    }).catch(() => put("profileMobile", "मोबाइल नंबर लोड नहीं हुआ — Refresh करें"));
+      })
+      .catch(() => { document.getElementById("profileMobile").textContent = "नंबर लोड नहीं हुआ — Refresh करें"; });
   }
-  // Booking list is loaded once by auth-tabs.js after the active session is confirmed.
-  if (dashboard) {
-    requestAnimationFrame(() => {
-      dashboard.scrollIntoView({ behavior: "auto", block: "start" });
-      dashboard.focus({ preventScroll: true });
-    });
-  }
+  document.getElementById("customerEmail").textContent = customerEmail;
+  if (user) loadCustomerHistory(user);
 }
 function addText(parent, tag, value, className) {
   const el = document.createElement(tag);
@@ -613,50 +415,16 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    // Load bookings linked to this account, plus older guest bookings made
-    // before the customer created an account. Legacy bookings are matched by
-    // the exact mobile number saved in the customer's verified account profile.
-    const { data: authResult, error: authError } = await client.auth.getUser();
-    if (authError) throw authError;
-    const activeUser = authResult && authResult.user ? authResult.user : user;
-    if (!activeUser || !activeUser.id) throw new Error("Customer login session नहीं मिला। कृपया दोबारा Login करें।");
-    const { data: accountRows, error: accountError } = await client
-      .from("bookings").select("*").eq("user_id", activeUser.id)
-      .order("created_at", { ascending: false });
-    if (accountError) throw accountError;
-
-    const metadata = activeUser.user_metadata || {};
-    let accountMobile = String(
-      metadata.phone || metadata.mobile || metadata.mobile_number || metadata.mobileNumber || metadata.phone_number || metadata.contact_number || activeUser.phone || ""
-    ).replace(/[^0-9]/g, "");
-    if (accountMobile.length > 10 && accountMobile.endsWith(accountMobile.slice(-10))) {
-      accountMobile = accountMobile.slice(-10);
+    // Show this account's linked bookings by default. When a mobile number is entered,
+    // include guest/older bookings that were submitted with that same booking phone too.
+    let bookingQuery = client.from("bookings").select("*");
+    if (mobileFilter) {
+      bookingQuery = bookingQuery.or("user_id.eq." + user.id + ",phone.eq." + mobileFilter);
+    } else {
+      bookingQuery = bookingQuery.eq("user_id", user.id);
     }
-
-    // If phone was not saved in signup metadata, use the latest number from
-    // bookings already linked to this same account.
-    if (!accountMobile && accountRows && accountRows.length) {
-      accountMobile = String(accountRows[0].phone || "").replace(/[^0-9]/g, "").slice(-10);
-    }
-
-    let legacyRows = [];
-    if (accountMobile.length === 10) {
-      const { data: phoneRows, error: phoneError } = await client
-        .from("bookings").select("*").eq("phone", accountMobile)
-        .order("created_at", { ascending: false });
-      if (phoneError) console.warn("Legacy phone bookings could not be loaded:", phoneError.message);
-      else legacyRows = phoneRows || [];
-    }
-
-    // Merge without duplicates; account-owned records always remain included.
-    const merged = new Map();
-    for (const row of [...(accountRows || []), ...legacyRows]) {
-      const key = String(row.id ?? row.booking_number ?? "");
-      if (key) merged.set(key, row);
-    }
-    const data = Array.from(merged.values()).sort(
-      (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
-    );
+    const { data, error } = await bookingQuery.order("created_at", { ascending: false });
+    if (error) throw error;
     // Show only the relevant tracking shortcut(s) for the services this customer booked.
     const cameraServices = ["photo camera book", "video camera book", "photo & video camera book"];
     const hasCameraBooking = (data || []).some(row => cameraServices.includes(String(row.service || "").trim().toLowerCase()));
@@ -666,11 +434,25 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     if (editingTrackLink) editingTrackLink.style.display = hasEditingBooking ? "flex" : "none";
     if (cameraTrackLink) cameraTrackLink.style.display = hasCameraBooking ? "flex" : "none";
 
-    // Cancellation history is optional; its SELECT policy must not hide bookings.
+    // Prefer the phone number actually entered on the customer's latest linked booking.
+    if (!mobileFilter && data && data.length) {
+      let latestBookingPhone = "";
+      for (const row of data) {
+        if (row.phone && String(row.phone).trim()) { latestBookingPhone = String(row.phone).trim(); break; }
+      }
+      if (latestBookingPhone) {
+        document.getElementById("bookingMobile").value = latestBookingPhone;
+        if (mobileMessage) mobileMessage.textContent = "यह नंबर आपकी latest booking से अपने-आप लिया गया है। इस नंबर से की गई सभी उपलब्ध बुकिंग नीचे दिखाई जाएँगी।";
+        // Automatically include guest and older bookings with the same booking phone.
+        return await loadCustomerHistory(user, latestBookingPhone);
+      } else if (mobileMessage) {
+        mobileMessage.textContent = "आपकी बुकिंग में मोबाइल नंबर दर्ज नहीं मिला।";
+      }
+    }
     const { data: cancellationRows, error: cancellationError } = await client
       .from("cancellation_requests").select("booking_number,status,created_at")
       .eq("user_id", user.id).order("created_at", { ascending: false });
-    if (cancellationError) console.warn("Cancellation history could not be loaded:", cancellationError.message);
+    if (cancellationError) throw cancellationError;
     const cancellationByBooking = new Map((cancellationRows || []).map(row => [row.booking_number, row]));
     // Resolved cancellation requests (approved/rejected) hide that booking from the customer dashboard.
     const visibleBookings = (data || []).filter(booking => {
@@ -678,7 +460,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       return !request || request.status === "pending";
     });
     if (!visibleBookings.length) {
-      box.textContent = "इस account से अभी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
+      box.textContent = mobileFilter ? "इस मोबाइल नंबर से जुड़ी कोई बुकिंग नहीं मिली। नंबर जाँचें या account से जुड़ी बुकिंग देखने के लिए मोबाइल नंबर खाली करके Find My Bookings दबाएँ।" : "दिखाने के लिए कोई बुकिंग नहीं है। यदि Cancellation Request का निर्णय हो चुका है, तो वह बुकिंग यहाँ नहीं दिखाई जाएगी। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
     }
     box.textContent = "";
@@ -694,7 +476,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         totalEl.textContent = "₹" + total.toLocaleString("en-IN", {maximumFractionDigits:2});
       } else totalEl.textContent = "Admin confirmation pending";
     }
-
+    if (mobileMessage && mobileFilter) mobileMessage.textContent = "इस मोबाइल नंबर से जुड़ी बुकिंग नीचे दिखाई गई हैं।";
     for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
       const bookingNumber = booking.booking_number || ("Booking #" + (booking.id ?? ""));
@@ -736,23 +518,6 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       serviceBox.style.cssText = "margin:12px 0;padding:16px;background:#fff7fb;border:1px solid #f0bfd5;border-left:5px solid #d81b70;border-radius:14px;box-shadow:0 4px 12px #d81b7010";
       addText(serviceBox, "div", "✂️ YOUR SERVICE", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#ad1457;margin-bottom:8px";
       addText(serviceBox, "div", booking.service || "—", "").style.cssText = "font-size:20px;font-weight:800;color:#263238;overflow-wrap:anywhere";
-       const workRaw = booking.special_requirement || booking.editing_details || booking.requirements || booking.description || "";
-       let workDetails = "";
-       if (typeof workRaw === "string") {
-         workDetails = workRaw.trim();
-         try {
-           const parsedWork = JSON.parse(workDetails);
-           if (parsedWork && typeof parsedWork === "object") {
-             workDetails = Object.entries(parsedWork).map(([key,value]) => key + ": " + (Array.isArray(value) ? value.join(", ") : String(value ?? ""))).join("\\n");
-           }
-         } catch (_) {}
-       } else if (workRaw && typeof workRaw === "object") {
-         workDetails = Object.entries(workRaw).map(([key,value]) => key + ": " + (Array.isArray(value) ? value.join(", ") : String(value ?? ""))).join("\\n");
-       }
-       const workBox = addText(card, "div", "", "booking-info-box work-details-box");
-       workBox.style.cssText = "margin:12px 0;padding:14px;background:#f2f8ff;border:1px solid #cfe0f5;border-left:5px solid #3478bd;border-radius:12px";
-       addText(workBox, "div", "📝 EDITING REQUIREMENTS / CUSTOMER NOTES", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:.6px;color:#245b9a;margin-bottom:7px";
-       addText(workBox, "div", workDetails || "इस Booking के साथ कोई अतिरिक्त Editing Requirement / Note दर्ज नहीं है।", "").style.cssText = "font-size:14px;color:#344054;white-space:pre-wrap;overflow-wrap:anywhere";
       const statusBox = addText(card, "div", "", "booking-info-box");
       statusBox.style.cssText = "margin:12px 0;padding:16px;background:#fff8f0;border:1px solid #f3d0a5;border-left:5px solid #ef8f00;border-radius:14px;box-shadow:0 4px 12px #ef8f0010";
       addText(statusBox, "div", "📌 YOUR BOOKING STATUS", "").style.cssText = "font-size:12px;font-weight:900;letter-spacing:1.2px;color:#a85b00;margin-bottom:8px";
@@ -801,7 +566,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const filesList = addText(filesSection, "div", "", "customer-file-list");
         filesList.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px";
         for (const item of uploadedFiles) {
-          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.storage_path || item.fullPath || item.url || item.name)) || "";
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name)) || "";
           if (!filePath) continue;
           const fileCard = addText(filesList, "div", "", "customer-file-item");
           fileCard.style.cssText = "min-width:0;padding:8px;border:1px solid #29415d;border-radius:9px;background:#102139";
@@ -810,15 +575,10 @@ async function loadCustomerHistory(user, mobileFilter = "") {
           fileLabel.style.cssText = "font-size:12px;overflow-wrap:anywhere;margin:0 0 8px;color:#eef7ff";
           const openLabel = addText(fileCard, "p", "फाइल लोड हो रही है...", "note");
           try {
-            let fileUrl = "";
-            if (/^https?:\/\//i.test(filePath)) {
-              fileUrl = filePath;
-            } else {
-              const { data: signedData, error: signedError } = await client.storage
-                .from("customer-media").createSignedUrl(filePath, 3600);
-              if (signedError || !signedData?.signedUrl) throw signedError || new Error("Signed URL नहीं बना");
-              fileUrl = signedData.signedUrl;
-            }
+            const { data: signedData, error: signedError } = await client.storage
+              .from("customer-media").createSignedUrl(filePath, 3600);
+            if (signedError || !signedData?.signedUrl) throw signedError || new Error("Signed URL नहीं बना");
+            const fileUrl = signedData.signedUrl;
             const ext = fileName.split(".").pop().toLowerCase();
             const isImage = /^(png|jpe?g|gif|webp|bmp|avif)$/i.test(ext);
             const isVideo = /^(mp4|mov|webm|m4v|ogg|avi)$/i.test(ext);
@@ -852,7 +612,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const invoiceWindow = window.open("", "_blank");
         if (!invoiceWindow) { alert("Invoice खोलने के लिए browser pop-up अनुमति दें।"); return; }
         invoiceWindow.document.open();
-        invoiceWindow.document.write(`<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Booking Invoice</title></head><body style="font:15px Arial,sans-serif;padding:24px;color:#172033">Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।<footer class="site-footer-branding"><strong>✦ EDIT CONCEPT</strong></footer></body></html>`);
+        invoiceWindow.document.write("<!DOCTYPE html><html lang='hi'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width'><title>Booking Invoice</title></head><body style='font:15px Arial,sans-serif;padding:24px;color:#172033'>Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।</body></html>");
         invoiceWindow.document.close();
         const esc = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
         const total = Math.max(0, Number(booking.amount) || 0);
@@ -860,7 +620,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const mediaPaths = Array.isArray(booking.file_paths) ? booking.file_paths : (typeof booking.file_paths === "string" ? (() => { try { const parsed = JSON.parse(booking.file_paths); return Array.isArray(parsed) ? parsed : []; } catch { return []; } })() : []);
         const mediaItems = [];
         for (const item of mediaPaths) {
-          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.storage_path || item.fullPath || item.url || item.name)) || "";
+          const filePath = typeof item === "string" ? item : (item && (item.path || item.file_path || item.name || item.url)) || "";
           if (!filePath) continue;
           // Existing uploads are stored in the private customer-media bucket.
           try {
@@ -943,60 +703,6 @@ async function loadCustomerHistory(user, mobileFilter = "") {
 .invoice-history .history-card .paybox .qr{background:#fff!important}
 @media(max-width:520px){.invoice-page-heading{display:block}.invoice-shortcuts{margin-top:13px}.invoice-shortcuts a{flex:1;justify-content:center}.invoice-history .money-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.invoice-history .history-card{border-radius:14px!important}}
 
-
-/* Customer booking cards: match the detailed booking/payment layout in the reference image */
-.invoice-history #bookingHistory{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:16px!important}
-.invoice-history #bookingHistory>.history-card{width:100%!important;box-sizing:border-box!important;padding:clamp(14px,2.5vw,22px)!important;margin:0 0 16px!important;border:2px solid #e7b5c9!important;border-left:5px solid #c62828!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 18px #b4235a12!important;overflow:hidden!important}
-.invoice-history #bookingHistory .customer-booking-number{background:#fff0f0!important;border:2px solid #d7a0a0!important;border-radius:12px!important;padding:14px!important;text-align:center!important}
-.invoice-history #bookingHistory .customer-booking-number [class*="booking-number-value"]{color:#b4232f!important;font-size:clamp(21px,4vw,30px)!important}
-.invoice-history #bookingHistory .customer-files{background:#fff!important;border:1px solid #ead6df!important;border-radius:12px!important}
-.invoice-history #bookingHistory .customer-file-item{background:#fff!important;border:1px solid #e8d6df!important}
-.invoice-history #bookingHistory .money-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:14px 0!important}
-.invoice-history #bookingHistory .money-item{min-width:0!important;padding:11px!important;background:#fff!important;border:1px solid #ead6df!important;border-radius:9px!important}
-.invoice-history #bookingHistory .money-item strong{color:#b4235a!important}
-.invoice-history #bookingHistory .paybox{display:block!important;width:100%!important;box-sizing:border-box!important;margin-top:14px!important;padding:16px!important;background:#fff!important;border:1px solid #ead6df!important;border-radius:14px!important;color:#38434a!important}
-.invoice-history #bookingHistory .paybox h3{color:#a94444!important;font-size:18px!important}
-.invoice-history #bookingHistory .paybox .history-section{margin:8px 0 14px!important;padding:14px!important;background:#fff!important;border:1px solid #e9bfd3!important;border-radius:13px!important}
-.invoice-history #bookingHistory .paybox .history-card{padding:12px!important;margin:8px 0!important;border:1px solid #eee!important;border-left:4px solid #c62828!important;border-radius:10px!important;background:#fff!important}
-.invoice-history #bookingHistory .paybox .amount-due-card{background:#fff4f4!important;border-color:#e7b5b5!important}
-.invoice-history #bookingHistory .paybox .qr{display:flex!important;justify-content:center!important;align-items:center!important;width:max-content!important;max-width:100%!important;margin:12px auto!important;padding:8px!important;background:#fff!important;border:3px solid #3995d8!important;border-radius:12px!important}
-.invoice-history #bookingHistory .paybox .upi-actions{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:8px!important}
-.invoice-history #bookingHistory .paybox .payment-submit{display:grid!important;gap:8px!important;margin-top:12px!important;padding:12px!important;background:#fff!important;border:1px solid #e5e5e5!important;border-radius:12px!important}
-.invoice-history #bookingHistory .paybox .payment-submit input{width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:10px!important;background:#fff!important;border:1px solid #ddd!important;border-radius:8px!important;color:#333!important}
-@media(max-width:520px){.invoice-history #bookingHistory .money-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.invoice-history #bookingHistory>.history-card{padding:12px!important}.invoice-history #bookingHistory .paybox{padding:12px!important}}
-
-
-/* Customer YOUR BOOKINGS: match the approved booking-summary and payment example */
-.invoice-history #bookingHistory{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
-.invoice-history #bookingHistory>.history-card{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:clamp(12px,3vw,20px)!important;background:#fff!important;border:1px solid #f0d6e2!important;border-left:5px solid #c62828!important;border-radius:16px!important;box-shadow:0 5px 18px rgba(30,40,50,.07)!important;color:#263238!important;overflow:hidden!important}
-.invoice-history #bookingHistory .customer-booking-number{background:#fff0f6!important;border:1px solid #f1c7da!important;border-bottom:2px solid #d81b70!important;border-radius:9px!important;text-align:left!important;padding:12px!important}
-.invoice-history #bookingHistory .booking-phone-box{background:#eff6ff!important;border:1px solid #cfe0f8!important;border-left:4px solid #3478bd!important;border-radius:9px!important;padding:10px 12px!important}
-.invoice-history #bookingHistory .booking-info-box{background:#fff8fc!important;border:1px solid #f0d6e2!important;border-left:4px solid #c21868!important;border-radius:10px!important;padding:12px!important;box-shadow:none!important}
-.invoice-history #bookingHistory .customer-detail-box{background:#fff8fc!important;border-left-color:#168b52!important}
-.invoice-history #bookingHistory .work-details-box{background:#f2f8ff!important;border-color:#cfe0f5!important;border-left-color:#3478bd!important}
-.invoice-history #bookingHistory .booking-date-time{background:#eff6ff!important;border-color:#d4e4fa!important;border-radius:10px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding:7px!important}
-.invoice-history #bookingHistory .booking-date-item{min-width:0!important;padding:7px!important}
-.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:12px!important;color:#245b9a!important}
-.invoice-history #bookingHistory .customer-files{background:#f1f7ff!important;border:1px solid #d3e4fa!important;border-radius:10px!important;padding:11px!important}
-.invoice-history #bookingHistory .customer-files h4{color:#245b9a!important}
-.invoice-history #bookingHistory .customer-file-item{background:#fff!important;border:1px solid #dce7f5!important;border-radius:9px!important}
-.invoice-history #bookingHistory .customer-file-item img,.invoice-history #bookingHistory .customer-file-item video{width:100%!important;max-height:200px!important;object-fit:contain!important;background:#f7f9fc!important}
-.invoice-history #bookingHistory .money-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin:10px 0!important}
-.invoice-history #bookingHistory .money-item{min-width:0!important;padding:10px!important;background:#fff!important;border:1px solid #dce7f5!important;border-radius:9px!important}
-.invoice-history #bookingHistory .money-item small{color:#667085!important}
-.invoice-history #bookingHistory .money-item strong{color:#245b9a!important;font-size:16px!important}
-.invoice-history #bookingHistory .customer-payment-history{background:#fff!important;border:1px solid #edc9dc!important;border-radius:13px!important;padding:13px!important}
-.invoice-history #bookingHistory .customer-payment-history h3{color:#a94444!important}
-.invoice-history #bookingHistory .customer-payment-history .history-card{background:#fff!important;border:1px solid #eee!important;border-left:4px solid #c62828!important;border-radius:9px!important;padding:11px!important}
-.invoice-history #bookingHistory .paybox{background:#fff!important;border:1px solid #ead6df!important;border-radius:13px!important;padding:13px!important;color:#344054!important}
-.invoice-history #bookingHistory .paybox h3{color:#a94444!important;font-size:17px!important}
-.invoice-history #bookingHistory .paybox .qr{width:max-content!important;height:auto!important;max-width:100%!important;margin:12px auto!important;padding:8px!important;background:#fff!important;border:3px solid #3995d8!important;border-radius:11px!important}
-.invoice-history #bookingHistory .paybox .payment-submit{background:#fff!important;border:1px solid #e5e5e5!important;border-radius:11px!important;padding:11px!important}
-.invoice-history #bookingHistory .paybox input{max-width:100%!important;box-sizing:border-box!important;background:#fff!important;color:#344054!important}
-.invoice-history #bookingHistory .upi-actions{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:8px!important}
-.invoice-history #bookingHistory .upi-actions button,.invoice-history #bookingHistory a.action{background:#d7193f!important;color:#fff!important;border:1px solid #c51639!important;border-radius:8px!important}
-@media(max-width:480px){.invoice-history #bookingHistory>.history-card{padding:10px!important}.invoice-history #bookingHistory .booking-date-time{gap:5px!important}.invoice-history #bookingHistory .booking-date-item{padding:5px!important}.invoice-history #bookingHistory .booking-date-item div:last-child{font-size:11px!important}.invoice-history #bookingHistory .money-item{padding:8px!important}}
-
 </style></head><body><header><h1>ADITYA KUMAR · PROJECT EDIT CONCEPT</h1><div>Photo &amp; Video Editing Service</div><div>Invoice: ${esc(booking.booking_number || booking.id)}</div></header><h2>🧾 Booking Invoice</h2><div class="row"><span>Booking Number</span><strong>${esc(booking.booking_number || booking.id)}</strong></div><div class="row"><span>Booking Date</span><strong>${esc(invoiceDate)}</strong></div><div class="row"><span>Customer</span><strong>${esc(booking.customer_name || "Customer")}</strong></div><div class="row"><span>Phone</span><strong>${esc(booking.phone)}</strong></div><div class="row"><span>Address</span><strong>${esc(booking.address || "इस बुकिंग में पता दर्ज नहीं है")}</strong></div><div class="row"><span>Service</span><strong>${esc(booking.service)}</strong></div><div class="row"><span>Status</span><strong>${esc(bookingStatus)}</strong></div><div class="row total"><span>Total Amount</span><span>${booking.amount == null ? "Admin से राशि की पुष्टि बाकी" : "₹" + total.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div><h2>Customer Photos &amp; Videos</h2><div class="media-grid">${mediaHtml}</div><div class="note">यह बिल वेबसाइट में उपलब्ध booking record पर आधारित है। भुगतान केवल Admin द्वारा सत्यापित होने पर प्राप्त माना जाएगा। फोटो/वीडियो print में तभी आएँगे जब browser उन्हें लोड कर पाए।</div><p><button class="print" onclick="window.print()">Print / Save as PDF</button></p></body></html>`;
         invoiceWindow.document.open(); invoiceWindow.document.write(invoiceHtml); invoiceWindow.document.close();
       });
@@ -1046,7 +752,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         let history = [];
         if (booking.booking_number) {
           const pr = await client.from("payment_submissions")
-            .select("amount,status,payment_reference,utr,created_at,screenshot_path,verified_at")
+            .select("amount,status,payment_reference,utr,created_at")
             .eq("booking_number", booking.booking_number);
           if (!pr.error && pr.data) {
             history = pr.data;
@@ -1066,36 +772,27 @@ async function loadCustomerHistory(user, mobileFilter = "") {
           addText(cell, "small", item[0]);
           addText(cell, "strong", "₹" + item[1].toLocaleString("en-IN"));
         }
-        const paymentHistoryBox = addText(card, "section", "", "history-section customer-payment-history");
-        paymentHistoryBox.style.cssText = "margin:12px 0;padding:14px;background:#fff;border:1px solid #edc9dc;border-radius:13px";
-        addText(paymentHistoryBox, "h3", "💳 PAYMENT HISTORY", "").style.cssText = "margin:0 0 8px;color:#a94444;font-size:17px";
-        addText(paymentHistoryBox, "p", "इस Booking के सभी दर्ज भुगतान:", "history-state");
-        if (history.length) {
-          for (const payment of history) {
-            const paymentCard = addText(paymentHistoryBox, "div", "", "history-card");
-            const paymentStatus = String(payment.status || "pending");
-            const paidAmount = Number(payment.amount) || 0;
-            addText(paymentCard, "p", dateText(payment.created_at) + " · UPI");
-            addText(paymentCard, "p", "Amount: ₹" + paidAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
-            addText(paymentCard, "p", "Status: " + paymentStatus);
-            const ref = payment.utr || payment.payment_reference;
-            if (ref) addText(paymentCard, "p", "Reference / UTR: " + ref, "history-state");
-            if (payment.verified_at) addText(paymentCard, "p", "Verified: " + dateText(payment.verified_at), "history-state");
-            if (payment.screenshot_path) {
-              try {
-                const {data: shot, error: shotError} = await client.storage.from("payment-screenshots").createSignedUrl(payment.screenshot_path, 3600);
-                if (!shotError && shot?.signedUrl) {
-                  const link = addText(paymentCard, "a", "View Payment Screenshot", "action");
-                  link.href = shot.signedUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
-                }
-              } catch (shotError) { console.warn("Payment screenshot unavailable:", shotError); }
-            }
-          }
-        } else {
-          addText(paymentHistoryBox, "p", "इस Booking के लिए अभी कोई payment submission दर्ज नहीं है।", "history-state");
-        }
         if (remaining > 0 && booking.booking_number) {
           const payBox = addText(card, "section", "", "paybox");
+          if (history.length) {
+            const historyBox = addText(payBox, "div", "", "history-section");
+            addText(historyBox, "h3", "Payment History");
+            addText(historyBox, "p", "इस बुकिंग में ग्राहक द्वारा जमा किए गए भुगतान:", "history-state");
+            for (const payment of history) {
+              const paymentCard = addText(historyBox, "div", "", "history-card");
+              const status = String(payment.status || "pending");
+              const paidAmount = Number(payment.amount) || 0;
+              addText(paymentCard, "p", dateText(payment.created_at) + " · UPI");
+              addText(paymentCard, "p", "Amount: ₹" + paidAmount.toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2}));
+              addText(paymentCard, "p", "Status: " + status);
+              const ref = payment.utr || payment.payment_reference;
+              if (ref) addText(paymentCard, "p", "Reference / UTR: " + ref, "history-state");
+            }
+          } else {
+            const emptyHistory = addText(payBox, "div", "", "history-section");
+            addText(emptyHistory, "h3", "Payment History");
+            addText(emptyHistory, "p", "इस बुकिंग के लिए अभी कोई payment record नहीं मिला।", "history-state");
+          }
           addText(payBox, "h3", "QR Payment Screen · Pay Remaining Amount");
           addText(payBox, "p", "Booking: " + booking.booking_number);
           const dueBox = addText(payBox, "div", "", "amount-due-card");
@@ -1184,9 +881,6 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     box.textContent = "बुकिंग नहीं दिख सकीं। Login सफल हो सकता है; Database की bookings SELECT policy जाँचें। (" + (error.message || "Unknown error") + ")";
   }
 }
-// Allow the separate customer-auth controller to render the complete booking cards.
-window.loadCustomerHistory = loadCustomerHistory;
-
 document.getElementById("findMyBookings").addEventListener("click", async () => {
   const { data: sessionData } = await client.auth.getSession();
   const user = sessionData && sessionData.session && sessionData.session.user;
@@ -1202,15 +896,8 @@ document.getElementById("findMyBookings").addEventListener("click", async () => 
   await loadCustomerHistory(user, mobileValue);
 });
 
-loginTab.addEventListener("click", (event) => {
-  event.preventDefault();
-  setMode("login");
-});
-signupTab.addEventListener("click", (event) => {
-  event.preventDefault();
-  setMode("signup");
-  document.getElementById("fullName").focus({ preventScroll: true });
-});
+loginTab.addEventListener("click", () => setMode("login"));
+signupTab.addEventListener("click", () => setMode("signup"));
 
 document.getElementById("forgotLink").addEventListener("click", async (event) => {
   event.preventDefault();
@@ -1221,30 +908,17 @@ document.getElementById("forgotLink").addEventListener("click", async (event) =>
   link.style.pointerEvents = "none";
   setMessage("Password reset email भेज रहे हैं...");
   try {
-    const { error } = await client.auth.resetPasswordForEmail(address, { redirectTo: "https://edit-concept.vercel.app/auth.html" });
+    const { error } = await client.auth.resetPasswordForEmail(address, { redirectTo: "https://fudansingh851214-hub.github.io/Aditya-editor-/auth.html" });
     if (error) throw error;
     setMessage("यदि इस Email से account मौजूद है, तो password reset link भेज दिया गया है। Inbox/Spam खोलें और link पर click करके नया password बनाएँ।");
   } catch (error) { setMessage("Reset email नहीं भेजा जा सका: " + (error.message || "दोबारा कोशिश करें।")); }
   finally { link.style.pointerEvents = "auto"; }
 });
 
-// Surface browser validation failures instead of leaving the Login button appearing unresponsive.
-form.addEventListener("invalid", (event) => {
-  const field = event.target;
-  if (field && field.id === "email") setMessage("कृपया सही Email Address भरें।");
-  else if (field && field.id === "password") setMessage("कृपया Password भरें।");
-}, true);
-
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  // Handle validation in-page so customers always receive a visible message.
-  const loginEmail = email.value.trim().toLowerCase();
-  const loginPassword = password.value;
-  if (!loginEmail) { setMessage("कृपया Email Address भरें।"); email.focus(); return; }
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(loginEmail)) { setMessage("कृपया सही Email Address डालें।"); email.focus(); return; }
-  if (!loginPassword) { setMessage("कृपया Password भरें।"); password.focus(); return; }
   if (!client) {
-    setMessage("Login service लोड नहीं हुई। Internet जाँचें और पेज refresh करें।");
+    setMessage("Supabase library लोड नहीं हुई। Internet चालू करके पेज refresh करें।");
     return;
   }
   submitButton.disabled = true;
@@ -1267,12 +941,9 @@ form.addEventListener("submit", async (event) => {
       if (password.value.length < 8) throw new Error("Password कम से कम 8 characters का होना चाहिए।");
       if (password.value !== confirmValue) throw new Error("Password और Confirm Password एक जैसे नहीं हैं।");
       result = await client.auth.signUp({
-        email: email.value.trim().toLowerCase(),
+        email: email.value.trim(),
         password: password.value,
-        options: {
-          data: { full_name: fullNameValue, phone: mobileValue },
-          emailRedirectTo: "https://edit-concept.vercel.app/auth.html"
-        }
+        options: { data: { full_name: fullNameValue, phone: mobileValue } }
       });
       if (result.error) throw result.error;
       if (result.data.session) {
@@ -1282,22 +953,14 @@ form.addEventListener("submit", async (event) => {
       }
     } else {
       result = await client.auth.signInWithPassword({
-        email: email.value.trim().toLowerCase(),
+        email: email.value.trim(),
         password: password.value
       });
       if (result.error) throw result.error;
       showDashboard(result.data.user);
     }
   } catch (error) {
-    const raw = String(error.message || "");
-    let friendly = raw || "दोबारा कोशिश करें।";
-    if (/invalid login credentials/i.test(raw)) friendly = "Email या Password सही नहीं है। Email verify किया है या नहीं, यह भी जाँचें।";
-    else if (/fetch failed|failed to fetch|networkerror|load failed/i.test(raw)) friendly = "Internet या Supabase connection में समस्या है। Internet जाँचकर फिर कोशिश करें।";
-    else if (/email not confirmed/i.test(raw)) friendly = "आपका Email अभी verify नहीं हुआ है। Inbox/Spam में Supabase confirmation email खोलकर Verify करें, फिर Login करें।";
-    else if (/user already registered/i.test(raw)) friendly = "इस Email से account पहले से बना हुआ है। Create Account के बजाय Login करें या Forgot Password इस्तेमाल करें।";
-    else if (/password should be at least/i.test(raw)) friendly = "Password कम से कम 8 characters का रखें।";
-    else if (/redirect.*not allowed|invalid.*redirect/i.test(raw)) friendly = "Email confirmation redirect URL Supabase में allow नहीं है। Admin को Supabase Auth URL Configuration में edit-concept.vercel.app/auth.html जोड़ना होगा।";
-    setMessage("समस्या: " + friendly);
+    setMessage("समस्या: " + (error.message || "दोबारा कोशिश करें।"));
   } finally {
     submitButton.disabled = false;
   }
@@ -1319,15 +982,7 @@ function initSupabase() {
   try {
     client = window.supabase.createClient(
       "https://okzwtylpmcyurkxvaocy.supabase.co",
-      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q",
-      {
-        auth: {
-          storageKey: "edit-concept-customer-auth",
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q"
     );
     client.auth.onAuthStateChange((event, session) => {
       if (event === "PASSWORD_RECOVERY") {
@@ -1348,22 +1003,4 @@ function initSupabase() {
 }
 initSupabase();
 
-
-/* Shared header interactions use the same customer Supabase session as this page. */
-(function(){
- const menuBtn=document.getElementById("siteMenuButton"),nav=document.getElementById("siteLinks");
- const trigger=document.getElementById("siteAccountTrigger"),menu=document.getElementById("siteAccountMenu");
- const name=document.getElementById("siteAccountName"),signed=document.getElementById("siteAccountSigned"),logout=document.getElementById("siteAccountLogout");
- menuBtn.addEventListener("click",()=>{const open=nav.classList.toggle("open");menuBtn.setAttribute("aria-expanded",String(open));});
- nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nav.classList.remove("open");menuBtn.setAttribute("aria-expanded","false");}));
- trigger.addEventListener("click",()=>{const open=menu.classList.toggle("open");trigger.setAttribute("aria-expanded",String(open));});
- document.addEventListener("click",e=>{if(!e.target.closest("#siteAccount")){menu.classList.remove("open");trigger.setAttribute("aria-expanded","false");}});
- function updateHeader(user){
-  if(user){const label=user.user_metadata?.full_name||user.user_metadata?.name||user.user_metadata?.fullName||(user.email?user.email.split("@")[0]:"My Account");name.textContent=label;signed.textContent="Signed in as "+label;logout.hidden=false;}
-  else{name.textContent="Sign In / Create Account";signed.textContent="Guest — Sign in to manage bookings";logout.hidden=true;}
- }
- logout.addEventListener("click",async()=>{if(!client)return;const {error}=await client.auth.signOut();if(error){signed.textContent="Logout नहीं हुआ: "+error.message;return;}menu.classList.remove("open");trigger.setAttribute("aria-expanded","false");updateHeader(null);});
- if(typeof client!=="undefined"&&client){client.auth.getUser().then(({data})=>updateHeader(data?.user||null));client.auth.onAuthStateChange((event,session)=>updateHeader(session?.user||null));}
-})();
-
-</script><footer class="site-footer-branding"><strong>✦ EDIT CONCEPT</strong></footer></body></html>
+</script></body></html>
