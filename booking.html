@@ -548,30 +548,59 @@
       .camera-booking-mode .service-card p{margin:16px 0;font-size:15px;line-height:1.7}
     }
 
+
+    /* Shared Home / Services navigation and customer account menu */
+    .shared-nav{width:min(1100px,100%);min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .logo{font-weight:900;font-size:20px;background:linear-gradient(90deg,#e91e72,#168b52);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+    .logo small{display:block;font-size:11px;color:#71877c;font-weight:400}
+    #menu{display:none;cursor:pointer;padding:9px 13px;border:0;border-radius:10px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800}
+    .links{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-size:12px;font-weight:800}
+    .links a{display:inline-flex;align-items:center;justify-content:center;padding:9px 10px;border-radius:12px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff!important;white-space:nowrap}
+    .links a:hover{background:#dc2626!important;color:#fff!important;transform:translateY(-2px)}
+    .links a.active{outline:2px solid #168b52;outline-offset:2px}
+    .account-wrap{position:relative;flex-shrink:0}
+    .account-trigger{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid #e84b91;border-radius:13px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800;cursor:pointer;max-width:220px;white-space:nowrap}
+    .account-trigger .account-name{max-width:155px;overflow:hidden;text-overflow:ellipsis}
+    .account-menu{display:none;position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 30px));background:#fff;color:#242424;border:1px solid #dce9e1;border-radius:16px;box-shadow:0 16px 42px #0003;z-index:100;overflow:hidden}
+    .account-menu.open{display:block}
+    .account-signed{padding:18px 20px 14px;color:#666;border-bottom:1px solid #eee;overflow-wrap:anywhere}
+    .account-signed strong{display:block;color:#174c35;margin-top:5px}
+    .account-menu a,.account-menu button{display:flex;align-items:center;gap:12px;width:100%;padding:13px 18px;border:0;background:#fff;color:#222;text-align:left;font:inherit;cursor:pointer;text-decoration:none}
+    .account-menu a:hover,.account-menu button:hover{background:#dc2626!important;color:#fff!important}
+    .account-menu .logout-item{border-top:1px solid #eee;color:#a23b32}
+    @media(min-width:1100px){.shared-nav{flex-wrap:nowrap}.links{flex-wrap:nowrap;gap:5px}.links a{padding:8px 7px;font-size:11px}.account-trigger{font-size:12px}}
+    @media(max-width:850px){#menu{display:inline-flex;align-items:center;justify-content:center}.shared-nav{flex-wrap:wrap}.links{display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch;max-height:75vh;overflow-y:auto}.links.open{display:flex}.links a{justify-content:center}.account-wrap{margin-left:auto}}
+
   </style>
 </head>
 
 <body>
   <header>
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-icon">ॐ</span>
-        <span>
-          <span class="brand-name">EDIT CONCEPT</span>
-          <span class="brand-sub">Photo &amp; Video Editing Studio</span>
-        </span>
-      </a>
-
-      <nav class="nav-links">
+    <div class="container nav shared-nav">
+      <a class="logo" href="index.html">✦ Edit Concept<small>Photo &amp; Video Editing Studio</small></a>
+      <button id="menu" type="button" aria-expanded="false" aria-label="Menu खोलें">☰</button>
+      <nav class="links" id="links">
         <a href="index.html">Home</a>
-        <a href="auth.html">Customer Login</a>
-        <a href="booking.html" class="active">Booking</a>
-        <a href="tracking.html">Track</a>
-        <a class="whatsapp"
-           href="https://wa.me/917544913754"
-           target="_blank"
-           rel="noopener">WhatsApp</a>
+        <a href="services.html">Our Services</a>
+        <a href="auth.html">🎨 🎬Editing Book</a>
+        <a href="booking.html?service=camera" class="active">📸 Camera Book</a>
+        <a href="tracking.html">🎨 🎬 Track Editing</a>
+        <a href="camera-tracking.html">📸 Track Camera</a>
       </nav>
+      <div class="account-wrap" id="accountWrapAfterNav">
+        <button class="account-trigger" id="accountTriggerAfterNav" type="button" aria-expanded="false"><span>👤</span><span class="account-name" id="accountNameAfterNav">Sign In / Create Account</span><span>▾</span></button>
+        <div class="account-menu" id="accountMenuAfterNav">
+          <div class="account-signed">Account <strong id="accountSignedAfterNav">Guest — Sign in to manage bookings</strong></div>
+          <a href="auth.html">🔐 <span>Sign In / Create Account</span></a>
+          <a href="auth.html#dashboard">👤 <span>My Account</span></a>
+          <a href="auth.html#bookingHistory">📋 <span>My Bookings</span></a>
+          <a href="tracking.html">📍 <span>Track Your Editing Booking</span></a>
+          <a href="camera-tracking.html">📸 <span>Track Your Camera Booking</span></a>
+          <a href="auth.html#personalInformation">🪪 <span>My Details</span></a>
+          <a href="index.html">🏠 <span>Home Page</span></a>
+          <button class="logout-item" id="accountLogoutAfterNav" type="button" style="display:none">🚪 <span>Logout</span></button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -1193,5 +1222,26 @@ $("mediaFiles").addEventListener("change", function() {
       }
     });
   </script>
+
+  <script>
+  (() => {
+    const menu=document.getElementById("menu"), links=document.getElementById("links");
+    const trigger=document.getElementById("accountTriggerAfterNav"), accountMenu=document.getElementById("accountMenuAfterNav");
+    const name=document.getElementById("accountNameAfterNav"), signed=document.getElementById("accountSignedAfterNav"), logout=document.getElementById("accountLogoutAfterNav");
+    if(!menu||!links||!trigger||!accountMenu)return;
+    menu.addEventListener("click",()=>{const open=links.classList.toggle("open");menu.setAttribute("aria-expanded",String(open));});
+    links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{links.classList.remove("open");menu.setAttribute("aria-expanded","false");}));
+    trigger.addEventListener("click",()=>{const open=accountMenu.classList.toggle("open");trigger.setAttribute("aria-expanded",String(open));});
+    document.addEventListener("click",e=>{if(!e.target.closest("#accountWrapAfterNav")){accountMenu.classList.remove("open");trigger.setAttribute("aria-expanded","false");}});
+    const URL="https://okzwtylpmcyurkxvaocy.supabase.co", KEY="sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+    if(window.supabase?.createClient){
+      const db=window.supabase.createClient(URL,KEY,{auth:{storageKey:"edit-concept-customer-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      async function refresh(){const {data}=await db.auth.getUser(),u=data?.user;if(u){const label=u.user_metadata?.full_name||u.user_metadata?.name||u.user_metadata?.fullName||(u.email?u.email.split("@")[0]:"My Account");name.textContent=label;signed.textContent="Signed in as "+label;logout.style.display="flex";}else{name.textContent="Sign In / Create Account";signed.textContent="Guest — Sign in to manage bookings";logout.style.display="none";}}
+      refresh();db.auth.onAuthStateChange(()=>refresh());
+      logout.addEventListener("click",async()=>{const {error}=await db.auth.signOut();if(error){signed.textContent="Logout नहीं हुआ: "+error.message;return;}accountMenu.classList.remove("open");trigger.setAttribute("aria-expanded","false");refresh();});
+    }else{signed.textContent="Sign in to manage your account";logout.style.display="none";}
+  })();
+  </script>
+
 </body>
 </html>
