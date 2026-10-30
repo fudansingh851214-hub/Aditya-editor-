@@ -404,28 +404,39 @@
     .button.secondary { color: #a51d40; background: #ffe8ee; box-shadow: none; }
     .message { color: #a51d40; }
     @media (max-width: 420px) { .intro { padding: 21px 18px; } }
-  </style>
+  
+.site-header{position:sticky;top:0;z-index:50;margin:0 0 22px;padding:0 18px;background:#ffffffed;border-bottom:1px solid #f0d5dc;box-shadow:0 4px 16px rgba(120,20,50,.06)}
+.site-nav{width:min(1180px,100%);min-height:72px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:9px}
+.site-logo{font-size:20px;font-weight:900;white-space:nowrap;text-decoration:none;background:linear-gradient(90deg,#e91e72,#168b52);-webkit-background-clip:text;background-clip:text;color:transparent}
+.site-logo small{display:block;font-size:11px;font-weight:400;color:#71877c}
+.site-links{display:flex;align-items:center;justify-content:center;gap:6px}
+.site-links a{padding:9px;border-radius:12px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff!important;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}
+.site-links a:hover,.site-links a.current{background:#dc2626!important;color:#fff!important}
+#siteMenuButton{display:none;padding:9px 13px;border:0;border-radius:10px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800}
+.site-account{position:relative;flex-shrink:0}
+#siteAccountTrigger{display:flex;align-items:center;gap:7px;max-width:210px;padding:9px 10px;border:0;border-radius:13px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800;cursor:pointer}
+#siteAccountName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.site-account-menu{display:none;position:absolute;right:0;top:calc(100% + 9px);width:min(320px,calc(100vw - 28px));background:#fff;border:1px solid #f0d5dc;border-radius:15px;box-shadow:0 16px 42px #0003;overflow:hidden;z-index:80}
+.site-account-menu.open{display:block}.site-account-info{padding:16px;color:#66736b;border-bottom:1px solid #eee}
+.site-account-menu a,.site-account-menu button{display:block;width:100%;padding:12px 16px;border:0;background:#fff;color:#263238;text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+.site-account-menu a:hover,.site-account-menu button:hover{background:#dc2626;color:#fff}
+.site-account-menu button[hidden]{display:none}
+@media(min-width:1100px){.site-nav{flex-wrap:nowrap}.site-links{gap:4px}.site-links a{padding:8px 7px;font-size:10px}}
+@media(max-width:850px){.site-nav{flex-wrap:wrap;padding:10px 0}#siteMenuButton{display:inline-flex}.site-account{margin-left:auto}.site-links{display:none;order:5;flex-basis:100%;flex-direction:column;align-items:stretch;padding-bottom:10px}.site-links.open{display:flex}.site-links a{text-align:center;font-size:13px}}
+</style>
 </head>
 
 <body>
-  <header>
-    <div class="container topbar">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">ॐ</span>
-        <span>
-          <small>श्री गणेशाय नमः:</small>
-          <strong>EDIT CONCEPT</strong>
-        </span>
-      </a>
-
-      <a class="whatsapp"
-         href="https://wa.me/917544913754"
-         target="_blank"
-         rel="noopener">
-        WhatsApp
-      </a>
-    </div>
-  </header>
+  <header class="site-header"><nav class="site-nav" aria-label="Main navigation">
+<a class="site-logo" href="index.html">✦ Edit Concept<small>Photo &amp; Video Editing Studio</small></a>
+<button id="siteMenuButton" type="button" aria-expanded="false">☰ Menu</button>
+<div class="site-links" id="siteLinks">
+<a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">🎨 🎬 Editing Book</a><a href="booking.html?service=camera">📸 Camera Book</a><a href="tracking.html" class="current">🎨 🎬 Track Editing</a><a href="camera-tracking.html">📸 Track Camera</a>
+</div>
+<div class="site-account" id="siteAccount"><button id="siteAccountTrigger" type="button" aria-expanded="false">👤 <span id="siteAccountName">Sign In / Create Account</span> ▾</button>
+<div class="site-account-menu" id="siteAccountMenu"><div class="site-account-info"><span id="siteAccountSigned">Guest — Sign in to manage bookings</span></div>
+<a href="auth.html">Sign In / Create Account</a><a href="auth.html">My Account</a><a href="auth.html#bookingHistory">My Bookings</a><a href="tracking.html">Track Editing Booking</a><a href="camera-tracking.html">Track Camera Booking</a><a href="auth.html">My Details</a><a href="index.html">Home Page</a><button id="siteAccountLogout" type="button" hidden>Logout</button></div></div>
+</nav></header>
 
   <main class="container">
     <div class="intro">
@@ -467,9 +478,7 @@
              role="status"
              aria-live="polite"></div>
 
-        <a class="button home-under-track" href="index.html">
-          🏠 Home Page पर जाएँ
-        </a>
+        
       </form>
     </section>
 
@@ -496,7 +505,7 @@
       </div>
 
       <div class="action-row">
-        <a class="button" href="index.html">← Home पर जाएँ</a>
+        
 
         <a class="button secondary"
            id="whatsappLink"
