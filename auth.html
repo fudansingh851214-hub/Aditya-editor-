@@ -28,6 +28,11 @@ body>.wrap>h1{display:none}
 body>.wrap>p{display:none}
 #authArea{width:min(680px,100%);margin:5vh auto;background:#fff;color:#203d32;border:1px solid #e1e6df;border-radius:26px;padding:clamp(30px,5vw,48px);box-shadow:0 18px 48px #203d3218}#authArea h2{font-size:clamp(27px,3.5vw,34px);margin-bottom:12px}#authArea>p{font-size:17px}#authArea label{font-size:17px;margin:18px 0 8px}#authArea input{min-height:54px;padding:16px;font-size:17px}#authArea .tabs button{min-height:52px;padding:15px;font-size:16px}#authArea .submit{min-height:56px;padding:17px;font-size:18px}#authArea .guest-link{padding:16px;font-size:16px}
 #authArea h2{color:#1c4d3b}
+.auth-heading{text-align:center;margin:0 0 24px}.auth-kicker{display:inline-block;padding:7px 12px;border-radius:99px;background:#edf5ed;color:#1e5b43;font-size:11px;font-weight:900;letter-spacing:1.5px}.auth-heading h2{margin:14px 0 8px;font-size:clamp(25px,4vw,34px)}.auth-heading p{margin:0 auto;max-width:520px;color:#64766b;line-height:1.6}.tabs button{cursor:pointer;touch-action:manipulation}
+#authArea input:focus{outline:3px solid #c6282825;border-color:#c62828!important}
+#authArea .submit{cursor:pointer;box-shadow:0 8px 18px #c6282824}
+#authArea .submit:disabled{opacity:.65;cursor:wait}
+#message:empty{display:none}#message:not(:empty){padding:12px 14px;margin-top:14px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:600}
 #authArea p{text-align:center;color:#65766c}
 #authArea input{background:#fbfcfa;color:#203d32;border-color:#d9e1da}
 #authArea .tabs button{background:#f4f7f2;color:#28513f;border-color:#dce5dc}
@@ -367,7 +372,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
   </div>
 </header><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
-<div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button" >Login</button><button id="signupTab" type="button" >Create Account</button></div>
+<div id="authArea"><div class="auth-heading"><span class="auth-kicker">CUSTOMER PORTAL</span><h2>Welcome to Edit Concept</h2><p>Login करें या नया अकाउंट बनाएँ और अपनी बुकिंग, पेमेंट और सर्विस अपडेट देखें।</p></div><div class="tabs"><button id="loginTab" class="active" type="button" aria-pressed="true">Login</button><button id="signupTab" type="button" aria-pressed="false">Create Account</button></div>
 <form id="authForm">
 <div id="signupFields" style="display:none">
 <label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Enter your full name">
@@ -418,7 +423,7 @@ body:has(.invoice-history){background:#f5f3ff!important}
 
 
 
-<section class="history-section invoice-history"><div class="invoice-page-heading"><div><h3>YOUR BOOKING</h3></div></div><div style="display:none;margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 BOOKING MOBILE NUMBER (FIXED)</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" readonly aria-readonly="true" placeholder="बुकिंग में दर्ज मोबाइल नंबर" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#f1f3f5;color:#263238;font-size:16px;cursor:not-allowed"><button id="findMyBookings" type="button" style="display:none" disabled>Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">यह नंबर आपकी बुकिंग से अपने-आप लिया जाएगा। इसी नंबर की सभी बुकिंग नीचे दिखाई जाएँगी।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div><div class="invoice-stats" id="invoiceStats" aria-live="polite"><div class="invoice-stat"><span>Total Bookings</span><strong id="invoiceBookingCount">—</strong></div><div class="invoice-stat"><span>Pending Bookings</span><strong id="invoicePendingCount">—</strong></div><div class="invoice-stat"><span>Total Amount</span><strong id="invoiceTotalAmount">Admin confirmation pending</strong></div></div></section>
+<section class="history-section invoice-history"><div class="invoice-page-heading"><div><span class="invoice-eyebrow">CUSTOMER BOOKING CENTER</span><h3>YOUR BOOKINGS &amp; INVOICES</h3><p>आपकी सभी उपलब्ध बुकिंग, स्टेटस, अपलोड की गई फाइलें और बिल की जानकारी यहाँ दिखाई जाएगी।</p></div></div><div style="display:none;margin:14px 0 18px;padding:16px;background:#fff7fa;border:1px solid #f0c5dc;border-radius:14px"><label for="bookingMobile" style="display:block;margin:0 0 7px;color:#c62828;font-weight:800">📌 BOOKING MOBILE NUMBER (FIXED)</label><input id="bookingMobile" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" readonly aria-readonly="true" placeholder="बुकिंग में दर्ज मोबाइल नंबर" style="width:100%;padding:12px;border:1px solid #e2b7cc;border-radius:9px;background:#f1f3f5;color:#263238;font-size:16px;cursor:not-allowed"><button id="findMyBookings" type="button" style="display:none" disabled>Find My Bookings</button><p id="bookingMobileMessage" class="note" style="text-align:left;margin:8px 0 0">यह नंबर आपकी बुकिंग से अपने-आप लिया जाएगा। इसी नंबर की सभी बुकिंग नीचे दिखाई जाएँगी।</p></div><div id="bookingHistory" aria-live="polite">आपकी बुकिंग लोड हो रही हैं...</div><div class="invoice-stats" id="invoiceStats" aria-live="polite"><div class="invoice-stat"><span>Total Bookings</span><strong id="invoiceBookingCount">—</strong></div><div class="invoice-stat"><span>Pending Bookings</span><strong id="invoicePendingCount">—</strong></div><div class="invoice-stat"><span>Total Amount</span><strong id="invoiceTotalAmount">Admin confirmation pending</strong></div></div></section>
 </section>
 
 </main>
@@ -545,18 +550,20 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    // Match bookings linked by account UUID OR the email used during booking.
-    // Older bookings may have email saved but no user_id, so UUID-only lookup misses them.
-    const accountEmail = String(user.email || "").trim().toLowerCase();
+    // Use only columns present in the bookings table: user_id and phone.
+    // The customer email is held by Supabase Auth and is not assumed to be a bookings column.
+    const accountMobile = String(
+      user.user_metadata?.phone || user.user_metadata?.mobile ||
+      user.user_metadata?.phone_number || user.phone || ""
+    ).trim();
+    const effectiveMobile = String(mobileFilter || accountMobile).trim();
     let bookingQuery = client.from("bookings").select("*");
-    if (mobileFilter) {
-      const filters = ["user_id.eq." + user.id, "phone.eq." + mobileFilter];
-      if (accountEmail) filters.push("email.ilike." + accountEmail);
-      bookingQuery = bookingQuery.or(filters.join(","));
+    if (effectiveMobile) {
+      bookingQuery = bookingQuery.or(
+        "user_id.eq." + user.id + ",phone.eq." + effectiveMobile
+      );
     } else {
-      bookingQuery = accountEmail
-        ? bookingQuery.or("user_id.eq." + user.id + ",email.ilike." + accountEmail)
-        : bookingQuery.eq("user_id", user.id);
+      bookingQuery = bookingQuery.eq("user_id", user.id);
     }
     const { data, error } = await bookingQuery.order("created_at", { ascending: false });
     if (error) throw error;
@@ -570,7 +577,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     if (cameraTrackLink) cameraTrackLink.style.display = hasCameraBooking ? "flex" : "none";
 
     // Prefer the phone number actually entered on the customer's latest linked booking.
-    if (!mobileFilter && data && data.length) {
+    if (!effectiveMobile && data && data.length) {
       let latestBookingPhone = "";
       for (const row of data) {
         if (row.phone && String(row.phone).trim()) { latestBookingPhone = String(row.phone).trim(); break; }
@@ -596,7 +603,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       return !request || request.status === "pending";
     });
     if (!visibleBookings.length) {
-      box.textContent = mobileFilter ? "इस मोबाइल नंबर से जुड़ी कोई बुकिंग नहीं मिली। नंबर जाँचें या account से जुड़ी बुकिंग देखने के लिए मोबाइल नंबर खाली करके Find My Bookings दबाएँ।" : "दिखाने के लिए कोई बुकिंग नहीं है। यदि Cancellation Request का निर्णय हो चुका है, तो वह बुकिंग यहाँ नहीं दिखाई जाएगी। नई बुकिंग के लिए Book New Service दबाएँ।";
+      box.textContent = effectiveMobile ? "इस account या registered mobile number से जुड़ी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।" : "इस account से अभी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
     }
     box.textContent = "";
@@ -612,7 +619,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         totalEl.textContent = "₹" + total.toLocaleString("en-IN", {maximumFractionDigits:2});
       } else totalEl.textContent = "Admin confirmation pending";
     }
-    if (mobileMessage && mobileFilter) mobileMessage.textContent = "इस मोबाइल नंबर से जुड़ी बुकिंग नीचे दिखाई गई हैं।";
+    if (mobileMessage && effectiveMobile) mobileMessage.textContent = "आपके account/mobile number से जुड़ी बुकिंग नीचे दिखाई गई हैं।";
     for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
       const bookingNumber = booking.booking_number || ("Booking #" + (booking.id ?? ""));
