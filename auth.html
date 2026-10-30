@@ -567,12 +567,46 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    // Strict account isolation: show ONLY bookings owned by this authenticated user.
-    // Never use phone-number OR matching here; two customers can share a family phone.
-    const { data, error } = await client.from("bookings").select("*")
-      .eq("user_id", user.id)
+    // Load bookings linked to this account, plus older guest bookings made
+    // before the customer created an account. Legacy bookings are matched by
+    // the exact mobile number saved in the customer's verified account profile.
+    const { data: accountRows, error: accountError } = await client
+      .from("bookings").select("*").eq("user_id", user.id)
       .order("created_at", { ascending: false });
-    if (error) throw error;
+    if (accountError) throw accountError;
+
+    const metadata = user.user_metadata || {};
+    let accountMobile = String(
+      metadata.phone || metadata.mobile || metadata.phone_number || user.phone || ""
+    ).replace(/[^0-9]/g, "");
+    if (accountMobile.length > 10 && accountMobile.endsWith(accountMobile.slice(-10))) {
+      accountMobile = accountMobile.slice(-10);
+    }
+
+    // If phone was not saved in signup metadata, use the latest number from
+    // bookings already linked to this same account.
+    if (!accountMobile && accountRows && accountRows.length) {
+      accountMobile = String(accountRows[0].phone || "").replace(/[^0-9]/g, "").slice(-10);
+    }
+
+    let legacyRows = [];
+    if (accountMobile.length === 10) {
+      const { data: phoneRows, error: phoneError } = await client
+        .from("bookings").select("*").eq("phone", accountMobile)
+        .order("created_at", { ascending: false });
+      if (phoneError) console.warn("Legacy phone bookings could not be loaded:", phoneError.message);
+      else legacyRows = phoneRows || [];
+    }
+
+    // Merge without duplicates; account-owned records always remain included.
+    const merged = new Map();
+    for (const row of [...(accountRows || []), ...legacyRows]) {
+      const key = String(row.id ?? row.booking_number ?? "");
+      if (key) merged.set(key, row);
+    }
+    const data = Array.from(merged.values()).sort(
+      (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
+    );
     // Show only the relevant tracking shortcut(s) for the services this customer booked.
     const cameraServices = ["photo camera book", "video camera book", "photo & video camera book"];
     const hasCameraBooking = (data || []).some(row => cameraServices.includes(String(row.service || "").trim().toLowerCase()));
