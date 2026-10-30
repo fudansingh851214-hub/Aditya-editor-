@@ -543,6 +543,75 @@
 
     const $ = id => document.getElementById(id);
 
+    // Keep the Track Editing account button in sync with the Home page customer session.
+    const accountTrigger = $("siteAccountTrigger");
+    const accountMenu = $("siteAccountMenu");
+    const accountName = $("siteAccountName");
+    const accountSigned = $("siteAccountSigned");
+    const accountMainLink = $("siteAccountMainLink");
+    const accountLogout = $("siteAccountLogout");
+    const siteMenuButton = $("siteMenuButton");
+    const siteLinks = $("siteLinks");
+
+    async function updateTrackingAccount() {
+      if (!client) return;
+      const { data, error } = await client.auth.getUser();
+      const user = !error ? data?.user : null;
+      if (user) {
+        const label = user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          user.user_metadata?.fullName ||
+          (user.email ? user.email.split("@")[0] : "My Account");
+        accountName.textContent = label;
+        accountSigned.textContent = "Signed in as " + label;
+        accountMainLink.textContent = "👤 My Account";
+        accountMainLink.href = "auth.html#dashboard";
+        accountLogout.hidden = false;
+      } else {
+        accountName.textContent = "Sign In / Create Account";
+        accountSigned.textContent = "Guest — Sign in to manage bookings";
+        accountMainLink.textContent = "Sign In / Create Account";
+        accountMainLink.href = "auth.html";
+        accountLogout.hidden = true;
+      }
+    }
+
+    accountTrigger.addEventListener("click", function(event) {
+      event.stopPropagation();
+      const isOpen = accountMenu.classList.toggle("open");
+      accountTrigger.setAttribute("aria-expanded", String(isOpen));
+    });
+    document.addEventListener("click", function(event) {
+      if (!event.target.closest("#siteAccount")) {
+        accountMenu.classList.remove("open");
+        accountTrigger.setAttribute("aria-expanded", "false");
+      }
+    });
+    accountLogout.addEventListener("click", async function() {
+      const { error } = await client.auth.signOut();
+      if (error) {
+        accountSigned.textContent = "Logout नहीं हुआ: " + error.message;
+        return;
+      }
+      accountMenu.classList.remove("open");
+      accountTrigger.setAttribute("aria-expanded", "false");
+      await updateTrackingAccount();
+    });
+    siteMenuButton.addEventListener("click", function() {
+      const isOpen = siteLinks.classList.toggle("open");
+      siteMenuButton.setAttribute("aria-expanded", String(isOpen));
+    });
+    siteLinks.querySelectorAll("a").forEach(function(link) {
+      link.addEventListener("click", function() {
+        siteLinks.classList.remove("open");
+        siteMenuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+    updateTrackingAccount();
+    if (client) client.auth.onAuthStateChange(function() {
+      updateTrackingAccount();
+    });
+
     $("year").textContent = new Date().getFullYear();
 
     /*
