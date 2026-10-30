@@ -810,10 +810,15 @@ async function loadCustomerHistory(user, mobileFilter = "") {
           fileLabel.style.cssText = "font-size:12px;overflow-wrap:anywhere;margin:0 0 8px;color:#eef7ff";
           const openLabel = addText(fileCard, "p", "फाइल लोड हो रही है...", "note");
           try {
-            const { data: signedData, error: signedError } = await client.storage
-              .from("customer-media").createSignedUrl(filePath, 3600);
-            if (signedError || !signedData?.signedUrl) throw signedError || new Error("Signed URL नहीं बना");
-            const fileUrl = signedData.signedUrl;
+            let fileUrl = "";
+            if (/^https?:\/\//i.test(filePath)) {
+              fileUrl = filePath;
+            } else {
+              const { data: signedData, error: signedError } = await client.storage
+                .from("customer-media").createSignedUrl(filePath, 3600);
+              if (signedError || !signedData?.signedUrl) throw signedError || new Error("Signed URL नहीं बना");
+              fileUrl = signedData.signedUrl;
+            }
             const ext = fileName.split(".").pop().toLowerCase();
             const isImage = /^(png|jpe?g|gif|webp|bmp|avif)$/i.test(ext);
             const isVideo = /^(mp4|mov|webm|m4v|ogg|avi)$/i.test(ext);
@@ -847,8 +852,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         const invoiceWindow = window.open("", "_blank");
         if (!invoiceWindow) { alert("Invoice खोलने के लिए browser pop-up अनुमति दें।"); return; }
         invoiceWindow.document.open();
-        invoiceWindow.document.write("<!DOCTYPE html><html lang='hi'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width'><title>Booking Invoice</title></head><body style='font:15px Arial,sans-serif;padding:24px;color:#172033'>Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।<footer class="site-footer-branding"><strong>✦ EDIT CONCEPT</strong></footer>
-</body></html>");
+        invoiceWindow.document.write(`<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Booking Invoice</title></head><body style="font:15px Arial,sans-serif;padding:24px;color:#172033">Invoice तैयार हो रहा है...<br>Customer की फोटो और वीडियो लोड हो रही हैं।<footer class="site-footer-branding"><strong>✦ EDIT CONCEPT</strong></footer></body></html>`);
         invoiceWindow.document.close();
         const esc = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
         const total = Math.max(0, Number(booking.amount) || 0);
