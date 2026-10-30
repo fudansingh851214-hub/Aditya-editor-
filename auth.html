@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EDIT CONCEPT | Sign In / Create Account</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;background:#07111f;color:#eef7ff;font-family:Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:block;padding:18px;background:#07111f;color:#eef7ff;font-family:Arial,sans-serif}.wrap{margin:76px auto 30px}
 .wrap{width:min(1100px,100%);background:#102139;border:1px solid #29415d;border-radius:22px;padding:25px;box-shadow:0 18px 45px #0005}
 #authArea{width:min(460px,100%);margin:0 auto}.home-top{position:absolute;top:14px;right:18px;z-index:5}.home-top a{display:inline-block;padding:9px 13px;border:1px solid #34516e;border-radius:10px;color:#42dfff;text-decoration:none;font-weight:bold}.or-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:#9db1c7;font-size:13px}.or-divider:before,.or-divider:after{content:"";height:1px;background:#34516e;flex:1}.guest-link{display:block;width:100%;padding:13px;border:1px solid #42dfff;border-radius:10px;text-align:center;color:#42dfff;text-decoration:none;font-weight:bold;background:#0a1728}.guest-link:hover{background:#153a4b}
 h1{margin:0;color:#42dfff;text-align:center}p{color:#b6c6d8;line-height:1.55;text-align:center}
@@ -499,11 +499,17 @@ function showDashboard(user) {
   }
   document.getElementById("customerEmail").textContent = customerEmail;
   if (user) loadCustomerHistory(user);
-  // Bring the customer dashboard into view immediately after a successful login.
-  requestAnimationFrame(() => {
-    const dashboard = document.getElementById("dashboard");
-    if (dashboard) dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
+  // Move the page to the dashboard after login. The page uses a long dashboard,
+  // so avoid vertically centering the whole page and make the new section obvious.
+  const dashboard = document.getElementById("dashboard");
+  if (dashboard) {
+    dashboard.style.setProperty("display", "block", "important");
+    dashboard.setAttribute("tabindex", "-1");
+    requestAnimationFrame(() => {
+      dashboard.scrollIntoView({ behavior: "auto", block: "start" });
+      dashboard.focus({ preventScroll: true });
+    });
+  }
 }
 function addText(parent, tag, value, className) {
   const el = document.createElement(tag);
