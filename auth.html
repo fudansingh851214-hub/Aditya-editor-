@@ -1016,6 +1016,9 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     box.textContent = "बुकिंग नहीं दिख सकीं। Login सफल हो सकता है; Database की bookings SELECT policy जाँचें। (" + (error.message || "Unknown error") + ")";
   }
 }
+// Allow the separate customer-auth controller to render the complete booking cards.
+window.loadCustomerHistory = loadCustomerHistory;
+
 document.getElementById("findMyBookings").addEventListener("click", async () => {
   const { data: sessionData } = await client.auth.getSession();
   const user = sessionData && sessionData.session && sessionData.session.user;
