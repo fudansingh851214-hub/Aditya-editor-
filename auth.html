@@ -373,13 +373,13 @@ body:has(.invoice-history){background:#f5f3ff!important}
 </header><main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
 <div id="authArea"><div class="auth-heading"><span class="auth-kicker">CUSTOMER PORTAL</span><h2>Welcome to Edit Concept</h2><p>Login करें या नया अकाउंट बनाएँ और अपनी बुकिंग, पेमेंट और सर्विस अपडेट देखें।</p></div><div class="tabs" role="group" aria-label="Choose account action"><button id="loginTab" class="active" type="button" aria-pressed="true" onclick="window.switchAuthMode('login')">Login</button><button id="signupTab" type="button" aria-pressed="false" onclick="window.switchAuthMode('signup')">Create Account</button></div>
-<form id="authForm">
+<form id="authForm" novalidate>
 <div id="signupFields" style="display:none">
 <label for="fullName">Full Name</label><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Enter your full name">
 <label for="mobileNumber">Mobile Number</label><input id="mobileNumber" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number"><p class="note" style="text-align:left;margin:5px 0">Enter your 10-digit Indian mobile number.</p>
 </div>
 <label for="email">Email Address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
-<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Enter your password">
+<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
 <div id="confirmPasswordField" style="display:none"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter your password"></div>
 <button class="submit" id="submitButton" type="submit">Login</button>
 </form>
@@ -1076,8 +1076,14 @@ form.addEventListener("invalid", (event) => {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  // Handle validation in-page so customers always receive a visible message.
+  const loginEmail = email.value.trim().toLowerCase();
+  const loginPassword = password.value;
+  if (!loginEmail) { setMessage("कृपया Email Address भरें।"); email.focus(); return; }
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(loginEmail)) { setMessage("कृपया सही Email Address डालें।"); email.focus(); return; }
+  if (!loginPassword) { setMessage("कृपया Password भरें।"); password.focus(); return; }
   if (!client) {
-    setMessage("Supabase library लोड नहीं हुई। Internet चालू करके पेज refresh करें।");
+    setMessage("Login service लोड नहीं हुई। Internet जाँचें और पेज refresh करें।");
     return;
   }
   submitButton.disabled = true;
@@ -1124,7 +1130,8 @@ form.addEventListener("submit", async (event) => {
   } catch (error) {
     const raw = String(error.message || "");
     let friendly = raw || "दोबारा कोशिश करें।";
-    if (/invalid login credentials/i.test(raw)) friendly = "Email या Password सही नहीं है। यदि नया account बनाया है, तो पहले Email में आया confirmation link खोलें।";
+    if (/invalid login credentials/i.test(raw)) friendly = "Email या Password सही नहीं है। Email verify किया है या नहीं, यह भी जाँचें।";
+    else if (/fetch failed|failed to fetch|networkerror|load failed/i.test(raw)) friendly = "Internet या Supabase connection में समस्या है। Internet जाँचकर फिर कोशिश करें।";
     else if (/email not confirmed/i.test(raw)) friendly = "आपका Email अभी verify नहीं हुआ है। Inbox/Spam में Supabase confirmation email खोलकर Verify करें, फिर Login करें।";
     else if (/user already registered/i.test(raw)) friendly = "इस Email से account पहले से बना हुआ है। Create Account के बजाय Login करें या Forgot Password इस्तेमाल करें।";
     else if (/password should be at least/i.test(raw)) friendly = "Password कम से कम 8 characters का रखें।";
