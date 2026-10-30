@@ -107,10 +107,75 @@ footer{border-top-color:#dce9e1!important;color:#174c35!important}
   nav a{padding:8px 11px;font-size:13px}
 }
 
+
+/* Shared homepage navigation and customer account dropdown */
+#menu{display:none;cursor:pointer}
+.account-wrap{position:relative;flex-shrink:0}
+.account-trigger{display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid #e84b91;border-radius:13px;background:linear-gradient(110deg,#e91e72,#168b52);color:#fff;font-weight:800;cursor:pointer;max-width:220px;white-space:nowrap}
+.account-trigger .account-name{max-width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-menu{display:none;position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 30px));background:#fff;color:#242424;border:1px solid #dce9e1;border-radius:16px;box-shadow:0 16px 42px #0003;z-index:100;overflow:hidden}
+.account-menu.open{display:block}
+.account-signed{padding:18px 20px 14px;color:#666;border-bottom:1px solid #eee;overflow-wrap:anywhere}
+.account-signed strong{display:block;color:#174c35;margin-top:5px}
+.account-menu a,.account-menu button{display:flex;align-items:center;gap:12px;width:100%;padding:13px 18px;border:0;background:#fff;color:#222;text-align:left;font:inherit;cursor:pointer;text-decoration:none}
+.account-menu a:hover,.account-menu button:hover{background:#dc2626!important;color:#fff!important}
+.account-menu .logout-item{border-top:1px solid #eee;color:#a23b32}
+@media(min-width:1100px){
+ .nav{flex-wrap:nowrap!important;gap:8px!important}
+ .logo{min-width:150px!important;flex:0 0 150px!important}
+ .links{flex:1 1 auto!important;min-width:0!important;flex-wrap:nowrap!important;white-space:nowrap!important;justify-content:center!important;gap:5px!important}
+ .links a{flex:0 1 auto!important;min-width:0!important;padding:9px 8px!important;font-size:11px!important;white-space:nowrap!important}
+ .account-wrap{flex:0 0 auto!important}
+ .account-trigger{font-size:12px!important}
+}
+@media(max-width:850px){
+ #menu{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border-radius:10px}
+ .nav{flex-wrap:wrap!important}
+ .links{display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch;gap:8px!important;max-height:75vh;overflow-y:auto}
+ .links.open{display:flex}
+ .links a{justify-content:center}
+ .account-wrap{margin-left:auto}
+}
+
 </style>
 </head>
 <body>
-<header><div class="container nav"><a class="logo" href="index.html">✦ EDIT CONCEPT<small>Photo &amp; Video Editing Studio</small></a><nav aria-label="Main navigation"><a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">Book Now</a><a href="payment.html">Secure Payment</a><a href="index.html#contact">Contact</a><a href="auth.html">Sign In</a></nav></div></header>
+<header>
+  <div class="container nav">
+    <a class="logo" href="index.html">
+      ✦ Edit Concept
+      <small>Photo &amp; Video Editing Studio</small>
+    </a>
+
+    <button id="menu" type="button" aria-expanded="false"
+      aria-label="Menu खोलें">☰</button>
+
+    <nav class="links" id="links">
+      <a class="pink-bold-nav" href="index.html">Home</a>
+      <a class="pink-bold-nav" href="services.html">Our Services</a>
+      <a class="pink-bold-nav" href="auth.html">🎨 🎬Editing Book</a>
+      <a class="pink-bold-nav" href="booking.html?service=camera">📸 Camera Book</a>
+      <a class="pink-bold-nav" href="tracking.html">🎨 🎬 Track Editing</a>
+      <a class="pink-bold-nav" href="camera-tracking.html">📸 Track Camera</a>
+    </nav>
+    <div class="account-wrap" id="accountWrapAfterNav">
+      <button class="account-trigger" id="accountTriggerAfterNav" type="button" aria-expanded="false">
+        <span>👤</span><span class="account-name" id="accountNameAfterNav">Sign In / Create Account</span><span>▾</span>
+      </button>
+      <div class="account-menu" id="accountMenuAfterNav">
+        <div class="account-signed">Account <strong id="accountSignedAfterNav">Guest — Sign in to manage bookings</strong></div>
+        <a href="auth.html">🔐 <span>Sign In / Create Account</span></a>
+        <a href="auth.html#dashboard">👤 <span>My Account</span></a>
+        <a href="auth.html#bookingHistory">📋 <span>My Bookings</span></a>
+        <a href="tracking.html">📍 <span>Track Your Editing Booking</span></a>
+        <a href="camera-tracking.html">📸 <span>Track Your Camera Booking</span></a>
+        <a href="auth.html#personalInformation">🪪 <span>My Details</span></a>
+        <a href="index.html">🏠 <span>Home Page</span></a>
+        <button class="logout-item" id="accountLogoutAfterNav" type="button" style="display:none">🚪 <span>Logout</span></button>
+      </div>
+    </div>
+  </div>
+</header>
 <main class="container"><section class="hero"><div class="eyebrow">EDITING SERVICE</div><h1>Editing Service</h1><p>कृपया वह सेवा चुनें जो आप बुक करना चाहते हैं।</p></section>
 <section class="grid" aria-label="Available editing services">
 <article class="card"><div class="icon">🖼️</div>
@@ -130,4 +195,56 @@ footer{border-top-color:#dce9e1!important;color:#174c35!important}
 </section>
 </main>
 <footer><div class="container"><strong>✦ ADITYA KUMAR · PROJECT EDIT CONCEPT</strong><p>Photo &amp; Video Editing Studio</p></div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const menu = document.getElementById("menu");
+const links = document.getElementById("links");
+const accountTrigger = document.getElementById("accountTriggerAfterNav");
+const accountMenu = document.getElementById("accountMenuAfterNav");
+const accountName = document.getElementById("accountNameAfterNav");
+const accountSigned = document.getElementById("accountSignedAfterNav");
+const accountLogout = document.getElementById("accountLogoutAfterNav");
+accountTrigger.addEventListener("click", function(){
+  const open = accountMenu.classList.toggle("open");
+  accountTrigger.setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", function(event){
+  if(!event.target.closest("#accountWrapAfterNav")){
+    accountMenu.classList.remove("open");
+    accountTrigger.setAttribute("aria-expanded","false");
+  }
+});
+const SERVICES_SUPABASE_URL="https://okzwtylpmcyurkxvaocy.supabase.co";
+const SERVICES_SUPABASE_KEY="sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
+if(window.supabase?.createClient){
+ const servicesDb=window.supabase.createClient(SERVICES_SUPABASE_URL,SERVICES_SUPABASE_KEY,{auth:{storageKey:"edit-concept-customer-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ async function updateAccountMenu(){
+  const {data}=await servicesDb.auth.getUser(); const user=data?.user;
+  if(user){
+   const label=user.user_metadata?.full_name||user.user_metadata?.name||user.user_metadata?.fullName||(user.email?user.email.split("@")[0]:"My Account");
+   accountName.textContent=label; accountSigned.textContent="Signed in as "+label;
+   accountMenu.querySelector('a[href="auth.html"]').innerHTML="👤 <span>My Account</span>";
+   accountLogout.style.display="flex";
+  }else{
+   accountName.textContent="Sign In / Create Account";
+   accountSigned.textContent="Guest — Sign in to manage bookings";
+   accountLogout.style.display="none";
+  }
+ }
+ updateAccountMenu(); servicesDb.auth.onAuthStateChange(()=>updateAccountMenu());
+ accountLogout.addEventListener("click",async function(){
+  const {error}=await servicesDb.auth.signOut();
+  if(error){accountSigned.textContent="Logout नहीं हुआ: "+error.message;return;}
+  accountMenu.classList.remove("open");accountTrigger.setAttribute("aria-expanded","false");await updateAccountMenu();
+ });
+}else{accountSigned.textContent="Sign in to manage your account";accountLogout.style.display="none";}
+menu.addEventListener("click",function(){
+ const isOpen=links.classList.toggle("open");menu.setAttribute("aria-expanded",String(isOpen));
+});
+links.querySelectorAll("a").forEach(link=>link.addEventListener("click",function(){
+ links.classList.remove("open");menu.setAttribute("aria-expanded","false");
+}));
+</script>
+
 </body></html>
