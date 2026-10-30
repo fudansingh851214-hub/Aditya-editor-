@@ -662,7 +662,14 @@ document.addEventListener("click", function(event) {
 const HOME_SUPABASE_URL = "https://okzwtylpmcyurkxvaocy.supabase.co";
 const HOME_SUPABASE_KEY = "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q";
 if (window.supabase?.createClient) {
-  const homeDb = window.supabase.createClient(HOME_SUPABASE_URL, HOME_SUPABASE_KEY);
+  const homeDb = window.supabase.createClient(HOME_SUPABASE_URL, HOME_SUPABASE_KEY, {
+    auth: {
+      storageKey: "edit-concept-customer-auth",
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
   async function updateAccountMenu() {
     const { data } = await homeDb.auth.getUser();
     const user = data?.user;
