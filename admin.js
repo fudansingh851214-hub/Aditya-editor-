@@ -410,9 +410,11 @@ function updateDashboardSummary() {
   const completedCount = currentBookings.filter((booking) =>
     String(booking.booking_status || booking.status || "").toLowerCase() === "completed"
   ).length;
-  const totalRevenue = currentBookings.reduce((sum, booking) =>
-    sum + Math.max(0, Number(booking._paidAmount) || 0), 0
-  );
+  const completePaymentCount = currentPayments.filter((payment) =>
+    ["paid", "verified", "confirmed", "success", "successful"].includes(
+      String(payment.status || "").toLowerCase()
+    )
+  ).length;
 
   setText("regularBookingCount", regularCount);
   setText("cameraBookingCount", cameraBookings.length);
@@ -420,7 +422,7 @@ function updateDashboardSummary() {
   setText("verifiedPaymentTotal", formatAmount(verifiedTotal));
   setText("cameraBookingAmountTotal", formatAmount(cameraAmount));
   setText("totalBookingCount", currentBookings.length);
-  setText("totalRevenue", formatAmount(totalRevenue));
+  setText("completePaymentCount", completePaymentCount);
   setText("pendingPaymentCount", pendingPaymentCount);
   setText("completedBookingCount", completedCount);
 }
