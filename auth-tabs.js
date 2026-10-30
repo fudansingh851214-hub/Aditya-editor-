@@ -129,55 +129,16 @@
   async function loadBookings(user) {
     var box = byId("bookingHistory");
     if (!box) return;
-    box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
+    box.textContent = "आपकी पूरी बुकिंग और भुगतान जानकारी लोड हो रही है...";
     try {
-      var db = getClient();
-      var result = await db.from("bookings")
-        .select("booking_number,service,booking_status,status,amount,created_at,phone")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      if (result.error) throw result.error;
-      var rows = result.data || [];
-      box.textContent = "";
-      if (!rows.length) {
-        box.textContent = "इस account से अभी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
-        return;
+      // Use the full booking renderer already present on auth.html. It includes
+      // customer details, uploaded media, invoice actions, payment history and QR.
+      if (typeof window.loadCustomerHistory !== "function") {
+        throw new Error("पूरा Booking Renderer उपलब्ध नहीं है। पेज Refresh करें।");
       }
-      rows.forEach(function (booking) {
-        var card = document.createElement("article");
-        card.className = "history-card";
-        var heading = document.createElement("h4");
-        heading.textContent = booking.booking_number || "Booking";
-        card.appendChild(heading);
-        [
-          "Service: " + (booking.service || "—"),
-          "Mobile: " + (booking.phone || "—"),
-          "Status: " + (booking.booking_status || booking.status || "Submitted"),
-          "Amount: " + (booking.amount == null ? "Admin confirmation pending" : "₹" + Number(booking.amount).toLocaleString("en-IN"))
-        ].forEach(function (line) {
-          var p = document.createElement("p");
-          p.textContent = line;
-          card.appendChild(p);
-        });
-        var link = document.createElement("a");
-        link.className = "action";
-        link.textContent = "Track Booking";
-        var camera = /camera/i.test(booking.service || "");
-        link.href = (camera ? "camera-tracking.html" : "tracking.html") + "?id=" + encodeURIComponent(booking.booking_number || "");
-        card.appendChild(link);
-        box.appendChild(card);
-      });
-      var count = byId("invoiceBookingCount");
-      if (count) count.textContent = String(rows.length);
-      var pending = byId("invoicePendingCount");
-      if (pending) pending.textContent = String(rows.filter(function (r) { return /pending|submitted|review|confirm/i.test(r.booking_status || r.status || "pending"); }).length);
-      var total = byId("invoiceTotalAmount");
-      if (total) {
-        var priced = rows.filter(function (r) { return r.amount != null && Number.isFinite(Number(r.amount)); });
-        total.textContent = priced.length ? "₹" + priced.reduce(function (sum, r) { return sum + Math.max(0, Number(r.amount) || 0); }, 0).toLocaleString("en-IN") : "Admin confirmation pending";
-      }
+      await window.loadCustomerHistory(user);
     } catch (error) {
-      box.textContent = "Login सफल है, लेकिन बुकिंग लोड नहीं हो सकीं। कृपया बाद में Refresh करें। (" + (error.message || "Database error") + ")";
+      box.textContent = "आपकी पूरी बुकिंग लोड नहीं हो सकी। कृपया Refresh करें। (" + (error.message || "Database error") + ")";
     }
   }
 
