@@ -767,6 +767,11 @@ function renderBookingList(bookings, targetList, emptyMessage) {
     );
 
     targetList.appendChild(article);
+
+    // Automatically show customer-uploaded photos and videos in Booking Management.
+    if (!isCameraBooking(booking) && parseFilePaths(booking.file_paths).length) {
+      viewFiles(booking.id);
+    }
   }
 }
 
