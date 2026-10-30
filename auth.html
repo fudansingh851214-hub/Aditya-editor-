@@ -243,6 +243,18 @@ h1{color:#ef4444!important}
 @media(max-width:850px){.site-nav{flex-wrap:wrap;padding:10px 0}#siteMenuButton{display:inline-flex}.site-account{margin-left:auto}.site-links{display:none;order:5;flex-basis:100%;flex-direction:column;align-items:stretch;padding-bottom:10px}.site-links.open{display:flex}.site-links a{text-align:center;font-size:13px}}
 @media(max-width:700px){.site-header{margin:-14px -14px 18px;padding:0 14px}}
 
+
+/* Larger top header and navigation on the login page */
+.site-header{padding:0 22px!important}
+.site-nav{min-height:92px!important;gap:14px!important}
+.site-logo{font-size:clamp(25px,2.4vw,30px)!important}
+.site-links{gap:8px!important}
+.site-links a{font-size:13px!important;padding:12px 11px!important}
+#siteAccountTrigger{font-size:14px!important;padding:12px 14px!important;max-width:250px!important}
+#siteMenuButton{font-size:18px!important;padding:12px 16px!important}
+@media(max-width:900px){.site-nav{min-height:82px!important}.site-links a{font-size:12px!important;padding:11px 9px!important}}
+@media(max-width:700px){.site-header{padding:0 12px!important}.site-nav{min-height:76px!important;gap:8px!important}.site-logo{font-size:24px!important}#siteAccountTrigger{font-size:12px!important;padding:10px!important;max-width:175px!important}}
+
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
