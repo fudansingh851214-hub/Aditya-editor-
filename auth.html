@@ -462,49 +462,49 @@ function setMode(next) {
 }
 window.setMode = setMode;
 function showDashboard(user) {
-  document.getElementById("authArea").style.setProperty("display", "none", "important");
-  document.getElementById("dashboard").style.setProperty("display", "block", "important");
-  document.getElementById("welcome").textContent = "Customer Dashboard";
+  // Show the customer area first so a secondary profile/history error cannot
+  // leave a successfully signed-in customer stuck on the login form.
+  const authArea = document.getElementById("authArea");
+  const dashboard = document.getElementById("dashboard");
+  if (authArea) authArea.style.setProperty("display", "none", "important");
+  if (dashboard) {
+    dashboard.style.setProperty("display", "block", "important");
+    dashboard.setAttribute("tabindex", "-1");
+  }
+  const put = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value == null ? "" : String(value);
+  };
   const meta = user && user.user_metadata ? user.user_metadata : {};
   const customerEmail = user && user.email ? user.email : "Email उपलब्ध नहीं";
-  const fullName = meta.full_name || meta.name || meta.fullName || (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
-  const mobile = meta.phone || meta.mobile || meta.phone_number || user.phone || "";
-  document.getElementById("signedInName").textContent = fullName;
-  document.getElementById("signedInEmail").textContent = customerEmail;
-  document.getElementById("profileFullName").textContent = fullName;
-  document.getElementById("profileEmail").textContent = customerEmail;
-  document.getElementById("profileMobile").textContent = mobile || "बुकिंग से नंबर खोज रहे हैं...";
-  // The booking form saved phone number will be displayed in YOUR BOOKINGS.
-  document.getElementById("profileStatus").textContent = user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending";
+  const fullName = meta.full_name || meta.name || meta.fullName ||
+    (customerEmail.includes("@") ? customerEmail.split("@")[0] : "Customer");
+  const mobile = meta.phone || meta.mobile || meta.phone_number || (user && user.phone) || "";
+  put("welcome", "Customer Dashboard");
+  put("signedInName", fullName);
+  put("signedInEmail", customerEmail);
+  put("profileFullName", fullName);
+  put("profileEmail", customerEmail);
+  put("profileMobile", mobile || "बुकिंग से नंबर खोज रहे हैं...");
+  put("profileStatus", user && user.email_confirmed_at ? "Active · Email verified" : "Active · Email verification pending");
+  put("customerEmail", customerEmail);
+
   if (!mobile && user && user.id && client) {
-    document.getElementById("profileMobile").textContent = "बुकिंग से नंबर खोज रहे हैं...";
     client.from("bookings").select("phone,created_at")
       .eq("user_id", user.id).not("phone","is",null)
       .order("created_at",{ascending:false}).limit(1).maybeSingle()
       .then(({data,error}) => {
-        if (!error && data && data.phone) {
-          document.getElementById("profileMobile").textContent = data.phone;
-          return;
-        }
-        // Fallback: some older bookings may not have been linked to the signed-in user.
-        return client.from("bookings").select("phone,created_at")
-          .eq("phone", user.phone || meta.phone || meta.mobile || "")
-          .order("created_at",{ascending:false}).limit(1).maybeSingle()
-          .then(({data:phoneData}) => {
-            document.getElementById("profileMobile").textContent =
-              (phoneData && phoneData.phone) ? phoneData.phone : "नंबर नहीं मिला — बुकिंग मोबाइल से लिंक नहीं है";
-          });
-      })
-      .catch(() => { document.getElementById("profileMobile").textContent = "नंबर लोड नहीं हुआ — Refresh करें"; });
+        if (!error && data && data.phone) put("profileMobile", data.phone);
+      }).catch(() => put("profileMobile", "नंबर लोड नहीं हुआ — Refresh करें"));
   }
-  document.getElementById("customerEmail").textContent = customerEmail;
-  if (user) loadCustomerHistory(user);
-  // Move the page to the dashboard after login. The page uses a long dashboard,
-  // so avoid vertically centering the whole page and make the new section obvious.
-  const dashboard = document.getElementById("dashboard");
+  if (user && client) {
+    try { loadCustomerHistory(user); }
+    catch (error) {
+      const history = document.getElementById("bookingHistory");
+      if (history) history.textContent = "बुकिंग लोड नहीं हो सकीं। कृपया Refresh करें।";
+    }
+  }
   if (dashboard) {
-    dashboard.style.setProperty("display", "block", "important");
-    dashboard.setAttribute("tabindex", "-1");
     requestAnimationFrame(() => {
       dashboard.scrollIntoView({ behavior: "auto", block: "start" });
       dashboard.focus({ preventScroll: true });
