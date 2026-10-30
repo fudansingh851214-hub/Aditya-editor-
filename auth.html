@@ -531,13 +531,18 @@ async function loadCustomerHistory(user, mobileFilter = "") {
   const mobileMessage = document.getElementById("bookingMobileMessage");
   box.textContent = "आपकी बुकिंग लोड हो रही हैं...";
   try {
-    // Show this account's linked bookings by default. When a mobile number is entered,
-    // include guest/older bookings that were submitted with that same booking phone too.
+    // Match bookings linked by account UUID OR the email used during booking.
+    // Older bookings may have email saved but no user_id, so UUID-only lookup misses them.
+    const accountEmail = String(user.email || "").trim().toLowerCase();
     let bookingQuery = client.from("bookings").select("*");
     if (mobileFilter) {
-      bookingQuery = bookingQuery.or("user_id.eq." + user.id + ",phone.eq." + mobileFilter);
+      const filters = ["user_id.eq." + user.id, "phone.eq." + mobileFilter];
+      if (accountEmail) filters.push("email.ilike." + accountEmail);
+      bookingQuery = bookingQuery.or(filters.join(","));
     } else {
-      bookingQuery = bookingQuery.eq("user_id", user.id);
+      bookingQuery = accountEmail
+        ? bookingQuery.or("user_id.eq." + user.id + ",email.ilike." + accountEmail)
+        : bookingQuery.eq("user_id", user.id);
     }
     const { data, error } = await bookingQuery.order("created_at", { ascending: false });
     if (error) throw error;
@@ -565,10 +570,11 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         mobileMessage.textContent = "आपकी बुकिंग में मोबाइल नंबर दर्ज नहीं मिला।";
       }
     }
+    // Cancellation history is optional; its SELECT policy must not hide bookings.
     const { data: cancellationRows, error: cancellationError } = await client
       .from("cancellation_requests").select("booking_number,status,created_at")
       .eq("user_id", user.id).order("created_at", { ascending: false });
-    if (cancellationError) throw cancellationError;
+    if (cancellationError) console.warn("Cancellation history could not be loaded:", cancellationError.message);
     const cancellationByBooking = new Map((cancellationRows || []).map(row => [row.booking_number, row]));
     // Resolved cancellation requests (approved/rejected) hide that booking from the customer dashboard.
     const visibleBookings = (data || []).filter(booking => {
