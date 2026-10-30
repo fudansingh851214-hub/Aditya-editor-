@@ -260,6 +260,22 @@ h1{color:#ef4444!important}
 @media(max-width:900px){.site-nav{min-height:62px!important}.site-links a{font-size:12px!important;padding:11px 9px!important}}
 @media(max-width:700px){.site-header{padding:0 12px!important}.site-nav{min-height:62px!important;gap:8px!important}.site-logo{font-size:24px!important}#siteAccountTrigger{font-size:12px!important;padding:10px!important;max-width:175px!important}}
 
+
+/* After login, focus the customer page on the large booking center */
+#dashboard.bookings-focus-mode .brand-banner,
+#dashboard.bookings-focus-mode #welcome,
+#dashboard.bookings-focus-mode #personalInformation,
+#dashboard.bookings-focus-mode .dashgrid,
+#dashboard.bookings-focus-mode > .note,
+#dashboard.bookings-focus-mode > .profile:not(#signedInCustomer){display:none!important}
+#dashboard.bookings-focus-mode{display:flex!important;flex-direction:column!important;gap:12px!important}
+#dashboard.bookings-focus-mode #signedInCustomer{order:0!important;min-height:0!important;margin:0 0 8px!important;padding:12px 16px!important;display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:wrap!important;gap:10px!important}
+#dashboard.bookings-focus-mode #signedInCustomer .pill{font-size:10px!important}
+#dashboard.bookings-focus-mode #signedInCustomer #signedInName{font-size:clamp(19px,3vw,25px)!important}
+#dashboard.bookings-focus-mode #signedInCustomer #logoutButton{margin:0 0 0 auto!important;padding:9px 14px!important}
+#dashboard.bookings-focus-mode .invoice-history{order:1!important;width:100%!important;margin:0!important;padding:clamp(14px,3vw,26px)!important}
+#dashboard.bookings-focus-mode .invoice-history .invoice-page-heading h3{font-size:clamp(25px,4vw,34px)!important}
+
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
