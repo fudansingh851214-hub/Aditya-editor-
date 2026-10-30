@@ -566,21 +566,6 @@ async function loadCustomerHistory(user, mobileFilter = "") {
     if (editingTrackLink) editingTrackLink.style.display = hasEditingBooking ? "flex" : "none";
     if (cameraTrackLink) cameraTrackLink.style.display = hasCameraBooking ? "flex" : "none";
 
-    // Use only the mobile number from this customer's own linked booking.
-    if (!accountMobile && data && data.length) {
-      let latestBookingPhone = "";
-      for (const row of data) {
-        if (row.phone && String(row.phone).trim()) { latestBookingPhone = String(row.phone).trim(); break; }
-      }
-      if (latestBookingPhone) {
-        document.getElementById("bookingMobile").value = latestBookingPhone;
-        if (mobileMessage) mobileMessage.textContent = "यह नंबर आपके अपने account की latest booking से लिया गया है।";
-        // Automatically include guest and older bookings with the same booking phone.
-        return;
-      } else if (mobileMessage) {
-        mobileMessage.textContent = "आपकी बुकिंग में मोबाइल नंबर दर्ज नहीं मिला।";
-      }
-    }
     // Cancellation history is optional; its SELECT policy must not hide bookings.
     const { data: cancellationRows, error: cancellationError } = await client
       .from("cancellation_requests").select("booking_number,status,created_at")
@@ -593,7 +578,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
       return !request || request.status === "pending";
     });
     if (!visibleBookings.length) {
-      box.textContent = effectiveMobile ? "इस account या registered mobile number से जुड़ी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।" : "इस account से अभी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
+      box.textContent = "इस account से अभी कोई बुकिंग नहीं मिली। नई बुकिंग के लिए Book New Service दबाएँ।";
       return;
     }
     box.textContent = "";
@@ -609,7 +594,7 @@ async function loadCustomerHistory(user, mobileFilter = "") {
         totalEl.textContent = "₹" + total.toLocaleString("en-IN", {maximumFractionDigits:2});
       } else totalEl.textContent = "Admin confirmation pending";
     }
-    if (mobileMessage && effectiveMobile) mobileMessage.textContent = "आपके account/mobile number से जुड़ी बुकिंग नीचे दिखाई गई हैं।";
+
     for (const booking of visibleBookings) {
       const card = addText(box, "div", "", "history-card");
       const bookingNumber = booking.booking_number || ("Booking #" + (booking.id ?? ""));
