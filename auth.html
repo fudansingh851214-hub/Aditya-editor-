@@ -499,6 +499,11 @@ function showDashboard(user) {
   }
   document.getElementById("customerEmail").textContent = customerEmail;
   if (user) loadCustomerHistory(user);
+  // Bring the customer dashboard into view immediately after a successful login.
+  requestAnimationFrame(() => {
+    const dashboard = document.getElementById("dashboard");
+    if (dashboard) dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 function addText(parent, tag, value, className) {
   const el = document.createElement(tag);
