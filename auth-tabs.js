@@ -101,7 +101,7 @@
     var authArea = byId("authArea");
     var dashboard = byId("dashboard");
     if (authArea) authArea.style.setProperty("display", "none", "important");
-    if (dashboard) dashboard.style.setProperty("display", "block", "important");
+    if (dashboard) { dashboard.style.setProperty("display", "block", "important"); dashboard.classList.add("bookings-focus-mode"); }
     var meta = user.user_metadata || {};
     var fullName = meta.full_name || meta.name || (user.email ? user.email.split("@")[0] : "Customer");
     var mobile = meta.phone || meta.mobile || user.phone || "अभी दर्ज नहीं";
@@ -121,7 +121,7 @@
     });
     renderHeader(user);
     loadBookings(user);
-    var bookingsSection = document.querySelector(".history-section");
+    var bookingsSection = document.querySelector(".invoice-history");
     if (bookingsSection) bookingsSection.scrollIntoView({ behavior: "auto", block: "start" });
     else if (dashboard) dashboard.scrollIntoView({ behavior: "auto", block: "start" });
   }
