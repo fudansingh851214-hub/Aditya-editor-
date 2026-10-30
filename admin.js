@@ -410,11 +410,21 @@ function updateDashboardSummary() {
   const completedCount = currentBookings.filter((booking) =>
     String(booking.booking_status || booking.status || "").toLowerCase() === "completed"
   ).length;
-  const completePaymentCount = currentPayments.filter((payment) =>
-    ["paid", "verified", "confirmed", "success", "successful"].includes(
-      String(payment.status || "").toLowerCase()
-    )
-  ).length;
+  // Count each booking only once, whether the verified status is recorded
+  // in payment_submissions or directly on the booking record.
+  const paidBookingKeys = new Set();
+  const paidStatuses = ["paid", "verified", "confirmed", "success", "successful", "completed"];
+  currentPayments.forEach((payment) => {
+    if (paidStatuses.includes(String(payment.status || "").trim().toLowerCase())) {
+      paidBookingKeys.add(String(payment.booking_number || payment.id));
+    }
+  });
+  currentBookings.forEach((booking) => {
+    if (paidStatuses.includes(String(booking.payment_status || "").trim().toLowerCase())) {
+      paidBookingKeys.add(String(booking.booking_number || booking.id));
+    }
+  });
+  const completePaymentCount = paidBookingKeys.size;
 
   setText("regularBookingCount", regularCount);
   setText("cameraBookingCount", cameraBookings.length);
