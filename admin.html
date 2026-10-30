@@ -94,18 +94,6 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
         <p id="paymentMessage" class="message" role="status" aria-live="polite"></p>
         <div id="paymentsList"><p class="muted">Payment records लोड होने की प्रतीक्षा करें...</p></div>
       </section>
-      <section class="card" id="serviceGallerySection">
-        <div class="toolbar"><h2><span class="section-icon">🖼️</span>Service Gallery</h2><button id="refreshGalleryButton" class="btn btn-secondary" type="button">↻ Refresh Gallery</button></div>
-        <p class="muted">Website की service gallery में photo/video जोड़ें और manage करें।</p>
-        <form id="galleryUploadForm" class="gallery-form">
-          <label for="galleryTitle">Title</label><input id="galleryTitle" type="text" maxlength="120" placeholder="Gallery title" required>
-          <label for="galleryService">Service</label><select id="galleryService" required><option value="">Select Service</option><option>Photo Editing</option><option>Video Editing</option><option>Wedding Projects</option><option>Graphic Design</option><option>Social Media Reels</option></select>
-          <label for="galleryFile">Photo / Video</label><input id="galleryFile" type="file" accept="image/*,video/*" required>
-          <button id="galleryUploadButton" class="btn" type="submit">Upload to Gallery</button>
-        </form>
-        <p id="galleryMessage" class="message" role="status" aria-live="polite"></p>
-        <div id="galleryAdminList"></div>
-      </section>
       <section class="card" id="profileSection">
         <div class="toolbar"><h2><span class="section-icon">👤</span>Admin Profile</h2></div>
         <div class="profile-panel"><div class="avatar">👤</div><div><strong>EDIT CONCEPT Administrator</strong><p class="muted">Signed-in administrator account</p><p id="adminProfileEmail" class="muted">Login के बाद account email यहाँ दिखाई देगा।</p></div></div>
