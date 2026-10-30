@@ -985,7 +985,15 @@ function initSupabase() {
   try {
     client = window.supabase.createClient(
       "https://okzwtylpmcyurkxvaocy.supabase.co",
-      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q"
+      "sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q",
+      {
+        auth: {
+          storageKey: "edit-concept-customer-auth",
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
     );
     client.auth.onAuthStateChange((event, session) => {
       if (event === "PASSWORD_RECOVERY") {
