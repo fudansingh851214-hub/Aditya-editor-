@@ -424,7 +424,29 @@
 @media(min-width:1100px){.site-nav{flex-wrap:nowrap}.site-links{gap:4px}.site-links a{padding:8px 7px;font-size:10px}}
 @media(max-width:850px){.site-nav{flex-wrap:wrap;padding:10px 0}#siteMenuButton{display:inline-flex}.site-account{margin-left:auto}.site-links{display:none;order:5;flex-basis:100%;flex-direction:column;align-items:stretch;padding-bottom:10px}.site-links.open{display:flex}.site-links a{text-align:center;font-size:13px}}
 </style>
-<style>.site-logo,.logo{font-size:27px!important;font-weight:900!important;letter-spacing:.2px!important;line-height:1.2!important}</style></head>
+<style>.site-logo,.logo{font-size:27px!important;font-weight:900!important;letter-spacing:.2px!important;line-height:1.2!important}</style><style>
+/* Matching colorful Edit Concept footer branding */
+.site-footer-branding{
+  padding:28px 16px;
+  margin-top:36px;
+  text-align:center;
+  background:#eaf3ed;
+  border-top:1px solid #d5e5db;
+}
+.site-footer-branding strong{
+  display:inline-block;
+  font-size:clamp(32px,6vw,52px);
+  line-height:1.15;
+  font-weight:1000;
+  letter-spacing:1.5px;
+  background:linear-gradient(90deg,#e91e72 0%,#ff8a00 25%,#168b52 50%,#168bdb 75%,#8555ff 100%);
+  background-clip:text;
+  -webkit-background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+</style>
+</head>
 
 <body>
   <header class="site-header"><nav class="site-nav" aria-label="Main navigation">
@@ -1005,5 +1027,6 @@
       });
     }
   </script>
+<footer class="site-footer-branding"><strong>✦ EDIT CONCEPT</strong></footer>
 </body>
 </html>
