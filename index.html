@@ -166,6 +166,18 @@ a.btn-secondary,.secondary-button{background:#eaf7ef!important;color:#168b52!imp
 input,select,textarea{background:#fff!important;color:#173b2d!important;border:1px solid #cfded4!important}
 input:focus,select:focus,textarea:focus{outline:2px solid #e91e7240!important;border-color:#e91e72!important}
 footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid #d5e5db!important}
+footer .footer-brand{
+  display:inline-block;
+  font-size:clamp(32px,6vw,52px);
+  line-height:1.15;
+  font-weight:1000;
+  letter-spacing:1.5px;
+  background:linear-gradient(90deg,#e91e72 0%,#ff8a00 25%,#168b52 50%,#168bdb 75%,#8555ff 100%);
+  background-clip:text;
+  -webkit-background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+}
 
 
 /* Camera Booking uses the same navy, purple and cyan palette as Quick Access */
@@ -629,9 +641,7 @@ header .logo{font-size:27px!important;font-weight:900!important;letter-spacing:.
 
 <footer>
   <div class="container">
-    <div class="logo">✦ EDIT CONCEPT</div>
-    <p>Photo &amp; Video Editing Studio</p>
-    <p>© <span id="year"></span> Edit Concept · Aditya Kumar. All rights reserved.</p>
+    <strong class="footer-brand">✦ EDIT CONCEPT</strong>
   </div>
 </footer>
 
