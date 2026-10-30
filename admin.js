@@ -289,7 +289,9 @@ async function handleLogin(event) {
 
     if (error) throw error;
 
-    await verifyAdmin();
+    const adminUser = await verifyAdmin();
+    const profileEmail = $("adminProfileEmail");
+    if (profileEmail) profileEmail.textContent = adminUser.email || "Admin account";
 
     showDashboard();
     showMessage(loginMessage, "Admin Login सफल हुआ।");
@@ -358,7 +360,9 @@ async function initializeAdmin() {
       return;
     }
 
-    await verifyAdmin();
+    const adminUser = await verifyAdmin();
+    const profileEmail = $("adminProfileEmail");
+    if (profileEmail) profileEmail.textContent = adminUser.email || "Admin account";
     showDashboard();
     showMessage(loginMessage, "Admin session सत्यापित हुआ।");
 
@@ -399,11 +403,26 @@ function updateDashboardSummary() {
     if (element) element.textContent = String(value);
   };
 
+  const pendingPaymentStatuses = ["pending", "submitted", "under_review", "review"];
+  const pendingPaymentCount = currentPayments.filter((payment) =>
+    pendingPaymentStatuses.includes(String(payment.status || "pending").toLowerCase())
+  ).length;
+  const completedCount = currentBookings.filter((booking) =>
+    String(booking.booking_status || booking.status || "").toLowerCase() === "completed"
+  ).length;
+  const totalRevenue = currentBookings.reduce((sum, booking) =>
+    sum + Math.max(0, Number(booking._paidAmount) || 0), 0
+  );
+
   setText("regularBookingCount", regularCount);
   setText("cameraBookingCount", cameraBookings.length);
   setText("paymentRecordCount", currentPayments.length);
   setText("verifiedPaymentTotal", formatAmount(verifiedTotal));
   setText("cameraBookingAmountTotal", formatAmount(cameraAmount));
+  setText("totalBookingCount", currentBookings.length);
+  setText("totalRevenue", formatAmount(totalRevenue));
+  setText("pendingPaymentCount", pendingPaymentCount);
+  setText("completedBookingCount", completedCount);
 }
 
 /* ---------- BOOKINGS ---------- */
