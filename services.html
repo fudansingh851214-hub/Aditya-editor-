@@ -37,10 +37,16 @@ footer{border-top-color:#f0ccd5;color:#795d65}
 .photo-side.after span{background:#c51e47;color:#fff}
 .service-preview{border-color:#f0ccd5}
 
-</style>
+.services-header{position:sticky;top:0;z-index:10;background:#f7f8f7;border-bottom:1px solid #e2e7e3;color:#24382e}.services-nav{width:min(1250px,100%);margin:auto;min-height:78px;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}.services-logo{flex:0 0 auto;color:#c43d6e;font-size:20px;font-weight:900;text-decoration:none;line-height:1.25}.services-logo small{display:block;color:#68756d;font-size:11px;font-weight:400}.services-links{display:flex;align-items:center;gap:12px}.services-links a,.services-account{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:14px;background:linear-gradient(110deg,#e91e72,#168653);color:#fff;text-decoration:none;font-size:14px;font-weight:800;white-space:nowrap;transition:color .2s,transform .2s}.services-links a:hover,.services-links a:focus-visible,.services-account:hover,.services-account:focus-visible{color:#ff1744;transform:translateY(-1px)}.services-account{gap:8px}#servicesMenuButton{display:none;padding:9px 13px;border:1px solid #d8e1da;border-radius:9px;background:#fff;color:#244c39;font-size:20px}@media(max-width:1000px){.services-nav{flex-wrap:wrap}.services-logo{margin-right:auto}.services-links{display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch}.services-links.open{display:flex}.services-links a{width:100%}#servicesMenuButton{display:block}.services-account{font-size:12px;padding:10px 12px}}</style>
 </head>
 <body>
-<header><div class="container nav"><a class="logo" href="index.html">✦ EDIT CONCEPT<small>Photo &amp; Video Editing Studio</small></a><nav aria-label="Main navigation"><a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">Book Now</a><a href="payment.html">Secure Payment</a><a href="index.html#contact">Contact</a><a href="auth.html">Sign In</a></nav></div></header>
+<header class="services-header"><div class="services-nav">
+<a class="services-logo" href="index.html">✦ EDIT CONCEPT<small>Photo &amp; Video Editing Studio</small></a>
+<button id="servicesMenuButton" type="button" aria-expanded="false" aria-label="मेन्यू खोलें">☰</button>
+<nav class="services-links" id="servicesLinks" aria-label="Main navigation">
+<a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">Editing Book</a><a href="auth.html">Camera Book</a><a href="tracking.html">Track Editing</a><a href="camera-tracking.html">Track Camera</a>
+</nav><a class="services-account" href="auth.html">👤 Sign In / Create Account <span>⌄</span></a>
+</div></header>
 <main class="container"><section class="hero"><div class="eyebrow">EDITING SERVICE</div><h1>Editing Service</h1><p>कृपया वह सेवा चुनें जो आप बुक करना चाहते हैं।</p></section>
 <section class="grid" aria-label="Available editing services">
 <article class="card"><div class="icon">🖼️</div>
@@ -60,4 +66,4 @@ footer{border-top-color:#f0ccd5;color:#795d65}
 </section>
 </main>
 <footer><div class="container"><strong>✦ ADITYA KUMAR · PROJECT EDIT CONCEPT</strong><p>Photo &amp; Video Editing Studio</p></div></footer>
-</body></html>
+<script>const servicesMenuButton=document.getElementById('servicesMenuButton');const servicesLinks=document.getElementById('servicesLinks');if(servicesMenuButton&&servicesLinks){servicesMenuButton.addEventListener('click',()=>{const open=servicesLinks.classList.toggle('open');servicesMenuButton.setAttribute('aria-expanded',String(open));});}</script></body></html>
