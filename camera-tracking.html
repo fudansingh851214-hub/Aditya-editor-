@@ -409,7 +409,7 @@
 
 <body>
   <header class="track-header"><div class="track-nav">
-<a class="track-logo" href="index.html">✦ EDIT CONCEPT<small>Photo &amp; Video Editing Studio</small></a>
+<a class="track-logo" href="index.html">✦ EDIT CONCEPT</a>
 <button id="trackMenuButton" type="button" aria-expanded="false" aria-label="मेन्यू खोलें">☰</button>
 <nav class="track-links" id="trackLinks">
 <a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">Editing Book</a><a href="auth.html">Camera Book</a><a href="tracking.html">Track Editing</a><a href="camera-tracking.html">Track Camera</a>
@@ -860,5 +860,5 @@ const trackMenuButton=document.getElementById('trackMenuButton'),trackLinks=docu
 if(trackMenuButton&&trackLinks)trackMenuButton.addEventListener('click',()=>{const opened=trackLinks.classList.toggle('open');trackMenuButton.setAttribute('aria-expanded',String(opened));});
 const trackAccountLabel=document.getElementById('trackAccountLabel');
 if(trackAccountLabel&&window.supabase?.createClient){const trackDb=window.supabase.createClient("https://okzwtylpmcyurkxvaocy.supabase.co","sb_publishable_PjYL34jyFif4E6eHc7HYJQ_y-5SAs0q");trackDb.auth.getUser().then(({data})=>{const u=data?.user;if(u){const m=u.user_metadata||{};trackAccountLabel.textContent=m.full_name||m.name||m.fullName||(u.email?u.email.split('@')[0]:'My Account');}}).catch(()=>{});}
-</script><footer class="editconcept-footer"><div>✦ EDIT <span>CONCEPT</span> ✦</div><small>Photo &amp; Video Editing Studio</small></footer><style>.editconcept-footer{text-align:center;padding:30px 16px 24px;margin-top:36px;background:#0b1428;color:#ff3d8d;font-size:clamp(24px,4vw,38px);font-weight:900;letter-spacing:2px;text-shadow:0 0 12px #ff3d8d66}.editconcept-footer span{background:linear-gradient(90deg,#ff3d8d,#ffcf45,#20d6a2,#55a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}.editconcept-footer small{display:block;margin-top:5px;color:#e6eaf2;font-size:11px;font-weight:400;letter-spacing:1px;text-shadow:none}</style></body>
+</script><footer class="editconcept-footer"><div>✦ EDIT <span>CONCEPT</span> ✦</div></footer><style>.editconcept-footer{text-align:center;padding:30px 16px 24px;margin-top:36px;background:#0b1428;color:#ff3d8d;font-size:clamp(24px,4vw,38px);font-weight:900;letter-spacing:2px;text-shadow:0 0 12px #ff3d8d66}.editconcept-footer span{background:linear-gradient(90deg,#ff3d8d,#ffcf45,#20d6a2,#55a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}.editconcept-footer small{display:block;margin-top:5px;color:#e6eaf2;font-size:11px;font-weight:400;letter-spacing:1px;text-shadow:none}</style></body>
 </html>
