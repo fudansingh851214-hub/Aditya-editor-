@@ -189,6 +189,17 @@ h1{color:#ef4444!important}
   font-weight:900!important;
 }
 
+
+.auth-header{width:100%;background:#f7f8f7;border-bottom:1px solid #e2e7e3;color:#24382e}
+.auth-nav{width:min(1250px,100%);margin:auto;min-height:78px;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.auth-logo{flex:0 0 auto;color:#c43d6e;font-size:20px;font-weight:900;text-decoration:none;line-height:1.25}
+.auth-logo small{display:block;color:#68756d;font-size:11px;font-weight:400}
+.auth-links{display:flex;align-items:center;gap:12px}
+.auth-links a,.auth-account{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:14px;background:linear-gradient(110deg,#e91e72,#168653);color:#fff;text-decoration:none;font-size:14px;font-weight:800;white-space:nowrap;transition:color .2s,transform .2s}
+.auth-links a:hover,.auth-links a:focus-visible,.auth-account:hover,.auth-account:focus-visible{color:#ff1744;transform:translateY(-1px)}
+.auth-account{gap:8px;background:linear-gradient(110deg,#e91e72,#168653)}
+#authMenuButton{display:none;padding:9px 13px;border:1px solid #d8e1da;border-radius:9px;background:#fff;color:#244c39;font-size:20px}
+@media(max-width:1000px){.auth-nav{flex-wrap:wrap}.auth-logo{margin-right:auto}.auth-links{display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch}.auth-links.open{display:flex}.auth-links a{width:100%}#authMenuButton{display:block}.auth-account{font-size:12px;padding:10px 12px}}
 </style><style id="invoice-screenshot-match">
 /* Match the clean invoice-card layout from the reference screenshot, using this project's real data */
 body:has(.invoice-history){background:#f3f6ef!important}
@@ -255,7 +266,15 @@ body:has(.invoice-history){background:#f5f3ff!important}
 .invoice-history #bookingHistory .money-item strong{color:#1d4ed8!important}
 </style>
 </head>
-<body><div class="home-top"><a href="index.html" style="display:inline-block;padding:10px 16px;border:1px solid #e5b8c5;border-radius:10px;background:#fff;color:#c62828;text-decoration:none;font-weight:800">🏠 Home Page पर जाएँ</a></div><main class="wrap">
+<body>
+<header class="auth-header"><div class="auth-nav">
+<a class="auth-logo" href="index.html">✦ EDIT CONCEPT<small>Photo &amp; Video Editing Studio</small></a>
+<button id="authMenuButton" type="button" aria-expanded="false" aria-label="मेन्यू खोलें">☰</button>
+<nav class="auth-links" id="authLinks">
+<a href="index.html">Home</a><a href="services.html">Our Services</a><a href="auth.html">Editing Book</a><a href="auth.html">Camera Book</a><a href="tracking.html">Track Editing</a><a href="camera-tracking.html">Track Camera</a>
+</nav><a class="auth-account" href="auth.html">👤 Sign In / Create Account <span>⌄</span></a>
+</div></header>
+<main class="wrap">
 <h1>✦ EDIT CONCEPT</h1><p>Customer Account<br>अपना अकाउंट बनाकर Booking करें और अपनी सेवाएँ मैनेज करें।</p>
 <div id="authArea"><div class="tabs"><button id="loginTab" class="active" type="button" onclick="setMode('login')">Login</button><button id="signupTab" type="button" onclick="setMode('signup')">Create Account</button></div>
 <form id="authForm">
