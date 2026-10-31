@@ -191,18 +191,19 @@ footer{background:#eaf3ed!important;color:#355747!important;border-top:1px solid
 #accountMenuAfterNav{display:none}
 #accountMenuAfterNav.open{display:block}
 
-/* Keep all home navigation labels visible */
-.links a.pink-bold-nav{color:#fff!important;font-weight:800!important;white-space:nowrap}
-.links a.pink-bold-nav:hover{color:#fff!important;opacity:.82}
+/* Keep navigation labels readable on the light header */
+.links a.pink-bold-nav{color:#244c39!important;font-weight:800!important;white-space:nowrap}
+.links a.pink-bold-nav:hover{color:#e91e72!important}
 @media(max-width:850px){
-  #menu{display:none!important}
+  #menu{display:block!important}
   .nav{flex-wrap:wrap;align-items:center}
-  .links{display:flex!important;position:static;order:4;flex-basis:100%;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px 14px;padding:12px 0;background:transparent;border:0;max-height:none;overflow:visible}
-  .links a{padding:5px 0;font-size:13px}
+  .links{display:none!important;position:absolute;top:72px;left:0;right:0;order:4;flex-basis:100%;flex-direction:column;align-items:stretch;gap:8px;padding:18px;background:#fff;border-bottom:1px solid #dce9e1;max-height:75vh;overflow-y:auto}
+  .links.open{display:flex!important}
+  .links a{padding:8px;color:#244c39!important;font-size:14px}
 }
 @media(max-width:520px){
   .links{justify-content:flex-start;gap:7px 12px}
-  .links a{font-size:12px}
+  .links a{font-size:13px}
 }
 </style>
 </head>
