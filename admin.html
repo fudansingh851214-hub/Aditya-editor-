@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#06152b">
-<title>EDIT CONCEPT | Admin Panel</title>
+<title>EDIT CONNECT | Admin Panel</title>
 <style>
 :root{--bg:#061329;--panel:#0b203d;--panel2:#09203d;--line:#17436b;--blue:#087cf0;--cyan:#36cfff;--text:#eff7ff;--muted:#9bb4d0;--green:#10c99a;--red:#ff647b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:82px}body{margin:0;background:radial-gradient(ellipse at 70% 0,#10365b 0,transparent 42%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
@@ -32,7 +32,7 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
 <body>
 <div class="app-shell">
 <aside class="sidebar" id="adminSidebar">
-  <div class="brand"><span class="brand-icon">📸</span><div><strong>EDIT CONCEPT</strong><small>Photo &amp; Video Editing Service</small></div></div>
+  <div class="brand"><span class="brand-icon">📸</span><div><strong>EDIT CONNECT</strong><small>Photo &amp; Video Editing Service</small></div></div>
   <div class="admin-user"><div class="avatar">👤</div><div><strong>Admin</strong><small>● Online</small></div></div>
   <nav class="side-nav" aria-label="Admin navigation">
     <a class="active" href="#dashboardSection"><span class="nav-icon">⌂</span>Dashboard</a>
@@ -43,7 +43,7 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
     <a href="#cancellationsSection"><span class="nav-icon">↩</span>Cancellation Requests</a>
     <button id="sidebarLogoutButton" type="button"><span class="nav-icon">⏻</span>Logout</button>
   </nav>
-  <div class="side-bottom">✦ EDIT CONCEPT<br><span>Manage customer bookings, uploaded files and payments securely.</span></div>
+  <div class="side-bottom">✦ EDIT CONNECT<br><span>Manage customer bookings, uploaded files and payments securely.</span></div>
 </aside>
 <div class="main-area">
   <div class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">☰</button><div class="topbar-title">🛡 Admin Panel</div></div><div class="topbar-right"><span>🔔</span><span>👤 Admin</span></div></div>
@@ -60,7 +60,7 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
     </section>
     <section id="adminDashboard" class="hidden">
       <section id="dashboardSection">
-        <div class="page-heading"><div><h1>Dashboard</h1><p class="muted">Welcome to EDIT CONCEPT — Manage bookings, camera reservations and payments.</p></div><button id="logoutButton" class="btn btn-danger" type="button">Logout</button></div>
+        <div class="page-heading"><div><h1>Dashboard</h1><p class="muted">Welcome to EDIT CONNECT — Manage bookings, camera reservations and payments.</p></div><button id="logoutButton" class="btn btn-danger" type="button">Logout</button></div>
         <div class="notice"><strong>🔒 Secure Admin Area:</strong> ग्राहक की booking, uploaded photos/videos और payment details केवल अधिकृत Admin को दिखाई देंगी।</div>
         <div class="grid" id="adminQuickLinks">
           <a class="stat" href="#bookingsSection"><div class="stat-title">📅 Total Bookings</div><div class="stat-value" id="totalBookingCount">0</div><p>All editing and camera bookings</p><span class="stat-link-hint">View bookings →</span></a>
@@ -96,7 +96,7 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
       </section>
       <section class="card" id="profileSection">
         <div class="toolbar"><h2><span class="section-icon">👤</span>Admin Profile</h2></div>
-        <div class="profile-panel"><div class="avatar">👤</div><div><strong>EDIT CONCEPT Administrator</strong><p class="muted">Signed-in administrator account</p><p id="adminProfileEmail" class="muted">Login के बाद account email यहाँ दिखाई देगा।</p></div></div>
+        <div class="profile-panel"><div class="avatar">👤</div><div><strong>EDIT CONNECT Administrator</strong><p class="muted">Signed-in administrator account</p><p id="adminProfileEmail" class="muted">Login के बाद account email यहाँ दिखाई देगा।</p></div></div>
         <button id="profileLogoutButton" class="btn btn-danger" type="button">Logout</button>
       </section>
       <section class="card" id="cancellationsSection">
@@ -104,7 +104,7 @@ footer{text-align:center;color:#7f9bb9;padding:24px 10px;border-top:1px solid #1
         <p id="cancellationMessage" class="message" role="status" aria-live="polite"></p>
         <div id="cancellationsList"><p class="muted">Cancellation requests लोड होने की प्रतीक्षा करें...</p></div>
       </section>
-      <footer>EDIT CONCEPT © <span id="currentYear">2026</span><br>Photo &amp; Video Editing Service · Private Admin Area</footer>
+      <footer>EDIT CONNECT © <span id="currentYear">2026</span><br>Photo &amp; Video Editing Service · Private Admin Area</footer>
     </section>
   </main>
 </div>
