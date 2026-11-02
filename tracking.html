@@ -517,7 +517,8 @@
 
     const $ = id => document.getElementById(id);
 
-    $("year").textContent = new Date().getFullYear();
+    const yearElement = $("year");
+    if (yearElement) yearElement.textContent = new Date().getFullYear();
 
     /*
       Booking statuses.
