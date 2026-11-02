@@ -38,7 +38,8 @@ const GALLERY_SERVICES = [
 
 const db = window.supabase?.createClient(
   SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+  SUPABASE_PUBLISHABLE_KEY,
+  { auth: { storageKey: "edit-concept-admin-auth", persistSession: true, autoRefreshToken: true } }
 );
 
 const $ = (id) => document.getElementById(id);
@@ -299,7 +300,7 @@ async function handleLogin(event) {
     await loadAllAdminData();
   } catch (error) {
     try {
-      await db.auth.signOut();
+      await db.auth.signOut({ scope: "local" });
     } catch (_) {
       // Login error is displayed below.
     }
@@ -319,7 +320,7 @@ async function handleLogout() {
   if (!db) return;
 
   try {
-    const { error } = await db.auth.signOut();
+    const { error } = await db.auth.signOut({ scope: "local" });
     if (error) throw error;
 
     showLogin();
